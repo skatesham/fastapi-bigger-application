@@ -31,6 +31,9 @@ For start application, run command below:
 uvicorn app.main:app --reload
 ```
 
+__Accessing Database__
+The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).  
+
 ## Using application local
 The application will get started in http://127.0.0.1:8000.  
 

@@ -10,4 +10,10 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: tinnova
-      POSTGRES_PASSWORD: tinnova@123
+      POSTGRES_PASSWORD: tinnova123
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9000:8080
