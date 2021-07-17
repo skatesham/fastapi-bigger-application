@@ -1,5 +1,7 @@
 # Fast API
 
+![alt-text](https://fastapi.tiangolo.com/img/tutorial/bigger-applications/image01.png)
+
 ## Requirements
 You'll must have installed:
 - Python 3.6+
