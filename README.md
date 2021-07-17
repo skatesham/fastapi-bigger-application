@@ -1,5 +1,27 @@
 # Fast API
 
+## Requirements
+You'll must have installed:
+- Python 3.6+
+- Docker
+- Docker-compose
+
+## Setup Project
+
+__Create Virtual Environment__
+```bash
+virtualenv -p python3.6 env 
+```
+
+__Activating virtual environment__
+```bash
+source env/bin/activate 
+```
+__Install depedencies__
+```bash
+pip install requirements.txt 
+```
+
 ## Running Application
 
 For start application, run command below:
@@ -12,12 +34,10 @@ The application will get started in http://127.0.0.1:8000.
 
 Acessing documentation on http://127.0.0.1:8000/docs.  
 
-Another option could be
+Another documentation option could be
 http://127.0.0.1:8000/redoc 
 
-
-
-## Source Documentation
+### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
 
 - [Bigger Application](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
