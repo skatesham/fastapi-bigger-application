@@ -8,11 +8,12 @@ from .routers import items, users
 from .repository import models
 from .repository.database import engine, SessionLocal
 
-
+# Database Auto Generation
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(dependencies=[Depends(get_query_token)])
 
+# Request Mapping
 app.include_router(users.router)
 app.include_router(items.router)
 app.include_router(
@@ -35,7 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Session per request
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
     '''
