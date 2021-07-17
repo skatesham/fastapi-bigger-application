@@ -1,4 +1,4 @@
-# Use tinnova/tinnova@123 user/password credentials
+# Use tinnova/tinnova123 user/password credentials
 version: '3.1'
 
 services:   
