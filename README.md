@@ -1,7 +1,5 @@
 # Fast API
 
-![alt-text](https://fastapi.tiangolo.com/img/tutorial/bigger-applications/image01.png)
-
 ## Requirements
 You'll must have installed:
 - Python 3.6+
@@ -34,7 +32,7 @@ uvicorn app.main:app --reload
 ## Using application local
 The application will get started in http://127.0.0.1:8000.  
 
-Acessing documentation on http://127.0.0.1:8000/docs.  
+Acessing documentation on http://127.0.0.1:8000/docs.
 
 Another documentation option could be
 http://127.0.0.1:8000/redoc
@@ -44,7 +42,7 @@ __App Authentication__
 - x_token = fake-super-secret-token
 
 __Accessing Database__
-The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).  
+The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).
 
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
