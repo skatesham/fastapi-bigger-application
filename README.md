@@ -7,6 +7,16 @@ For start application, run command below:
 uvicorn app.main:app --reload
 ```
 
+## Using application local
+The application will get started in http://127.0.0.1:8000.  
+
+Acessing documentation on http://127.0.0.1:8000/docs.  
+
+Another option could be
+http://127.0.0.1:8000/redoc 
+
+
+
 ## Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
 
