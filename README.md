@@ -3,6 +3,7 @@
 ## Requirements
 You'll must have installed:
 - Python 3.6+
+- Virtualenv for Python3.6+
 - Docker
 - Docker-compose
 
