@@ -31,16 +31,20 @@ For start application, run command below:
 uvicorn app.main:app --reload
 ```
 
-__Accessing Database__
-The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).  
-
 ## Using application local
 The application will get started in http://127.0.0.1:8000.  
 
 Acessing documentation on http://127.0.0.1:8000/docs.  
 
 Another documentation option could be
-http://127.0.0.1:8000/redoc 
+http://127.0.0.1:8000/redoc
+
+__App Authentication__
+- token = jessica
+- x_token = fake-super-secret-token
+
+__Accessing Database__
+The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).  
 
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
