@@ -5,11 +5,10 @@ from .dependencies import get_query_token, get_token_header
 from .internal import admin
 from .routers import items, users
 
-from .repository import models
-from .repository.database import engine, SessionLocal
+from .database import engine, SessionLocal, Base
 
 # Database Auto Generation
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(dependencies=[Depends(get_query_token)])
 

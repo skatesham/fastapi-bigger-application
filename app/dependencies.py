@@ -1,6 +1,6 @@
 from fastapi import Header, HTTPException
 
-from .repository.database import SessionLocal
+from .database import SessionLocal
 
 async def get_token_header(x_token: str = Header(...)):
     if x_token != "fake-super-secret-token":
