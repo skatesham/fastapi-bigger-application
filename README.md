@@ -42,7 +42,7 @@ __App Authentication__
 - token = jessica
 - x_token = fake-super-secret-token
 
-__Accessing Database__
+__Accessing Database with Adminer__  
 The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).
 
 ### Source Documentation
