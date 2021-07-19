@@ -14,6 +14,11 @@ __Create Virtual Environment__
 virtualenv -p python3.6 env 
 ```
 
+__Start virtual environment__ 
+```bash
+source env/bin/activate
+```
+
 __Activating virtual environment__
 ```bash
 source env/bin/activate 

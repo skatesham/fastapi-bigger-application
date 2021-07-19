@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from ..dependencies import get_token_header, get_db
 
-from ..domain import service, schemas
+from ..domain.user import service, schemas
 
 
 router = APIRouter(
