@@ -43,7 +43,7 @@ __App Authentication__
 - x_token = fake-super-secret-token
 
 __Accessing Database with Adminer__  
-The database can be accessed by adminer on http://127.0.0.1:9000 using credentials tinnova/tinnova123(user/password).
+The database can be accessed by adminer on http://127.0.0.1:9000 using postgres and credentials tinnova/tinnova123(user/password).
 
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
