@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .dependencies import get_query_token, get_token_header
 from .internal import admin
-from .routers import items, users, cars, stocks, seller
+from .routers import items, users, cars, stocks, sellers, buyers
 
 from .database import engine, SessionLocal, Base
 
@@ -20,7 +20,8 @@ app.include_router(users.router)
 app.include_router(items.router)
 app.include_router(cars.router)
 app.include_router(stocks.router)
-app.include_router(seller.router)
+app.include_router(sellers.router)
+app.include_router(buyers.router)
 app.include_router(
     admin.router,
     prefix="/admin",
