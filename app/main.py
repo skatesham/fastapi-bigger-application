@@ -26,7 +26,7 @@ app.include_router(
     admin.router,
     prefix="/admin",
     tags=["admin"],
-    dependencies=[Depends(get_token_header)],
+    dependencies=[Depends(get_token_header, get_query_token)],
     responses={418: {"description": "I'm a teapot"}},
 )
 
