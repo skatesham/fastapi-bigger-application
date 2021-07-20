@@ -1,3 +1,5 @@
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String
 
 from ...database import Base
@@ -10,4 +12,6 @@ class Car(Base):
     name = Column(String, unique=True, index=True)
     year = Column(Integer, index=True)
     brand = Column(String, index=True)
+    
+    stock = relationship("Stock", back_populates="car")
     

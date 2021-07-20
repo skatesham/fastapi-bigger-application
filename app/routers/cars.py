@@ -23,7 +23,7 @@ def create_car(car: schemas.CarCreate, db: Session = Depends(get_db)):
 def read_car(car_id: int, db: Session = Depends(get_db)):
     db_car = service.get_car(db, car_id=car_id)
     if db_car is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Car Model not found")
     return db_car
 
 @router.get("/", response_model=List[schemas.Car])
