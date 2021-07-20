@@ -3,20 +3,20 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class CarBase(BaseModel):
+class SellerBase(BaseModel):
     id: int
     
     
-class CarCreate(BaseModel):
+class SellerCreate(BaseModel):
     name: str
-    year: str
-    brand: str
+    cpf: str
+    phone: str
 
 
-class Car(CarBase):
+class Seller(SellerBase):
     name: str
-    year: str
-    brand: str
+    cpf: str
+    phone: str
    
     class Config:
         orm_mode = True

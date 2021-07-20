@@ -31,3 +31,10 @@ def read_cars(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     cars = service.get_cars(db, skip=skip, limit=limit)
     return cars
 
+@router.delete("/{car_id}", response_model=bool)
+def delete_car(car_id: int, db: Session = Depends(get_db)):
+    db_car = service.get_car(db, car_id=car_id)
+    if db_car is None:
+        raise HTTPException(status_code=404, detail="Car not found")
+    return service.remove_car(db, db_car=db_car)
+

@@ -15,3 +15,8 @@ def get_car(db: Session, car_id: int):
 def get_cars(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Car).offset(skip).limit(limit).all()
 
+def remove_car(db: Session, db_car: models.Car):
+    db.delete(db_car)
+    db.commit()
+    return True
+

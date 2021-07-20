@@ -32,7 +32,7 @@ def read_stocks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return stocks
 
 @router.delete("/{stock_id}", response_model=bool)
-def read_stock(stock_id: int, db: Session = Depends(get_db)):
+def delete_stock(stock_id: int, db: Session = Depends(get_db)):
     db_stock = service.get_stock(db, stock_id=stock_id)
     if db_stock is None:
         raise HTTPException(status_code=404, detail="Stock not found")
