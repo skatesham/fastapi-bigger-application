@@ -9,13 +9,13 @@ class CarBase(BaseModel):
     
 class CarCreate(BaseModel):
     name: str
-    year: str
+    year: int
     brand: str
 
 
 class Car(CarBase):
     name: str
-    year: str
+    year: int
     brand: str
    
     class Config:

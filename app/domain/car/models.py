@@ -14,4 +14,5 @@ class Car(Base):
     brand = Column(String, index=True)
     
     stock = relationship("Stock", back_populates="car")
-    
+    sale = relationship("Sale", back_populates="car")
+
