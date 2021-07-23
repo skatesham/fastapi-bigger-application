@@ -7,6 +7,8 @@ from ..dependencies import get_db
 
 from ..domain.stock import service, schemas
 
+from ..domain.car import service as car_service
+
 
 router = APIRouter(
     prefix="/stocks",
@@ -17,6 +19,8 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Stock)
 def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db)):
+    if car_service.get_car(db, car_id=stock.car_id) is None:
+        raise HTTPException(status_code=404, detail="Car not found")
     return service.create_stock(db=db, stock=stock)
 
 @router.get("/{stock_id}", response_model=schemas.Stock)

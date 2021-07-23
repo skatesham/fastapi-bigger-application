@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 
+
 def create_stock(db: Session, stock: schemas.StockCreate):
     db_stock = models.Stock(**stock.dict())
     db.add(db_stock)

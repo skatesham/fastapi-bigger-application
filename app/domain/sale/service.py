@@ -4,6 +4,7 @@ from datetime import datetime
 
 from . import models, schemas
 
+
 def create_sale(db: Session, sale: schemas.SaleCreate):
     db_sale = models.Sale(**sale.dict(), created_at=str(datetime.now()))
     db.add(db_sale)
