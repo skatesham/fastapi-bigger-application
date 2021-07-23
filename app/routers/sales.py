@@ -13,6 +13,8 @@ from ..domain.buyer import service as buyer_service
 
 from ..domain.seller import service as seller_service
 
+from ..domain.stock import service as stock_service
+
 
 router = APIRouter(
     prefix="/sales",
@@ -24,6 +26,8 @@ router = APIRouter(
 @router.post("/", response_model=schemas.Sale)
 def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
     errors = []
+    
+    # Validate relationship
     if car_service.get_car(db, car_id=sale.car_id) is None:
         errors.append("Car not found")
     if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
@@ -32,7 +36,10 @@ def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
         errors.append("Seller not found")
     if len(errors) > 0:
         raise HTTPException(status_code=404, detail=str({'errors': errors}))
-    return service.create_sale(db=db, sale=sale)
+    
+    sale_db = service.create_sale(db=db, sale=sale)
+    stock_service.buy_car_from_stock(db, car_id=sale.car_id)
+    return sale_db
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
 def read_sale(sale_id: int, db: Session = Depends(get_db)):

@@ -30,6 +30,13 @@ def read_stock(stock_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Stock not found")
     return db_stock
 
+@router.get("/car/{car_id}", response_model=schemas.Stock)
+def read_stock(car_id: int, db: Session = Depends(get_db)):
+    db_stock = service.get_stock_by_car(db, car_id=car_id)
+    if db_stock is None:
+        raise HTTPException(status_code=404, detail="Stock not found")
+    return db_stock
+
 @router.get("/", response_model=List[schemas.Stock])
 def read_stocks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     stocks = service.get_stocks(db, skip=skip, limit=limit)
