@@ -16,13 +16,13 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Request Mapping
-app.include_router(users.router)
-app.include_router(items.router)
-app.include_router(cars.router)
-app.include_router(stocks.router)
-app.include_router(sellers.router)
-app.include_router(buyers.router)
-app.include_router(sales.router)
+app.include_router(users.router, prefix="/api/v1")
+app.include_router(items.router, prefix="/api/v1")
+app.include_router(cars.router, prefix="/api/v1")
+app.include_router(stocks.router, prefix="/api/v1")
+app.include_router(sellers.router, prefix="/api/v1")
+app.include_router(buyers.router, prefix="/api/v1")
+app.include_router(sales.router, prefix="/api/v1")
 app.include_router(
     admin.router,
     prefix="/admin",
