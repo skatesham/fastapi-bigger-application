@@ -1,22 +1,25 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from fastapi import HTTPException
+
+from . import repository, schemas
+
 
 def create_car(db: Session, car: schemas.CarCreate):
-    db_car = models.Car(**car.dict())
-    db.add(db_car)
-    db.commit()
-    db.refresh(db_car)
-    return db_car
+    return repository.create_car(db, car);
 
 def get_car(db: Session, car_id: int):
-    return db.query(models.Car).filter(models.Car.id == car_id).first()
+    db_car = repository.get_car(db, car_id=car_id)
+    if db_car is None:
+        raise HTTPException(status_code=404, detail="Car Model not found")
+    return repository.get_car(db, car_id);
 
 def get_cars(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Car).offset(skip).limit(limit).all()
+    return repository.get_cars(db, skip, limit);
 
-def remove_car(db: Session, db_car: models.Car):
-    db.delete(db_car)
-    db.commit()
-    return True
+def remove_car(db: Session, car_id: int):
+    db_car = get_car(db, car_id=car_id)
+    if db_car is None:
+        raise HTTPException(status_code=404, detail="Car not found")
+    return repository.remove_car(db, db_car)
 

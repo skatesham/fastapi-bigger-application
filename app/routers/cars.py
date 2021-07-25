@@ -15,16 +15,14 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.post("/", response_model=schemas.Car)
 def create_car(car: schemas.CarCreate, db: Session = Depends(get_db)):
     return service.create_car(db=db, car=car)
 
 @router.get("/{car_id}", response_model=schemas.Car)
 def read_car(car_id: int, db: Session = Depends(get_db)):
-    db_car = service.get_car(db, car_id=car_id)
-    if db_car is None:
-        raise HTTPException(status_code=404, detail="Car Model not found")
-    return db_car
+    return service.get_car(db, car_id=car_id)
 
 @router.get("/", response_model=List[schemas.Car])
 def read_cars(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -33,8 +31,5 @@ def read_cars(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @router.delete("/{car_id}", response_model=bool)
 def delete_car(car_id: int, db: Session = Depends(get_db)):
-    db_car = service.get_car(db, car_id=car_id)
-    if db_car is None:
-        raise HTTPException(status_code=404, detail="Car not found")
-    return service.remove_car(db, db_car=db_car)
+    return service.remove_car(db, car_id=car_id)
 
