@@ -27,6 +27,20 @@ def configure_test_database(app):
     app.dependency_overrides[get_db] = override_get_db
 
 
+def insert_into_car():
+    from sqlalchemy.sql import text
+    with engine.connect() as con:
+
+        data = ( { "id": 1, "name": "Galardo", "year": "1999", "brand": "lamborghini" },
+                { "id": 2, "name": "CX40", "year": "2021", "brand": "Volvo" },
+        )
+
+        statement = text("""INSERT INTO sellers(id, name, year, brand) VALUES(:id, :name, :year, :brand)""")
+
+        for line in data:
+            con.execute(statement, **line)    
+
+
 def insert_into_seller():
     from sqlalchemy.sql import text
     with engine.connect() as con:

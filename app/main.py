@@ -10,19 +10,23 @@ from .database import engine, SessionLocal, Base
 # Database Auto Generation
 Base.metadata.create_all(bind=engine)
 
-# Add validarion on all routes
+# Add validation on all routes
 # app = FastAPI(dependencies=[Depends(get_query_token)])
 
 app = FastAPI()
 
+route_prefix_v1 = "/api/v1"
+
 # Request Mapping
-app.include_router(users.router, prefix="/api/v1")
-app.include_router(items.router, prefix="/api/v1")
-app.include_router(cars.router, prefix="/api/v1")
-app.include_router(stocks.router, prefix="/api/v1")
-app.include_router(sellers.router, prefix="/api/v1")
-app.include_router(buyers.router, prefix="/api/v1")
-app.include_router(sales.router, prefix="/api/v1")
+app.include_router(users.router, prefix=route_prefix_v1)
+app.include_router(items.router, prefix=route_prefix_v1)
+app.include_router(cars.router, prefix=route_prefix_v1)
+app.include_router(stocks.router, prefix=route_prefix_v1)
+app.include_router(sellers.router, prefix=route_prefix_v1)
+app.include_router(buyers.router, prefix=route_prefix_v1)
+app.include_router(sales.router, prefix=route_prefix_v1)
+
+# Example of Admin creation
 app.include_router(
     admin.router,
     prefix="/admin",
