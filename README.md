@@ -11,12 +11,11 @@ You'll must have installed:
 
 __Create Virtual Environment__
 ```bash
-virtualenv -p python3.6 env 
-```
-
-__Start virtual environment__ 
-```bash
-source env/bin/activate
+sudo apt-get install python-virtualenv
+virtualenv -p python3.6 env
+# Or 
+sudo apt-get install python3.6-venv python3.6-dev
+python3.6 -m venv env
 ```
 
 __Activating virtual environment__
@@ -53,7 +52,7 @@ The database can be accessed by adminer on http://127.0.0.1:9000 using postgres 
 ## Testing
 
 __For test run__  
-```sh
+```bash
 pytest
 ```
 
