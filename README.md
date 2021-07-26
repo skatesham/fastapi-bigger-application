@@ -2,52 +2,56 @@
 
 ## Requirements
 You'll must have installed:
-- Python 3.6+
-- Virtualenv for Python3.6+
-- Docker
-- Docker-compose
+- [Python 3.6+](https://www.python.org/downloads/)
+- [Virtualenv for Python3.6+](https://virtualenv.pypa.io/en/latest/installation.html)
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker-compose](https://docs.docker.com/compose/install/)
 
 ## Setup Project
 
-__Create Virtual Environment__
+Create Virtual Environment
 ```bash
-sudo apt-get install python-virtualenv
 virtualenv -p python3.6 env
-# Or 
-sudo apt-get install python3.6-venv python3.6-dev
-python3.6 -m venv env
 ```
 
-__Activating virtual environment__
+Activating virtual environment
 ```bash
 source env/bin/activate 
 ```
-__Install depedencies__
+Install depedencies
 ```bash
 pip install -r requirements.txt 
 ```
 
 ## Running Application
 
-For start application, run command below:
+Starting database (postgres:alpine3.14)
+```bash
+docker-compose up
+```
+
+Starting application, run:
 ```bash
 uvicorn app.main:app --reload
 ```
 
-## Using application local
+##### Obs: It's possible to configure the database by environment variable as:
+##### `export URI_DB="postgresql://user-name:password@host-name/database-name"`  
+
+
+## Acessing on local
 The application will get started in http://127.0.0.1:8000.  
 
-Acessing documentation on http://127.0.0.1:8000/docs.
+Swagger Documentation: http://127.0.0.1:8000/docs.
 
-Another documentation option could be
-http://127.0.0.1:8000/redoc
+Redoc Documentation: http://127.0.0.1:8000/redoc
 
-__App Authentication__
+Database Adminer: http://127.0.0.1:9000
+- credentials tinnova/tinnova123(user/password).
+
+If required authentication on routes add headers:
 - token = jessica
 - x_token = fake-super-secret-token
-
-__Accessing Database with Adminer__  
-The database can be accessed by adminer on http://127.0.0.1:9000 using postgres and credentials tinnova/tinnova123(user/password).
 
 ## Testing
 
@@ -62,3 +66,5 @@ pytest
 - [Bigger Application](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
 
 - [SQL](https://fastapi.tiangolo.com/tutorial/sql-databases/)
+
+- [Testing](https://fastapi.tiangolo.com/tutorial/testing/)
