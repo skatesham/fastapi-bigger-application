@@ -50,6 +50,13 @@ __App Authentication__
 __Accessing Database with Adminer__  
 The database can be accessed by adminer on http://127.0.0.1:9000 using postgres and credentials tinnova/tinnova123(user/password).
 
+## Testing
+
+__For test run__  
+```sh
+pytest
+```
+
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
 
