@@ -9,7 +9,7 @@ class Car(Base):
     __tablename__ = "cars"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
+    name = Column(String, index=True)
     year = Column(Integer, index=True)
     brand = Column(String, index=True)
     
