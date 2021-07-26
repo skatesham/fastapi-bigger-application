@@ -15,7 +15,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=schemas.Seller)
+@router.post("/", response_model=schemas.Seller, status_code=201)
 def create_seller(seller: schemas.SellerCreate, db: Session = Depends(get_db)):
     return service.create_seller(db=db, seller=seller)
 
@@ -23,7 +23,7 @@ def create_seller(seller: schemas.SellerCreate, db: Session = Depends(get_db)):
 def read_seller(seller_id: int, db: Session = Depends(get_db)):
     db_seller = service.get_seller(db, seller_id=seller_id)
     if db_seller is None:
-        raise HTTPException(status_code=404, detail="Seller Model not found")
+        raise HTTPException(status_code=404, detail="Seller not found")
     return db_seller
 
 @router.get("/", response_model=List[schemas.Seller])
