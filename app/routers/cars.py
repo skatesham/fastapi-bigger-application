@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=schemas.Car)
+@router.post("/", response_model=schemas.Car, status_code=201)
 def create_car(car: schemas.CarCreate, db: Session = Depends(get_db)):
     return service.create_car(db=db, car=car)
 
