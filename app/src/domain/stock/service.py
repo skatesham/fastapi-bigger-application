@@ -1,4 +1,3 @@
-from app.domain import car
 from sqlalchemy.orm import Session
 
 from fastapi import HTTPException

@@ -1,11 +1,11 @@
 from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from .dependencies import get_query_token, get_token_header
-from .internal import admin
-from .routers import items, users, cars, stocks, sellers, buyers, sales
+from .src.dependencies import get_query_token, get_token_header
+from .src.internal import admin
+from .src.routers import items, users, cars, stocks, sellers, buyers, sales
 
-from .database import engine, SessionLocal, Base
+from .src.database import engine, SessionLocal, Base
 
 # Database Auto Generation
 Base.metadata.create_all(bind=engine)
