@@ -10,6 +10,7 @@ client = TestClient(app)
 
 sellers_route = "/api/v1/sellers"
 
+
 def test_create_seller():
     ''' Create a seller with success '''
     request_json = {
@@ -28,8 +29,20 @@ def test_create_seller():
 
 
 def test_read_seller():
-    ''' Read a created seller with success '''
+    ''' Read a seller with success '''
     request_url = sellers_route + "/1"
+    response = client.get(request_url)
+    assert response.status_code == 200
+    assert response.json() == {
+        "id": 1,
+        "name": "João da Silva",
+        "cpf": "69285717640",
+        "phone": "1299871234"
+    }
+    
+def test_read_seller_by_cpf():
+    ''' Read a seller by cpf with success '''
+    request_url = sellers_route + "/cpf/69285717640"
     response = client.get(request_url)
     assert response.status_code == 200
     assert response.json() == {
@@ -66,6 +79,16 @@ def test_delete_seller():
 def test_read_seller_not_found():
     ''' Read a seller when not found '''
     request_url = sellers_route + "/1"
+    response = client.get(request_url)
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Seller not found"
+    }
+
+
+def test_read_seller_by_cpf():
+    ''' Read a seller by cpf when not found '''
+    request_url = sellers_route + "/cpf/69285717640"
     response = client.get(request_url)
     assert response.status_code == 404
     assert response.json() == {

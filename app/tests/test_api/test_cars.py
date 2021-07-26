@@ -10,6 +10,7 @@ client = TestClient(app)
 
 cars_route = "/api/v1/cars"
 
+
 def test_create_car():
     ''' Create a car with success '''
     request_json = {
@@ -28,7 +29,7 @@ def test_create_car():
 
 
 def test_read_car():
-    ''' Read a created car with success '''
+    ''' Read a car with success '''
     request_url = cars_route + "/1"
     response = client.get(request_url)
     assert response.status_code == 200

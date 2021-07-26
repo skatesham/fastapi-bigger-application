@@ -20,3 +20,6 @@ def remove_seller(db: Session, db_seller: models.Seller):
     db.commit()
     return True
 
+def get_by_cpf(db: Session, seller_cpf: str):
+    return db.query(models.Seller).filter(models.Seller.cpf == seller_cpf).first()
+

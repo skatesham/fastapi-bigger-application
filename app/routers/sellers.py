@@ -26,6 +26,13 @@ def read_seller(seller_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Seller not found")
     return db_seller
 
+@router.get("/cpf/{seller_cpf}", response_model=schemas.Seller)
+def read_seller_by_cpf(seller_cpf: str, db: Session = Depends(get_db)):
+    db_seller = service.get_by_cpf(db, seller_cpf=seller_cpf)
+    if db_seller is None:
+        raise HTTPException(status_code=404, detail="Seller not found")
+    return db_seller
+
 @router.get("/", response_model=List[schemas.Seller])
 def read_sellers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     sellers = service.get_sellers(db, skip=skip, limit=limit)
