@@ -10,7 +10,6 @@ client = TestClient(app)
 
 sellers_route = "/api/v1/sellers"
 
-
 def test_create_seller():
     ''' Create a seller with success '''
     request_json = {
