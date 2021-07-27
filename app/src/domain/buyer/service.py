@@ -3,7 +3,19 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 def create_buyer(db: Session, buyer: schemas.BuyerCreate):
-    db_buyer = models.Buyer(**buyer.dict())
+    buyer_dict = buyer.dict()
+    address_dict = buyer_dict["address"]
+    print(buyer_dict)
+    db_buyer = models.Buyer(
+        name=buyer_dict["name"],
+        phone=buyer_dict["phone"],
+        address_cep=address_dict["cep"],
+        address_public_place=address_dict["public_place"],
+        address_city=address_dict["city"],
+        address_district=address_dict["district"],
+        address_state=address_dict["state"],
+    )
+    
     db.add(db_buyer)
     db.commit()
     db.refresh(db_buyer)

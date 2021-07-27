@@ -11,6 +11,11 @@ class Buyer(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     phone = Column(String)
+    address_cep = Column(String)
+    address_public_place = Column(String)
+    address_city = Column(String)
+    address_district = Column(String)
+    address_state = Column(String)
     
     sale = relationship("Sale", back_populates="buyer")
     
