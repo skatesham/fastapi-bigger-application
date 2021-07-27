@@ -5,8 +5,6 @@ from ..src.database import Base
 
 from ..src.dependencies import get_db
 
-from .remove_db_file import remove_db_file
-
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(
@@ -31,19 +29,6 @@ def configure_test_database(app):
             db.close()
     
     app.dependency_overrides[get_db] = override_get_db    
-    
-    with engine.connect() as con:
-        
-        statements = [
-            "DELETE FROM stocks",
-            "DELETE FROM buyers",
-            "DELETE FROM sellers",
-            "DELETE FROM cars",
-            "DELETE FROM sales",
-        ]
-        for statement in statements:
-            con.execute(statement)
-    remove_db_file()
     
 
 def insert_into_cars():
