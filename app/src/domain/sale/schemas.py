@@ -14,12 +14,14 @@ class SaleCreate(BaseModel):
     car_id: int
     seller_id: int
     buyer_id: int
-
+    
+class SaleCreateResponse(SaleCreate):
+    id: int
 
 class Sale(SaleBase):
     car: Car
-    seller: Seller
     buyer: Buyer
+    seller: Seller
     created_at: datetime
     
     class Config:

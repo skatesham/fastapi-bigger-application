@@ -5,7 +5,6 @@ from . import models, schemas
 def create_buyer(db: Session, buyer: schemas.BuyerCreate):
     buyer_dict = buyer.dict()
     address_dict = buyer_dict["address"]
-    print(buyer_dict)
     db_buyer = models.Buyer(
         name=buyer_dict["name"],
         phone=buyer_dict["phone"],

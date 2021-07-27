@@ -30,7 +30,9 @@ response_error = {"detail": "Stock not found"}
 
 headers = {"X-token":"fake-super-secret-token"}
 
-def create_car():
+
+def generate_test_mass():
+    ## Create a car
     response = client.post("/api/v1/cars/", json={
         "name": "Ram 3",
         "year": 2020,
@@ -39,7 +41,8 @@ def create_car():
 
 def test_create_stock():
     ''' Create a stock with success '''
-    create_car()
+    generate_test_mass()
+    
     response = client.post(stocks_route + "/", json=request_json)
     assert response.status_code == 201
     assert response.json() == response_json
@@ -52,34 +55,12 @@ def test_read_stock():
     assert response.status_code == 200
     assert response.json() == response_json
 
-
-def test_buy_from_stock_by_car():
-    ''' Buy from stock by car with success '''
-    
-    request_url = stocks_route + "/buy/1/9"
-    response = client.patch(request_url, headers=headers)
-    assert response.status_code == 200
-    response_changed = response_json.copy()
-    response_changed["quantity"] = 1
-    assert response.json() == response_changed
-    
-def test_buy_from_stock_by_car_out_of_stock():
-    ''' Buy from stock by car when out of stock failure '''
- 
-    request_url = stocks_route + "/buy/1/100"
-    response = client.patch(request_url, headers=headers)
-    assert response.status_code == 422
-    assert response.json() == {"detail": "Out of stock"}
-
-
 def test_read_stocks():
     ''' Read all stocks paginated with success '''
     request_url = stocks_route + "?skip=0&limit=100"
     response = client.get(request_url)
     assert response.status_code == 200
-    response_changed = response_json.copy()
-    response_changed["quantity"] = 1
-    assert response.json() == [response_changed]
+    assert response.json() == [response_json]
 
 
 def test_delete_stock():
@@ -94,14 +75,6 @@ def test_read_stock_not_found():
     ''' Read a stock when not found '''
     request_url = stocks_route + "/1"
     response = client.get(request_url)
-    assert response.status_code == 404
-    assert response.json() == response_error
-    
-def test_buy_from_stock_by_car_not_found():
-    ''' Buy from stock by car when not found '''
-    
-    request_url = stocks_route + "/buy/1/9"
-    response = client.patch(request_url, headers=headers)
     assert response.status_code == 404
     assert response.json() == response_error
 

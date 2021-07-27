@@ -45,17 +45,6 @@ def read_stocks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return service.get_stocks(db, skip=skip, limit=limit)
 
 
-@router.patch("/buy/{stock_id}/{quantity}", response_model=schemas.Stock,
-              dependencies=[Depends(get_token_header)])
-def buy_from_stock_by_car(stock_id: int, quantity: int, db: Session = Depends(get_db)):
-    db_stock = service.get_stock(db, stock_id=stock_id)
-    if db_stock is None:
-        raise HTTPException(status_code=404, detail="Stock not found")
-    if db_stock.quantity == 0 or db_stock.quantity < quantity:
-        raise HTTPException(status_code=422, detail="Out of stock")
-    return service.buy_car_from_stock(db, db_stock=db_stock, quantity=quantity)
-
-
 @router.delete("/{stock_id}", response_model=bool)
 def delete_stock(stock_id: int, db: Session = Depends(get_db)):
     db_stock = service.get_stock(db, stock_id=stock_id)
