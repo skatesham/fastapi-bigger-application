@@ -9,7 +9,7 @@ class StockBase(BaseModel):
 class StockCreate(BaseModel):
     car_id: int
     quantity: int
-
+    
 
 class Stock(StockBase):
     car: Car

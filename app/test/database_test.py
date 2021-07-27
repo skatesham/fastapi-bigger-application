@@ -11,36 +11,39 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
 
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-def override_get_db():
-    try:
-        db = TestingSessionLocal()
-        yield db
-    finally:
-        db.close()
-
 def configure_test_database(app):
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    )
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     
-    app.dependency_overrides[get_db] = override_get_db
+    def override_get_db():
+        try:
+            db = TestingSessionLocal()
+            yield db
+        finally:
+            db.close()
+    
+    app.dependency_overrides[get_db] = override_get_db    
 
 
-def insert_into_car():
+def insert_into_cars():
     with engine.connect() as con:
 
         data = ( { "id": 1, "name": "Galardo", "year": "1999", "brand": "lamborghini" },
                 { "id": 2, "name": "CX40", "year": "2021", "brand": "Volvo" },
         )
 
-        statement = text("""INSERT INTO sellers(id, name, year, brand) VALUES(:id, :name, :year, :brand)""")
+        statement = text("""INSERT INTO cars(id, name, year, brand) VALUES(:id, :name, :year, :brand)""")
 
         for line in data:
-            con.execute(statement, **line)    
+            con.execute(statement, **line)
 
 
-def insert_into_seller():
+def insert_into_sellers():
     with engine.connect() as con:
 
         data = ( { "id": 1, "name": "João da Silva", "cpf": "69285717640", "phone": "1299871234" },
