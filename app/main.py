@@ -33,23 +33,25 @@ def get_application() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    @application.middleware("http")
-    async def db_session_middleware(request: Request, call_next):
-        '''
-        The middleware we'll add (just a function) will create
-        a new SQLAlchemy SessionLocal for each request, add it to
-        the request and then close it once the request is finished.
-        '''
-        response = Response("Internal server error", status_code=500)
-        try:
-            request.state.db = SessionLocal()
-            response = await call_next(request)
-        finally:
-            request.state.db.close()
-        return response
     
     return application
 
 
 app = get_application()
+
+
+@app.middleware("http")
+async def db_session_middleware(request: Request, call_next):
+    '''
+    The middleware we'll add (just a function) will create
+    a new SQLAlchemy SessionLocal for each request, add it to
+    the request and then close it once the request is finished.
+    '''
+    response = Response("Internal server error", status_code=500)
+    try:
+        request.state.db = SessionLocal()
+        response = await call_next(request)
+    finally:
+        request.state.db.close()
+    return response
+
