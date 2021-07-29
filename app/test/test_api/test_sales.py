@@ -2,7 +2,9 @@ from fastapi.testclient import TestClient
 
 from ..database_test import configure_test_database
 
-from ...main import app
+from ...main import get_application
+
+app = get_application()
 
 configure_test_database(app)
 

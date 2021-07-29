@@ -11,7 +11,7 @@ You'll must have installed:
 
 Create Virtual Environment
 ```bash
-virtualenv -p python3.6 env
+python3 -m venv env
 ```
 
 Activating virtual environment

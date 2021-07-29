@@ -2,7 +2,9 @@ from fastapi.testclient import TestClient
 
 from ..database_test import configure_test_database
 
-from ...main import app
+from ...main import get_application
+
+app = get_application()
 
 configure_test_database(app)
 
@@ -23,7 +25,7 @@ response_json = {
     "brand": "Dodge"
 }
 
-response_error = { 'detail': 'Car Model not found' }
+response_error = { 'detail': 'Car not found' }
 
 
 def test_create_car():

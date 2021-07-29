@@ -11,7 +11,7 @@ def create_car(db: Session, car: schemas.CarCreate):
 def get_car(db: Session, car_id: int):
     db_car = repository.get_car(db, car_id=car_id)
     if db_car is None:
-        raise HTTPException(status_code=404, detail="Car Model not found")
+        raise HTTPException(status_code=404, detail="Car not found")
     return repository.get_car(db, car_id);
 
 def get_cars(db: Session, skip: int = 0, limit: int = 100):
