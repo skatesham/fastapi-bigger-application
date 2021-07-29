@@ -1,12 +1,20 @@
 from fastapi import Depends, FastAPI, Request, Response
+
 from fastapi.middleware.cors import CORSMiddleware
 
+from starlette.exceptions import HTTPException
+
 from .src.dependencies import get_query_token, get_token_header
+
 from .src.internal import admin
+
 from .src.routers.api import router as router_api
 
 from .src.database import engine, SessionLocal, Base
+
 from .src.config import API_PREFIX, ALLOWED_HOSTS
+
+from .src.routers.handlers.http_error import http_error_handler
 
 
 def get_application() -> FastAPI:
@@ -17,6 +25,8 @@ def get_application() -> FastAPI:
     Base.metadata.create_all(bind=engine)
 
     application.include_router(router_api, prefix=API_PREFIX)
+
+    application.add_exception_handler(HTTPException, http_error_handler)
 
     application.add_middleware(
         CORSMiddleware,

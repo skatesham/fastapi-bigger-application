@@ -23,7 +23,7 @@ response_json = {
     "brand": "Dodge"
 }
 
-response_error = { 'detail': 'Car not found' }
+response_error = { 'errors': ['car does not exist'] }
 
 
 def test_create_car():

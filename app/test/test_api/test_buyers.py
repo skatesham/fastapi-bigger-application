@@ -35,7 +35,7 @@ response_json = {
     "phone": "12996651234"
 }
 
-response_error = { 'detail': 'Buyer not found' }
+response_error = { 'errors': ['Buyer not found'] }
 
 
 def test_create_buyer():

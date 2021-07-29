@@ -45,7 +45,7 @@ response_json = {
   "created_at": None
 }
 
-response_error = { 'detail': 'Sale not found' }
+response_error = { 'errors': ['Sale not found'] }
 
 def create_test_mass():
     client.post("/api/v1/cars/", json={ ## car

@@ -23,7 +23,7 @@ response_json = {
     "phone": "1299871234"
 }
 
-response_error = { "detail": "Seller not found" }
+response_error = { "errors": ["Seller not found"] }
 
 
 def test_create_seller():

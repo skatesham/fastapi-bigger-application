@@ -26,7 +26,7 @@ response_json = {
     "quantity": 10
 }
 
-response_error = {"detail": "Stock not found"}
+response_error = {"errors": ["Stock not found"]}
 
 headers = {"X-token":"fake-super-secret-token"}
 
