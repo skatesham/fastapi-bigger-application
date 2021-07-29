@@ -18,20 +18,20 @@ def get_application() -> FastAPI:
 
     application.include_router(router_api, prefix=API_PREFIX)
 
-    application.include_router(
-        admin.router,
-        prefix="/admin",
-        tags=["admin"],
-        dependencies=[Depends(get_token_header)],
-        responses={418: {"description": "I'm a teapot"}},
-    )
-
     application.add_middleware(
         CORSMiddleware,
         allow_origins=ALLOWED_HOSTS or ["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+
+    application.include_router(
+        admin.router,
+        prefix="/admin",
+        tags=["admin"],
+        dependencies=[Depends(get_token_header), Depends(get_query_token)],
+        responses={418: {"description": "I'm a teapot"}},
     )
     
     return application
