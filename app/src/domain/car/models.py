@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, UniqueConstraint
 
 from sqlalchemy.orm import relationship
 
@@ -15,4 +15,5 @@ class Car(Base):
     
     stock = relationship("Stock", back_populates="car")
     sale = relationship("Sale", back_populates="car")
+    UniqueConstraint('year', 'name', 'brand', name='cars_year_name_brand_uk_idx1')
 
