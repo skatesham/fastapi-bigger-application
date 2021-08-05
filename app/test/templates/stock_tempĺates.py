@@ -29,7 +29,7 @@ def stock_response_json():
 
 @pytest.fixture
 def stock_not_found_error():
-    return { "errors": ["stock not found"] }
+    return { "errors": ["stock does not exist"] }
 
 
 @pytest.fixture

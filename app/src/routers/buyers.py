@@ -9,6 +9,8 @@ from ..domain.buyer import service, schemas
 
 from .converter.buyer_converter import convert, convert_many
 
+from ...resources.strings import BUYER_DOES_NOT_EXIST_ERROR
+
 
 router = APIRouter(
     prefix="/buyers",
@@ -27,7 +29,7 @@ def create_buyer(buyer: schemas.BuyerCreate, db: Session = Depends(get_db)):
 def read_buyer(buyer_id: int, db: Session = Depends(get_db)):
     db_buyer = service.get_buyer(db, buyer_id=buyer_id)
     if db_buyer is None:
-        raise HTTPException(status_code=404, detail="buyer not found")
+        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
     return convert(db_buyer)
     
 
@@ -41,6 +43,6 @@ def read_buyers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def delete_buyer(buyer_id: int, db: Session = Depends(get_db)):
     db_buyer = service.get_buyer(db, buyer_id=buyer_id)
     if db_buyer is None:
-        raise HTTPException(status_code=404, detail="buyer not found")
+        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
     return service.remove_buyer(db, db_buyer=db_buyer)
 

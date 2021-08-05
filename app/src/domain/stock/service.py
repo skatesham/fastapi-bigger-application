@@ -5,6 +5,8 @@ from fastapi import HTTPException
 
 from . import models, schemas
 
+from ....resources.strings import STOCK_OUT_OF_STOCK_ERROR
+
 
 def create_stock(db: Session, stock: schemas.StockCreate):
     db_stock = models.Stock(**stock.dict())
@@ -24,7 +26,7 @@ def get_stock_by_car(db: Session, car_id: int):
 def buy_car_from_stock(db: Session, car_id: int, quantity: int ):
     db_stock = get_stock_by_car(db, car_id=car_id)
     if db_stock.quantity == 0 or db_stock.quantity < quantity:
-        raise HTTPException(status_code=422, detail="out of stock")
+        raise HTTPException(status_code=422, detail=STOCK_OUT_OF_STOCK_ERROR)
     db_stock.quantity -= quantity
     db.commit()
     db.refresh(db_stock)
