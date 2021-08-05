@@ -1,6 +1,6 @@
 from .config import database_test_config
 
-from .config.database_tables import tables
+from .database_tables import tables
 
 def configure_test_database(app):
     database_test_config.configure_test_database(app)
