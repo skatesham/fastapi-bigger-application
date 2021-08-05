@@ -94,6 +94,7 @@ def test_read_stock_not_found(stock_not_found_error):
     assert response.status_code == 404
     assert response.json() == stock_not_found_error
     
+    
 def test_read_stock_by_car(car_json, stock_request_json, stock_response_json, stock_not_found_error):
     ''' Read a stock with success '''
     request_url = stocks_route + "/cars/1"
