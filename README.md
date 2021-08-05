@@ -5,7 +5,7 @@
 ## Requirements
 You'll must have installed:
 - [Python 3.6+](https://www.python.org/downloads/)
-- [Virtualenv for Python3.6+](https://virtualenv.pypa.io/en/latest/installation.html)
+- [Virtual Environments with Python3.6+](https://docs.python.org/3/tutorial/venv.html)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker-compose](https://docs.docker.com/compose/install/)
 
