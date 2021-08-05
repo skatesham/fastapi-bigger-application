@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer
+
 from sqlalchemy.orm import relationship
 
 from ...database import Base
@@ -12,4 +13,9 @@ class Stock(Base):
     car_id = Column(Integer, ForeignKey("cars.id"), unique=True)
     
     car = relationship("Car", back_populates="stock")
+    
+    
+    def hasStock(self, quantity):
+        return self.quantity >= quantity
+    
     
