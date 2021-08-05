@@ -5,7 +5,7 @@ from ...src.database import Base
 
 from ...src.dependencies import get_db
 
-
+## Configure SQLite embedded for file "test.db"
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(
@@ -19,6 +19,7 @@ Base.metadata.create_all(bind=engine)
 
 
 def override_get_db():
+    ''' Method for override database default configuration '''
     try:
         db = TestingSessionLocal()
         yield db
@@ -27,10 +28,14 @@ def override_get_db():
 
 
 def configure_test_database(app):
+    ''' Override default database for test embedded database '''
+    
     app.dependency_overrides[get_db] = override_get_db
 
 
-def truncate_tables(data):
+def truncate_tables(tables):
+    ''' Truncate rows of all input tables '''
+    
     with engine.connect() as con:
         
         IGNORE_CONSTRAINTS = """PRAGMA ignore_check_constraints = 0"""
@@ -39,7 +44,7 @@ def truncate_tables(data):
         statement = """DELETE FROM {table:s}"""
 
         con.execute(IGNORE_CONSTRAINTS)
-        for line in data:
+        for line in tables:
             con.execute(statement.format(table = line))
         con.execute(DISABLE_IGNORE_CONSTRAINTS)
     

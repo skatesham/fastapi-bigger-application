@@ -10,6 +10,7 @@ from ...domain.sale import schemas, models
 
 
 def convert(db_sale: models.Sale):
+    ''' Customized convertion to response template '''
     return schemas.Sale(
         id=db_sale.id,
         car=car_converter.convert(db_sale.car),
@@ -20,4 +21,5 @@ def convert(db_sale: models.Sale):
 
 
 def convert_many(db_sales: List):
+    ''' Convert list customized '''
     return [convert(db_sale) for db_sale in db_sales]

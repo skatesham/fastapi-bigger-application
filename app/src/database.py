@@ -4,6 +4,10 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
+###
+# Database Configuration
+###
+
 SQLALCHEMY_DATABASE_URL = "postgresql://tinnova:tinnova123@localhost/tinnova"
 
 engine = create_engine(

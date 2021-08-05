@@ -3,11 +3,15 @@ from sqlalchemy.sql import text
 from .config import database_test_config
 
 
+###
+# Suport test for database insertions
+###
+
 engine = database_test_config.engine
 
 
 def insert_into_cars(input):
-    """ Insert row into table cars for test mass """
+    ''' Insert into table cars '''
     with engine.connect() as con:
 
         data = (input, )
@@ -20,6 +24,7 @@ def insert_into_cars(input):
 
 
 def insert_into_sellers(input):
+    ''' Insert into table sellers '''
     with engine.connect() as con:
 
         data = (input, )
@@ -32,6 +37,7 @@ def insert_into_sellers(input):
 
 
 def insert_into_buyers(input):
+    ''' Insert into table buyers '''
     with engine.connect() as con:
 
         data = (
@@ -59,7 +65,7 @@ def insert_into_buyers(input):
             
 
 def insert_into_stocks(input):
-    """ Insert row into table cars for test mass """
+    ''' Insert into table stocks '''
     with engine.connect() as con:
 
         data = (input, )
@@ -72,7 +78,7 @@ def insert_into_stocks(input):
 
 
 def insert_into_sales(input):
-    """ Insert row into table cars for test mass """
+    ''' Insert into table sales '''
     with engine.connect() as con:
 
         data = (input, )

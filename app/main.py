@@ -18,7 +18,7 @@ from .src.routers.handlers.http_error import http_error_handler
 
 
 def get_application() -> FastAPI:
-    ''' Start and get the application '''
+    ''' Configure, start and return the application '''
     
     application = FastAPI()
 

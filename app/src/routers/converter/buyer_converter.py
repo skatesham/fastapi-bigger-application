@@ -4,6 +4,7 @@ from ...domain.buyer import schemas, models
 
 
 def convert(db_buyer: models.Buyer):
+    ''' Customized convertion to response template '''
     return schemas.Buyer(
         id=db_buyer.id,
         name=db_buyer.name,
@@ -19,4 +20,5 @@ def convert(db_buyer: models.Buyer):
 
 
 def convert_many(db_buyers: List):
+    ''' Convert list customized '''
     return [convert(db_buyer) for db_buyer in db_buyers]

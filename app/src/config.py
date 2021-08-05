@@ -4,6 +4,11 @@ from starlette.config import Config
 
 from starlette.datastructures import CommaSeparatedStrings, Secret
 
+
+###
+# Properties configurations
+###
+
 API_PREFIX = "/api"
 
 JWT_TOKEN_PREFIX = "Authorization"
