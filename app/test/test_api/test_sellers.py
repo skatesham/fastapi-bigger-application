@@ -8,7 +8,6 @@ from ..base_insertion import insert_into_sellers
 
 from ...main import app
 
-configure_test_database(app)
 
 client = TestClient(app)
 
