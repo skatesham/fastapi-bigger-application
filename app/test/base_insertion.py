@@ -7,6 +7,7 @@ engine = database_test_config.engine
 
 
 def insert_into_cars(input):
+    """ Insert row into table cars for test mass """
     with engine.connect() as con:
 
         data = (input, )
