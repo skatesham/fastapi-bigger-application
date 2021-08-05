@@ -21,6 +21,8 @@ router = APIRouter(
 def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db)):
     if car_service.get_car(db, car_id=stock.car_id) is None:
         raise HTTPException(status_code=404, detail="car not found")
+    if service.get_stock_by_car(db, car_id=stock.car_id):
+        raise HTTPException(status_code=422, detail="stock already exist")
     return service.create_stock(db=db, stock=stock)
 
 
@@ -32,7 +34,7 @@ def read_stock(stock_id: int, db: Session = Depends(get_db)):
     return service.get_stock(db, stock_id=stock_id)
 
 
-@router.get("/car/{car_id}", response_model=schemas.Stock)
+@router.get("/cars/{car_id}", response_model=schemas.Stock)
 def read_stock_by_car(car_id: int, db: Session = Depends(get_db)):
     db_stock = service.get_stock_by_car(db, car_id=car_id)
     if db_stock is None:

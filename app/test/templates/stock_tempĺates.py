@@ -23,3 +23,8 @@ def stock_response_json():
 def stock_not_found_error():
     return { "errors": ["stock not found"] }
 
+
+@pytest.fixture
+def stock_already_exist():
+    return { "errors": ["stock already exist"] }
+
