@@ -50,3 +50,8 @@ def sale_response_json():
 def sale_not_found_error():
     return { "errors": ["sale not found"] }
 
+
+@pytest.fixture
+def sale_all_not_found_error():
+    return {'errors': ['car does not exist, buyer not found, seller not found, stock not found']}
+

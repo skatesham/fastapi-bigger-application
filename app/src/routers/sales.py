@@ -5,9 +5,9 @@ from sqlalchemy.orm import Session
 
 from ..dependencies import get_db
 
-from ..domain.sale import service, schemas, models
+from ..domain.sale import service, schemas
 
-from ..domain.car import service as car_service
+from ..domain.car import repository as car_repository
 
 from ..domain.buyer import service as buyer_service
 
@@ -27,14 +27,18 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Sale, status_code=201)
 def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
-    if car_service.get_car(db, car_id=sale.car_id) is None:
-        raise HTTPException(status_code=404, detail="car does not found")
+    errors = []
+
+    if car_repository.get_car(db, car_id=sale.car_id) is None:
+        errors.append("car does not exist")
     if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
-        raise HTTPException(status_code=404, detail="buyer not found")
+        errors.append("buyer not found")
     if seller_service.get_seller(db, seller_id=sale.seller_id) is None:
-        raise HTTPException(status_code=404, detail="seller not found")
+        errors.append("seller not found")
     if stock_service.get_stock_by_car(db, car_id=sale.car_id) is None:
-        raise HTTPException(status_code=404, detail="stock not found")
+        errors.append("stock not found")
+    if len(errors) > 0:
+        raise HTTPException(status_code=404, detail=", ".join(errors))
     
     stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
     db_sale = service.create_sale(db=db, sale=sale)

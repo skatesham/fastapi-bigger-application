@@ -1,10 +1,8 @@
-import pytest
-
 from fastapi.testclient import TestClient
 
 from ..database_test import configure_test_database, clear_database
 
-from ..templates.sale_tempĺates import sale_request_json, sale_response_json, sale_not_found_error
+from ..templates.sale_tempĺates import sale_request_json, sale_response_json, sale_not_found_error, sale_all_not_found_error
 
 from ..templates.car_tempĺates import car_json, car_not_found_error
 
@@ -139,7 +137,7 @@ def test_create_sale_seller_not_found(car_json, stock_request_json, buyer_json, 
     insert_into_buyers(buyer_json)
     
     response = client.post(sales_route + "/", json=sale_request_json)
-    # assert response.status_code == 404
+    assert response.status_code == 404
     assert response.json() == seller_not_found_error
 
 
@@ -164,4 +162,11 @@ def test_create_sale_out_of_stock(car_json, seller_json, buyer_json, stock_reque
     response = client.post(sales_route + "/", json=sale_request_json)
     assert response.status_code == 422
     assert response.json() == stock_out_of_stock
+    
+    
+def test_create_sale_all_not_found(sale_request_json, sale_all_not_found_error):
+    ''' Create a sale when stock has no quantity available  '''  
+    response = client.post(sales_route + "/", json=sale_request_json)
+    assert response.status_code == 404
+    assert response.json() == sale_all_not_found_error
     
