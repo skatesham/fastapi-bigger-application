@@ -10,7 +10,6 @@ from ..base_insertion import insert_into_stocks, insert_into_cars
 
 from ...main import app
 
-configure_test_database(app)
 
 client = TestClient(app)
 

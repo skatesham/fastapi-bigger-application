@@ -8,7 +8,6 @@ from ..templates.buyer_tempĺates import buyer_json, buyer_not_found_error
 
 from ...main import app
 
-configure_test_database(app)
 
 client = TestClient(app)
 

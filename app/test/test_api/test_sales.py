@@ -19,8 +19,6 @@ from ..base_insertion import insert_into_sales, insert_into_cars, insert_into_st
 from ...main import app
 
 
-configure_test_database(app)
-
 client = TestClient(app)
 
 sales_route = "/api/v1/sales"
@@ -113,7 +111,7 @@ def test_delete_sale_not_found(sale_not_found_error):
 
 
 def test_create_sale_car_not_found(stock_request_json, seller_json, buyer_json, sale_request_json, car_not_found_error):
-    ''' Create a sale with success '''
+    ''' Create a sale when car not found  '''
     insert_into_stocks(stock_request_json)
     insert_into_buyers(buyer_json)
     insert_into_sellers(seller_json)
@@ -124,7 +122,7 @@ def test_create_sale_car_not_found(stock_request_json, seller_json, buyer_json, 
 
 
 def test_create_sale_buyer_not_found(car_json, stock_request_json, seller_json, sale_request_json, buyer_not_found_error):
-    ''' Create a sale with success '''
+    ''' Create a sale when buyer not found  '''
     insert_into_cars(car_json)
     insert_into_stocks(stock_request_json)
     insert_into_sellers(seller_json)
@@ -135,7 +133,7 @@ def test_create_sale_buyer_not_found(car_json, stock_request_json, seller_json, 
 
 
 def test_create_sale_seller_not_found(car_json, stock_request_json, buyer_json, sale_request_json, seller_not_found_error):
-    ''' Create a sale with success '''
+    ''' Create a sale when seller not found '''
     insert_into_cars(car_json)
     insert_into_stocks(stock_request_json)
     insert_into_buyers(buyer_json)
@@ -146,7 +144,7 @@ def test_create_sale_seller_not_found(car_json, stock_request_json, buyer_json, 
 
 
 def test_create_sale_stock_not_found(car_json, seller_json, buyer_json, sale_request_json, stock_not_found_error):
-    ''' Create a sale with success '''
+    ''' Create a sale when stock not found '''
     insert_into_cars(car_json)
     insert_into_buyers(buyer_json)
     insert_into_sellers(seller_json)
@@ -157,7 +155,7 @@ def test_create_sale_stock_not_found(car_json, seller_json, buyer_json, sale_req
 
 
 def test_create_sale_out_of_stock(car_json, seller_json, buyer_json, stock_request_json_out_of_stock, sale_request_json, stock_out_of_stock):
-    ''' Create a sale with success '''
+    ''' Create a sale when stock has no quantity available  '''
     insert_into_cars(car_json)
     insert_into_buyers(buyer_json)
     insert_into_sellers(seller_json)
