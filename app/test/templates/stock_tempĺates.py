@@ -9,6 +9,14 @@ def stock_request_json():
         "quantity": 10
     }
     
+@pytest.fixture
+def stock_request_json_out_of_stock():
+    return {
+        "id": 1,
+        "car_id": 1,
+        "quantity": 0
+    }
+    
     
 @pytest.fixture
 def stock_response_json():
@@ -27,4 +35,9 @@ def stock_not_found_error():
 @pytest.fixture
 def stock_already_exist():
     return { "errors": ["stock already exist"] }
+
+
+@pytest.fixture
+def stock_out_of_stock():
+    return { "errors": ["out of stock"] }
 

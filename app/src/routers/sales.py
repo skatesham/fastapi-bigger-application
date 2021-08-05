@@ -27,30 +27,24 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Sale, status_code=201)
 def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
-    errors = []
-    
-    # Validate relationship
     if car_service.get_car(db, car_id=sale.car_id) is None:
-        errors.append("Car not found")
+        raise HTTPException(status_code=404, detail="car does not found")
     if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
-        errors.append("Buyer not found")
+        raise HTTPException(status_code=404, detail="buyer not found")
     if seller_service.get_seller(db, seller_id=sale.seller_id) is None:
-        errors.append("Seller not found")
-    if len(errors) > 0:
-        raise HTTPException(status_code=404, detail=str({'errors': errors}))
+        raise HTTPException(status_code=404, detail="seller not found")
+    if stock_service.get_stock_by_car(db, car_id=sale.car_id) is None:
+        raise HTTPException(status_code=404, detail="stock not found")
     
-    # Validating Stock
     stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
-    
     db_sale = service.create_sale(db=db, sale=sale)
-    
     return sale_converter.convert(db_sale)
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
 def read_sale(sale_id: int, db: Session = Depends(get_db)):
     db_sale = service.get_sale(db, sale_id=sale_id)
     if db_sale is None:
-        raise HTTPException(status_code=404, detail="Sale not found")
+        raise HTTPException(status_code=404, detail="sale not found")
     return sale_converter.convert(db_sale)
 
 @router.get("/", response_model=List[schemas.Sale])
@@ -62,5 +56,6 @@ def read_sales(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def delete_sale(sale_id: int, db: Session = Depends(get_db)):
     db_sale = service.get_sale(db, sale_id=sale_id)
     if db_sale is None:
-        raise HTTPException(status_code=404, detail="Sale not found")
+        raise HTTPException(status_code=404, detail="sale not found")
     return service.remove_sale(db, db_sale=db_sale)
+

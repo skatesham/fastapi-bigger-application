@@ -13,5 +13,5 @@ def seller_json():
 
 @pytest.fixture
 def seller_not_found_error():
-    return { "errors": ["Seller not found"] }
+    return { "errors": ["seller not found"] }
 

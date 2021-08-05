@@ -23,14 +23,14 @@ def create_seller(seller: schemas.SellerCreate, db: Session = Depends(get_db)):
 def read_seller(seller_id: int, db: Session = Depends(get_db)):
     db_seller = service.get_seller(db, seller_id=seller_id)
     if db_seller is None:
-        raise HTTPException(status_code=404, detail="Seller not found")
+        raise HTTPException(status_code=404, detail="seller not found")
     return db_seller
 
 @router.get("/cpf/{seller_cpf}", response_model=schemas.Seller)
 def read_seller_by_cpf(seller_cpf: str, db: Session = Depends(get_db)):
     db_seller = service.get_by_cpf(db, seller_cpf=seller_cpf)
     if db_seller is None:
-        raise HTTPException(status_code=404, detail="Seller not found")
+        raise HTTPException(status_code=404, detail="seller not found")
     return db_seller
 
 @router.get("/", response_model=List[schemas.Seller])
@@ -42,5 +42,5 @@ def read_sellers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 def delete_seller(seller_id: int, db: Session = Depends(get_db)):
     db_seller = service.get_seller(db, seller_id=seller_id)
     if db_seller is None:
-        raise HTTPException(status_code=404, detail="Seller not found")
+        raise HTTPException(status_code=404, detail="seller not found")
     return service.remove_seller(db, db_seller=db_seller)

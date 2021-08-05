@@ -70,3 +70,16 @@ def insert_into_stocks(input):
         for line in data:
             con.execute(statement, **line)
 
+
+def insert_into_sales(input):
+    """ Insert row into table cars for test mass """
+    with engine.connect() as con:
+
+        data = (input, )
+
+        statement = text(
+            """INSERT INTO sales(id, car_id, buyer_id, seller_id, created_at) VALUES(:id, :car_id, :buyer_id, :seller_id, :created_at)""")
+
+        for line in data:
+            con.execute(statement, **line)
+
