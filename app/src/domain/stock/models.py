@@ -19,3 +19,7 @@ class Stock(Base):
         return self.quantity >= quantity
     
     
+    def reduce_quantity(self, quantity):
+        self.quantity -= quantity
+    
+    

@@ -27,7 +27,7 @@ def buy_car_from_stock(db: Session, car_id: int, quantity: int ):
     db_stock = get_stock_by_car(db, car_id=car_id)
     if not db_stock.hasStock(quantity):
         raise HTTPException(status_code=422, detail=STOCK_OUT_OF_STOCK_ERROR)
-    db_stock.quantity -= quantity
+    db_stock.reduce_quantity(quantity)
     db.commit()
     db.refresh(db_stock)
     return db_stock
