@@ -83,4 +83,13 @@ pip freeze > requirements.txt
 
 - [SQL](https://fastapi.tiangolo.com/tutorial/sql-databases/)
 
-- [Testing](https://fastapi.tiangolo.com/tutorial/testing/)
+- [Testing](https://fastapi.tiangolo.com/tutorial/testing/)  
+
+- [Pydantic](https://pydantic-docs.helpmanual.io/)  
+
+- [SQL Relational Database SQLAlchemy by FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/?h=databa#sql-relational-databases)
+
+- [SQLAlchemy 1.4](https://docs.sqlalchemy.org/en/14/tutorial/engine.html)  
+
+- [FastAPI "Real world example app"](https://github.com/nsidnev/fastapi-realworld-example-app)  
+
