@@ -17,17 +17,26 @@ from .src.config import API_PREFIX, ALLOWED_HOSTS
 from .src.routers.handlers.http_error import http_error_handler
 
 
+###
+# Main application file
+###
+
 def get_application() -> FastAPI:
     ''' Configure, start and return the application '''
     
+    ## Start FastApi App 
     application = FastAPI()
 
+    ## Generate database tables
     Base.metadata.create_all(bind=engine)
 
+    ## Mapping api routes
     application.include_router(router_api, prefix=API_PREFIX)
 
+    ## Add exception handlers
     application.add_exception_handler(HTTPException, http_error_handler)
 
+    ## Allow cors
     application.add_middleware(
         CORSMiddleware,
         allow_origins=ALLOWED_HOSTS or ["*"],
@@ -36,6 +45,7 @@ def get_application() -> FastAPI:
         allow_headers=["*"],
     )
 
+    ## Example of admin route
     application.include_router(
         admin.router,
         prefix="/admin",
