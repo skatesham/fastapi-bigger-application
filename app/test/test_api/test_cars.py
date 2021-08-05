@@ -1,10 +1,8 @@
-import pytest
-
-import json
-
 from fastapi.testclient import TestClient
 
-from ..database_test import configure_test_database, insert_into_cars, clear_database
+from ..database_test import configure_test_database, clear_database
+
+from ..base_insertion import insert_into_cars
 
 from ..templates.car_tempĺates import car_json, car_not_found_error
 
@@ -17,9 +15,12 @@ CAR_ROUTE = "/api/v1/cars"
 client = TestClient(app)
 
 
-def setup_function(module):
+def setup_module(module):
     configure_test_database(app)
-    clear_database() 
+
+
+def setup_function(module):
+    clear_database()
 
 
 def test_create_car(car_json):
