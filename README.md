@@ -42,9 +42,9 @@ uvicorn app.main:app --reload
 
 
 ## Acessing on local
-The application will get started in http://127.0.0.1:8000.  
+The application will get started in http://127.0.0.1:8000  
 
-Swagger Documentation: http://127.0.0.1:8000/docs.
+Swagger Documentation: http://127.0.0.1:8000/docs
 
 Redoc Documentation: http://127.0.0.1:8000/redoc
 
