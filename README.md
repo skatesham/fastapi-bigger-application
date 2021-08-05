@@ -1,6 +1,6 @@
 # Fast API
 
-![coverage](https://img.shields.io/badge/coverage-95%25-darkgreen)
+![coverage](https://img.shields.io/badge/coverage-93%25-darkgreen)
 
 ## Requirements
 You'll must have installed:
