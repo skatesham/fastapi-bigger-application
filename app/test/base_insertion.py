@@ -19,13 +19,10 @@ def insert_into_cars(input):
             con.execute(statement, **line)
 
 
-def insert_into_sellers():
+def insert_into_sellers(input):
     with engine.connect() as con:
 
-        data = ({"id": 1, "name": "João da Silva", "cpf": "69285717640", "phone": "1299871234"},
-                {"id": 2, "name": "Maria de Souza",
-                    "cpf": "42843444128", "phone": "1299874321"},
-                )
+        data = (input, )
 
         statement = text(
             """INSERT INTO sellers(id, name, cpf, phone) VALUES(:id, :name, :cpf, :phone)""")
