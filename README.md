@@ -1,5 +1,7 @@
 # Fast API
 
+![coverage](https://img.shields.io/badge/coverage-95%25-darkgreen)
+
 ## Requirements
 You'll must have installed:
 - [Python 3.6+](https://www.python.org/downloads/)
@@ -55,10 +57,16 @@ If required authentication on routes add headers:
 
 ## Testing
 
-__For test run__  
+__For run tests__  
 ```bash
 pytest
 ```
+
+__For run tests with coverage report__  
+```bash
+pytest --cov=app app/test/
+```
+
 
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
