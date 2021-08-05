@@ -89,3 +89,13 @@ def insert_into_sales(input):
         for line in data:
             con.execute(statement, **line)
 
+
+def read_stock_by_id(id):
+    with engine.connect() as con:
+        statement = "SELECT * FROM stocks WHERE id = " + str(id)
+        keys = ("id", "quantity", "car_id")
+        for row in con.execute(statement):
+            return dict(zip(keys, row))
+    return None
+    
+    

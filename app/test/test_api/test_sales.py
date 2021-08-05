@@ -12,7 +12,7 @@ from ..templates.seller_tempĺates import seller_json, seller_not_found_error
 
 from ..templates.buyer_tempĺates import buyer_json, buyer_not_found_error
 
-from ..base_insertion import insert_into_sales, insert_into_cars, insert_into_stocks, insert_into_sellers, insert_into_buyers
+from ..base_insertion import insert_into_sales, insert_into_cars, insert_into_stocks, insert_into_sellers, insert_into_buyers, read_stock_by_id
 
 from ...main import app
 
@@ -41,6 +41,8 @@ def test_create_sale(car_json, stock_request_json, seller_json, buyer_json, sale
     assert response.status_code == 201
     sale_response_json["created_at"] = response.json()["created_at"]
     assert response.json() == sale_response_json
+    db_stock = read_stock_by_id(stock_request_json["id"])
+    assert (stock_request_json["quantity"] - 1) == db_stock["quantity"]
 
 
 def test_read_sale(car_json, stock_request_json, seller_json, buyer_json, sale_request_json, sale_response_json):
