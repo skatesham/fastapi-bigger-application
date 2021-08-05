@@ -1,6 +1,6 @@
 from sqlalchemy.sql import text
 
-from . import database_test_config
+from .config import database_test_config
 
 
 engine = database_test_config.engine
