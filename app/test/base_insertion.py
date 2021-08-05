@@ -34,31 +34,22 @@ def insert_into_sellers():
             con.execute(statement, **line)
 
 
-def insert_into_buyers():
+def insert_into_buyers(input):
     with engine.connect() as con:
 
         data = (
             {
-                "id": 1,
-                "name": "Bruce Lee",
-                "phone": "1299871234",
-                "address_cep": "73770-000",
-                "address_public_place": "Muro Preto",
-                "address_district": "Cidade Baixa",
-                "address_city": "Alto Paraíso de Goias",
-                "address_state": "Goias"
+                "id": input["id"],
+                "name":input["name"],
+                "phone": input["phone"],
+                "address_cep": input["address"]["cep"],
+                "address_public_place": input["address"]["public_place"],
+                "address_district": input["address"]["district"],
+                "address_city": input["address"]["city"],
+                "address_state": input["address"]["state"]
             },
-            {
-                "id": 2,
-                "name": "Bruce Willis",
-                "phone": "1299874321",
-                "address_cep": "12209-000",
-                "address_public_place": "Prédio Vermelho",
-                "address_district": "Centro",
-                "address_city": "São José dos Campos",
-                "address_state": "São Paulo"
-            }
         )
+
 
         statement = text("""INSERT INTO buyers( 
             id, name, phone, address_cep, address_public_place, 
