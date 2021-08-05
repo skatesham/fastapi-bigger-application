@@ -11,16 +11,16 @@ You'll must have installed:
 
 ## Setup Project
 
-Create Virtual Environment
+Create virtual environment
 ```bash
 python3 -m venv env
 ```
 
-Activating virtual environment
+Activating created virtual environment
 ```bash
 source env/bin/activate 
 ```
-Install depedencies
+Install app depedencies
 ```bash
 pip install -r requirements.txt 
 ```
@@ -65,6 +65,14 @@ pytest
 __For run tests with coverage report__  
 ```bash
 pytest --cov=app app/test/
+```
+
+## Development
+
+For update dependencies on `requirements.txt`, run:  
+
+```bash
+pip freeze > requirements.txt
 ```
 
 
