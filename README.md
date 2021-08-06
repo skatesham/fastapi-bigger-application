@@ -38,7 +38,7 @@ uvicorn app.main:app --reload
 ```
 
 ##### Obs: It's possible to configure the database by environment variable as:
-##### `export URI_DB="postgresql://user-name:password@host-name/database-name"`  
+##### `export DATABASE_URL="postgresql://user-name:password@host-name/database-name"`  
 
 
 ## Acessing on local
