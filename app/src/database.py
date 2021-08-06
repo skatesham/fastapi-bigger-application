@@ -11,7 +11,7 @@ import os
 SQLALCHEMY_DATABASE_URL = "postgresql://tinnova:tinnova123@localhost/tinnova"
 
 engine = create_engine(
-    os.getenv("DATABASE_URL", SQLALCHEMY_DATABASE_URL)
+    os.getenv("DB_URL", SQLALCHEMY_DATABASE_URL)
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
