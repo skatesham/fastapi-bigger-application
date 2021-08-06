@@ -91,7 +91,8 @@ sudo snap install --classic heroku
 
 __Deploy__
 
-Case is activated automatic deploy for `master` branch, just commit on `master` branch, instead make manual deploy from Heroku Cli. 
+**Case is activated automatic deploy for `master` branch, just commit on `master` branch,  
+instead make manual deploy from Heroku Cli, like below**  
 ```
 heroku login
 heroku git:remote -a car-shop-fastapi
