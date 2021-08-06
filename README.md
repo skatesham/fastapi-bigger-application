@@ -1,6 +1,9 @@
-# Fast API
+# FastAPI for Car Shop ERP
 
-![coverage](https://img.shields.io/badge/coverage-93%25-darkgreen)
+![coverage](https://img.shields.io/badge/coverage-93%25-darkgreen)  
+
+This rest api is a kind of ERP of car shop.  
+App is available on cloud by https://car-shop-fastapi.herokuapp.com/docs.
 
 ## Requirements
 You'll must have installed:
@@ -75,6 +78,29 @@ For update dependencies on `requirements.txt`, run:
 pip freeze > requirements.txt
 ```
 
+## Deploy On Heroku
+
+__Requirements__  
+
+- [Heroku Cli](https://devcenter.heroku.com/articles/heroku-cli)
+
+__Install Heroku Cli__  
+```
+sudo snap install --classic heroku
+```
+
+__Deploy__
+
+Case is activated automatic deploy for `master` branch, just commit on `master` branch, instead make manual deploy from Heroku Cli. 
+```
+heroku login
+heroku git:remote -a car-shop-fastapi
+git add .
+git commit -m "Deploy on heroku"
+git push origin master
+git push heroku master
+```
+ ___
 
 ### Source Documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
