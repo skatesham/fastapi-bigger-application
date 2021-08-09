@@ -73,9 +73,13 @@ ___
 ## Development
 
 For update dependencies on `requirements.txt`, run:  
+Obs: For production must have extra changes.
+1. Remove version of `dataclasses`
+2. Change `psycopg2...` to `psycopg2-binary`
+3. Remove `pkg-resources...`
 
 ```bash
-pip freeze > requirements.txt (requires extra changes)
+pip freeze > requirements.txt
 ```
 ___
 ## Deploy On Heroku
