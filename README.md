@@ -11,7 +11,7 @@ You'll must have installed:
 - [Virtual Environments with Python3.6+](https://docs.python.org/3/tutorial/venv.html)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker-compose](https://docs.docker.com/compose/install/)
-
+___
 ## Setup Project
 
 Create virtual environment
@@ -25,9 +25,9 @@ source env/bin/activate
 ```
 Install app depedencies
 ```bash
-pip install -r requirements.txt 
+pip install -r requirements-local.txt 
 ```
-
+___
 ## Running Application
 
 Starting database (postgres:alpine3.14)
@@ -57,7 +57,7 @@ Database Adminer: http://127.0.0.1:9000
 If required authentication on routes add headers:
 - token = jessica
 - x_token = fake-super-secret-token
-
+___
 ## Testing
 
 __For run tests__  
@@ -69,15 +69,15 @@ __For run tests with coverage report__
 ```bash
 pytest --cov=app app/test/
 ```
-
+___
 ## Development
 
 For update dependencies on `requirements.txt`, run:  
 
 ```bash
-pip freeze > requirements.txt
+pip freeze > requirements.txt (requires extra changes)
 ```
-
+___
 ## Deploy On Heroku
 
 __Requirements__  
