@@ -23,7 +23,7 @@ Activating created virtual environment
 ```bash
 source env/bin/activate 
 ```
-Install app depedencies
+Install app dependencies
 ```bash
 pip install -r requirements-local.txt 
 ```
