@@ -15,8 +15,6 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine)
 
-Base.metadata.create_all(bind=engine)
-
 
 def override_get_db():
     ''' Method for override database default configuration '''
@@ -29,6 +27,8 @@ def override_get_db():
 
 def configure_test_database(app):
     ''' Override default database for test embedded database '''
+    
+    Base.metadata.create_all(bind=engine)
     
     app.dependency_overrides[get_db] = override_get_db
 
