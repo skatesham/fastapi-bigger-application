@@ -55,7 +55,7 @@ Database Adminer: http://127.0.0.1:9000
 - credentials tinnova/tinnova123(user/password).
 
 If required authentication on routes add headers:
-- token = jessica
+- token = sham
 - x_token = fake-super-secret-token
 ___
 ## Testing
