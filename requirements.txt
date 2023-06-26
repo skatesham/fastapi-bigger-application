@@ -19,14 +19,14 @@ importlib-metadata==4.6.1
 iniconfig==1.1.1
 packaging==21.0
 pluggy==0.13.1
-psycopg2-binary
+psycopg2-binary==2.9.6
 py==1.10.0
 pycodestyle==2.7.0
 pydantic==1.8.2
+PyJWT==2.7.0
 pyparsing==2.4.7
 pytest==6.2.4
 pytest-cov==2.12.1
-python-jose==3.3.0
 requests==2.26.0
 SQLAlchemy==1.4.21
 starlette==0.14.2
