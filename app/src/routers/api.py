@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
+from . import items, users, cars, stocks, sellers, buyers, sales, auth
 from ..config import ROUTE_PREFIX_V1
 
-from . import items, users, cars, stocks, sellers, buyers, sales, auth
-
 router = APIRouter()
+
 
 def include_api_routes():
     ''' Include to router all api rest routes with version prefix '''
@@ -16,5 +16,6 @@ def include_api_routes():
     router.include_router(sellers.router, prefix=ROUTE_PREFIX_V1)
     router.include_router(buyers.router, prefix=ROUTE_PREFIX_V1)
     router.include_router(sales.router, prefix=ROUTE_PREFIX_V1)
+
 
 include_api_routes()

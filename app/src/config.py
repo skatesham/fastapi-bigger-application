@@ -1,9 +1,7 @@
 from typing import List
 
 from starlette.config import Config
-
-from starlette.datastructures import CommaSeparatedStrings, Secret
-
+from starlette.datastructures import CommaSeparatedStrings
 
 ###
 # Properties configurations

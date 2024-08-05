@@ -1,13 +1,9 @@
 from fastapi.testclient import TestClient
 
-from ..database_test import configure_test_database, clear_database
-
 from ..base_insertion import insert_into_buyers
-
+from ..database_test import configure_test_database, clear_database
 from ..templates.buyer_tempĺates import buyer_json, buyer_not_found_error
-
 from ...main import app
-
 
 client = TestClient(app)
 
@@ -20,7 +16,7 @@ def setup_module(module):
 
 def setup_function(module):
     clear_database()
-    
+
 
 def test_create_buyer(buyer_json):
     ''' Create a buyer with success '''
@@ -44,7 +40,7 @@ def test_read_buyers(buyer_json):
     request_url = buyers_route + "?skip=0&limit=100"
     response = client.get(request_url)
     assert response.status_code == 200
-    assert response.json() == [ buyer_json ]
+    assert response.json() == [buyer_json]
 
 
 def test_delete_buyer(buyer_json):
@@ -62,8 +58,8 @@ def test_read_buyer_not_found(buyer_not_found_error):
     response = client.get(request_url)
     assert response.status_code == 404
     assert response.json() == buyer_not_found_error
-    
-    
+
+
 def test_read_buyers_not_found():
     ''' Read all buyers paginated when not found '''
     request_url = buyers_route + "?skip=0&limit=100"
@@ -78,4 +74,3 @@ def test_delete_buyer_not_found(buyer_not_found_error):
     response = client.delete(request_url)
     assert response.status_code == 404
     assert response.json() == buyer_not_found_error
-    

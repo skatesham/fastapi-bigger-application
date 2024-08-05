@@ -1,7 +1,7 @@
 ###
 # Tables for clear on test
 ###
- 
+
 tables = (
     "sales",
     "buyers",
@@ -11,4 +11,3 @@ tables = (
     "users",
     "items",
 )
-

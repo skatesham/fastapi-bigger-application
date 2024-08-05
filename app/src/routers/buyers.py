@@ -1,17 +1,12 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from sqlalchemy.orm import Session
 
-from ..dependencies import get_db
-
-from ..domain.buyer import service, schemas
-
 from .converter.buyer_converter import convert, convert_many
-
+from ..dependencies import get_db
+from ..domain.buyer import service, schemas
 from ...resources.strings import BUYER_DOES_NOT_EXIST_ERROR
-
 
 router = APIRouter(
     prefix="/buyers",
@@ -32,7 +27,7 @@ def read_buyer(buyer_id: int, db: Session = Depends(get_db)):
     if db_buyer is None:
         raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
     return convert(db_buyer)
-    
+
 
 @router.get("/", response_model=List[schemas.Buyer])
 def read_buyers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -46,4 +41,3 @@ def delete_buyer(buyer_id: int, db: Session = Depends(get_db)):
     if db_buyer is None:
         raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
     return service.remove_buyer(db, db_buyer=db_buyer)
-

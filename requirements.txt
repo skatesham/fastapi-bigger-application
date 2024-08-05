@@ -9,7 +9,6 @@ charset-normalizer==2.0.3
 click==8.0.1
 contextvars==2.4
 coverage==5.5
-dataclasses
 fastapi==0.66.0
 greenlet==1.1.0
 h11==0.12.0

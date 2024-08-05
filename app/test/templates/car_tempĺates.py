@@ -8,4 +8,4 @@ def car_json():
 
 @pytest.fixture
 def car_not_found_error():
-    return { 'errors': ['car does not exist'] }
+    return {'errors': ['car does not exist']}

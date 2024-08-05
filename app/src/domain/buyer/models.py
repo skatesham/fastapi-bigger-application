@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String
-
 from sqlalchemy.orm import relationship
 
 from ...database import Base
@@ -16,6 +15,5 @@ class Buyer(Base):
     address_city = Column(String)
     address_district = Column(String)
     address_state = Column(String)
-    
+
     sale = relationship("Sale", back_populates="buyer")
-    

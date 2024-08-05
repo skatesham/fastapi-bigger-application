@@ -19,5 +19,4 @@ def buyer_json():
 
 @pytest.fixture
 def buyer_not_found_error():
-    return { 'errors': ['buyer does not exist'] }
-
+    return {'errors': ['buyer does not exist']}

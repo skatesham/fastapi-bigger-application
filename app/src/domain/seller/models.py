@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String
-
 from sqlalchemy.orm import relationship
 
 from ...database import Base
@@ -12,6 +11,5 @@ class Seller(Base):
     name = Column(String)
     cpf = Column(String, index=True)
     phone = Column(String)
-    
+
     sale = relationship("Sale", back_populates="seller")
-    

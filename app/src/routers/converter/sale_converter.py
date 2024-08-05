@@ -1,11 +1,8 @@
 from typing import List
 
 from . import buyer_converter
-
-from . import seller_converter
-
 from . import car_converter
-
+from . import seller_converter
 from ...domain.sale import schemas, models
 
 

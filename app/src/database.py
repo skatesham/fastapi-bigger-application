@@ -1,14 +1,14 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
-import os
 
 ###
 # Database Configuration
 ###
 
-SQLALCHEMY_DATABASE_URL = "postgresql://tinnova:tinnova123@localhost/tinnova"
+SQLALCHEMY_DATABASE_URL = "postgresql://skatesham:skatesham-github@localhost/skatesham"
 
 engine = create_engine(
     os.getenv("DB_URL", SQLALCHEMY_DATABASE_URL)

@@ -1,19 +1,12 @@
 from fastapi import Depends, FastAPI, Request, Response
-
 from fastapi.middleware.cors import CORSMiddleware
-
 from starlette.exceptions import HTTPException
 
-from .src.dependencies import get_query_token, get_token_header
-
-from .src.internal import admin
-
-from .src.routers.api import router as router_api
-
-from .src.database import engine, SessionLocal, Base
-
 from .src.config import API_PREFIX, ALLOWED_HOSTS
-
+from .src.database import engine, SessionLocal, Base
+from .src.dependencies import get_token_header
+from .src.internal import admin
+from .src.routers.api import router as router_api
 from .src.routers.handlers.http_error import http_error_handler
 
 
@@ -23,7 +16,7 @@ from .src.routers.handlers.http_error import http_error_handler
 
 def get_application() -> FastAPI:
     ''' Configure, start and return the application '''
-    
+
     ## Start FastApi App 
     application = FastAPI()
 
@@ -53,7 +46,7 @@ def get_application() -> FastAPI:
         dependencies=[Depends(get_token_header)],
         responses={418: {"description": "I'm a teapot"}},
     )
-    
+
     return application
 
 
@@ -74,4 +67,3 @@ async def db_session_middleware(request: Request, call_next):
     finally:
         request.state.db.close()
     return response
-
