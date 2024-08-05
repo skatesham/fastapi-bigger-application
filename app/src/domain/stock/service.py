@@ -1,4 +1,3 @@
-# TODO: Remove this dependency
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
