@@ -18,6 +18,7 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Buyer, status_code=201)
 def create_buyer(buyer: schemas.BuyerCreate, db: Session = Depends(get_db)):
+    # FIXME: This conversion is an Error... Fast API can convert it automatically.
     return convert(service.create_buyer(db=db, buyer=buyer))
 
 

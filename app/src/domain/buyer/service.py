@@ -6,6 +6,9 @@ from . import models, schemas
 def create_buyer(db: Session, buyer: schemas.BuyerCreate):
     buyer_dict = buyer.dict()
     address_dict = buyer_dict["address"]
+
+    # FIXME: Less code could be use with something like:
+    # FIXME: db_buyer = models.Buyer(**db_buyer.model_dump(exclude={'XXX', 'YYY'}))
     db_buyer = models.Buyer(
         name=buyer_dict["name"],
         phone=buyer_dict["phone"],
