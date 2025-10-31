@@ -8,7 +8,7 @@ This REST API serves as an ERP system for a car shop.
 
 Ensure you have the following installed:
 
-- [Python 3.6+](https://www.python.org/downloads/)
+- [Python 3.6~3.8](https://www.python.org/downloads/) (Verify runtime.txt)
 - [Virtual Environments with Python 3.6+](https://docs.python.org/3/tutorial/venv.html)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
