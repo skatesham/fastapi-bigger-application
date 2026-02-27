@@ -1,5 +1,5 @@
-import jwt
 from fastapi import Header, HTTPException
+from jose import jwt
 
 from .database import SessionLocal
 
@@ -18,7 +18,7 @@ def encode():
 
 
 def get_db():
-    ''' Method for configure database '''
+    """Method for configure database"""
     db = SessionLocal()
     try:
         yield db
@@ -27,7 +27,7 @@ def get_db():
 
 
 async def get_token_header(x_token: str = Header(...)):
-    ''' Exemplo of header validation dependency '''
+    """Exemplo of header validation dependency"""
     payload = decode(x_token)
     username: str = payload.get("email")
     if username == None:
@@ -35,6 +35,6 @@ async def get_token_header(x_token: str = Header(...)):
 
 
 async def get_query_token(token: str):
-    ''' Exemplo of header validation dependency '''
+    """Exemplo of header validation dependency"""
     if token != "jessica":
         raise HTTPException(status_code=400, detail="No Jessica token provided")

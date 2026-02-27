@@ -1,0 +1,215 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastapi-car-shop-erp"
+version = "1.0.0"
+description = "Professional FastAPI ERP system for car shop management"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Development Team", email = "dev@carshop.com"}
+]
+maintainers = [
+    {name = "Development Team", email = "dev@carshop.com"}
+]
+keywords = ["fastapi", "erp", "car-shop", "postgresql", "python"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+requires-python = ">=3.11"
+dependencies = [
+    # Core FastAPI Stack
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "starlette>=0.27.0",
+    
+    # Database & ORM
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+    "psycopg2-binary>=2.9.0",
+    
+    # Pydantic & Validation
+    "pydantic>=2.4.0",
+    "pydantic-settings>=2.0.0",
+    "email-validator>=2.0.0",
+    
+    # Authentication & Security
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.6",
+    
+    # Environment & Configuration
+    "python-dotenv>=1.0.0",
+    
+    # Utilities
+    "requests>=2.31.0",
+    "click>=8.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Development & Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+    
+    # Code Quality
+    "black>=23.9.0",
+    "isort>=5.12.0",
+    "flake8>=7.3.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.5.0",
+    
+    # Documentation
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+]
+
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+    "factory-boy>=3.3.0",
+    "faker>=19.0.0",
+]
+
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/carshop/fastapi-erp"
+Documentation = "https://fastapi-car-shop-erp.readthedocs.io/"
+Repository = "https://github.com/carshop/fastapi-erp.git"
+"Bug Tracker" = "https://github.com/carshop/fastapi-erp/issues"
+Changelog = "https://github.com/carshop/fastapi-erp/blob/main/CHANGELOG.md"
+
+[project.scripts]
+carshop = "app.main:main"
+
+[tool.hatch.version]
+path = "app/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+# Black Configuration
+[tool.black]
+line-length = 88
+target-version = ['py311', 'py312', 'py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# isort Configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["app"]
+known_third_party = ["fastapi", "sqlalchemy", "pydantic", "jose"]
+
+# MyPy Configuration
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "jose.*",
+    "passlib.*",
+    "alembic.*",
+]
+ignore_missing_imports = true
+
+# Pytest Configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["app/test"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+# Coverage Configuration
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "app/test/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+
+# Bandit Security Linter
+[tool.bandit]
+exclude_dirs = ["app/test", "venv"]
+skips = ["B101", "B601"]
+
+# Flake8 Configuration (in setup.cfg or .flake8)
+# [tool.flake8] - flake8 doesn't support pyproject yet

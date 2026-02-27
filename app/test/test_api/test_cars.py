@@ -1,9 +1,9 @@
 from fastapi.testclient import TestClient
 
-from ..base_insertion import insert_into_cars
-from ..database_test import configure_test_database, clear_database
-from ..templates.car_tempĺates import car_json, car_not_found_error
 from ...main import app
+from ..base_insertion import insert_into_cars
+from ..database_test import clear_database, configure_test_database
+from ..templates.car_tempĺates import car_json, car_not_found_error
 
 CAR_ROUTE = "/api/v1/cars"
 
@@ -19,14 +19,14 @@ def setup_function(module):
 
 
 def test_create_car(car_json):
-    ''' Create a car with success '''
+    """Create a car with success"""
     response = client.post(CAR_ROUTE + "/", json=car_json)
     assert response.status_code == 201
     assert response.json() == car_json
 
 
 def test_read_car(car_json):
-    ''' Read a car with success '''
+    """Read a car with success"""
     insert_into_cars(car_json)
 
     request_url = CAR_ROUTE + "/1"
@@ -36,7 +36,7 @@ def test_read_car(car_json):
 
 
 def test_read_cars(car_json):
-    ''' Read all cars paginated with success '''
+    """Read all cars paginated with success"""
     insert_into_cars(car_json)
 
     request_url = CAR_ROUTE + "?skip=0&limit=100"
@@ -46,7 +46,7 @@ def test_read_cars(car_json):
 
 
 def test_delete_car(car_json):
-    ''' Delete a car with success '''
+    """Delete a car with success"""
     insert_into_cars(car_json)
 
     request_url = CAR_ROUTE + "/1"
@@ -56,7 +56,7 @@ def test_delete_car(car_json):
 
 
 def test_read_car_not_found(car_not_found_error):
-    ''' Read a car when not found '''
+    """Read a car when not found"""
     request_url = CAR_ROUTE + "/1"
     response = client.get(request_url)
     assert response.status_code == 404
@@ -64,7 +64,7 @@ def test_read_car_not_found(car_not_found_error):
 
 
 def test_read_cars_not_found():
-    ''' Read all cars paginated when not found '''
+    """Read all cars paginated when not found"""
     request_url = CAR_ROUTE + "?skip=0&limit=100"
     response = client.get(request_url)
     assert response.status_code == 200
@@ -72,7 +72,7 @@ def test_read_cars_not_found():
 
 
 def test_delete_car_not_found(car_not_found_error):
-    ''' Delete a car when not exists '''
+    """Delete a car when not exists"""
     request_url = CAR_ROUTE + "/1"
     response = client.delete(request_url)
     assert response.status_code == 404

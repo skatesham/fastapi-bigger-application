@@ -11,12 +11,12 @@ def buyer_json():
             "public_place": "Banbusal",
             "city": "Alto Paraiso de Goias",
             "district": "Cidade Baixa",
-            "state": "Goias"
+            "state": "Goias",
         },
-        "phone": "12996651234"
+        "phone": "12996651234",
     }
 
 
 @pytest.fixture
 def buyer_not_found_error():
-    return {'errors': ['buyer does not exist']}
+    return {"errors": ["buyer does not exist"]}

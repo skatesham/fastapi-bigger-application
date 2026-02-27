@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from . import models, schemas
 from ....resources.strings import STOCK_OUT_OF_STOCK_ERROR
+from . import models, schemas
 
 
 def create_stock(db: Session, stock: schemas.StockCreate):

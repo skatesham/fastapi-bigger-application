@@ -5,5 +5,5 @@ router = APIRouter()
 
 @router.post("/")
 async def update_admin():
-    ''' Example route '''
+    """Example route"""
     return {"message": "Admin getting schwifty"}

@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from ..dependencies import get_db
-from ..domain.seller import service, schemas
 from ...resources.strings import SELLER_DOES_NOT_EXIST_ERROR
+from ..dependencies import get_db
+from ..domain.seller import schemas, service
 
 router = APIRouter(
     prefix="/sellers",

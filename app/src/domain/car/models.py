@@ -14,4 +14,4 @@ class Car(Base):
 
     stock = relationship("Stock", back_populates="car")
     sale = relationship("Sale", back_populates="car")
-    UniqueConstraint('year', 'name', 'brand', name='cars_year_name_brand_uk_idx1')
+    UniqueConstraint("year", "name", "brand", name="cars_year_name_brand_uk_idx1")

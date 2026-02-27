@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
+from jose import jwt
 from sqlalchemy.orm import Session
 
 from ..dependencies import get_db
-from ..domain.user import service, schemas
+from ..domain.user import schemas, service
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 

@@ -2,22 +2,22 @@ from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException
 
-from .src.config import API_PREFIX, ALLOWED_HOSTS
-from .src.database import engine, SessionLocal, Base
+from .src.config import ALLOWED_HOSTS, API_PREFIX
+from .src.database import Base, SessionLocal, engine
 from .src.dependencies import get_token_header
 from .src.internal import admin
 from .src.routers.api import router as router_api
 from .src.routers.handlers.http_error import http_error_handler
 
-
 ###
 # Main application file
 ###
 
-def get_application() -> FastAPI:
-    ''' Configure, start and return the application '''
 
-    ## Start FastApi App 
+def get_application() -> FastAPI:
+    """Configure, start and return the application"""
+
+    ## Start FastApi App
     application = FastAPI()
 
     ## Generate database tables
@@ -55,11 +55,11 @@ app = get_application()
 
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
-    '''
+    """
     The middleware we'll add (just a function) will create
     a new SQLAlchemy SessionLocal for each request, add it to
     the request and then close it once the request is finished.
-    '''
+    """
     response = Response("Internal server error", status_code=500)
     try:
         request.state.db = SessionLocal()

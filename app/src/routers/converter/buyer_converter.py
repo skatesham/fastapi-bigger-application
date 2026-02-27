@@ -1,10 +1,10 @@
 from typing import List
 
-from ...domain.buyer import schemas, models
+from ...domain.buyer import models, schemas
 
 
 def convert(db_buyer: models.Buyer):
-    ''' Customized convertion to response template '''
+    """Customized convertion to response template"""
     return schemas.Buyer(
         id=db_buyer.id,
         name=db_buyer.name,
@@ -15,10 +15,10 @@ def convert(db_buyer: models.Buyer):
             city=db_buyer.address_city,
             district=db_buyer.address_district,
             state=db_buyer.address_state,
-        )
+        ),
     )
 
 
 def convert_many(db_buyers: List):
-    ''' Convert list customized '''
+    """Convert list customized"""
     return [convert(db_buyer) for db_buyer in db_buyers]

@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from ..dependencies import get_token_header, get_db
-from ..domain.user import service, schemas
+from ..dependencies import get_db, get_token_header
+from ..domain.user import schemas, service
 
 router = APIRouter(
     prefix="/items",

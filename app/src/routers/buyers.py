@@ -3,10 +3,10 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from .converter.buyer_converter import convert, convert_many
-from ..dependencies import get_db
-from ..domain.buyer import service, schemas
 from ...resources.strings import BUYER_DOES_NOT_EXIST_ERROR
+from ..dependencies import get_db
+from ..domain.buyer import schemas, service
+from .converter.buyer_converter import convert, convert_many
 
 router = APIRouter(
     prefix="/buyers",

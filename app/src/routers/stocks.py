@@ -3,12 +3,14 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from ...resources.strings import (
+    CAR_DOES_NOT_EXIST_ERROR,
+    STOCK_ALREADY_EXISTS_ERROR,
+    STOCK_DOES_NOT_EXIST_ERROR,
+)
 from ..dependencies import get_db
 from ..domain.car import service as car_service
-from ..domain.stock import service, schemas
-from ...resources.strings import CAR_DOES_NOT_EXIST_ERROR
-from ...resources.strings import STOCK_ALREADY_EXISTS_ERROR
-from ...resources.strings import STOCK_DOES_NOT_EXIST_ERROR
+from ..domain.stock import schemas, service
 
 router = APIRouter(
     prefix="/stocks",
