@@ -2,7 +2,7 @@
 # Updated to latest stable versions - 2026
 
 # Core FastAPI Stack
-fastapi>=0.104.0
+fastapi==0.133.1
 uvicorn[standard]>=0.24.0
 starlette>=0.27.0
 
