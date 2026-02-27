@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, UserService
-from app.src.domain.user import schemas
+from app.src.domain.user import exceptions, schemas
 
 router = APIRouter()
 
@@ -15,7 +15,12 @@ def create_user(
     user_service: UserService,
 ):
     """Create new user using dependency injection"""
-    return user_service.create_user(db=db, user=user)
+    try:
+        return user_service.create_user(db=db, user=user)
+    except exceptions.UserAlreadyExistsError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except exceptions.InvalidUserError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -25,7 +30,10 @@ def read_user(
     user_service: UserService,
 ):
     """Get user by ID using dependency injection"""
-    return user_service.get_user(db, user_id=user_id)
+    try:
+        return user_service.get_user(db, user_id=user_id)
+    except exceptions.UserNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=List[schemas.User])

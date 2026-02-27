@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 from app.src.core.conversion import convert_model_to_schema, convert_many_models_to_schemas
 
 
@@ -18,6 +19,12 @@ class BuyerCreate(BaseModel):
     name: str
     address: Address
     phone: str
+
+
+class BuyerUpdate(BaseModel):
+    name: Optional[str] = None
+    address: Optional[Address] = None
+    phone: Optional[str] = None
 
 
 class BuyerSimpleResponse(BaseModel):

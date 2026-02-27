@@ -2,9 +2,8 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from app.resources.strings import BUYER_DOES_NOT_EXIST_ERROR
 from app.src.api.deps import Database, BuyerService
-from app.src.domain.buyer import schemas
+from app.src.domain.buyer import exceptions, schemas
 
 router = APIRouter()
 
@@ -16,8 +15,13 @@ def create_buyer(
     buyer_service: BuyerService,
 ):
     """Create new buyer using dependency injection"""
-    db_buyer = buyer_service.create_buyer(db=db, buyer=buyer)
-    return schemas.Buyer.from_model(db_buyer)
+    try:
+        db_buyer = buyer_service.create_buyer(db=db, buyer=buyer)
+        return schemas.Buyer.from_model(db_buyer)
+    except exceptions.BuyerAlreadyExistsError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except exceptions.BuyerInvalidDataError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/{buyer_id}", response_model=schemas.Buyer)
@@ -27,10 +31,11 @@ def read_buyer(
     buyer_service: BuyerService,
 ):
     """Get buyer by ID using dependency injection"""
-    db_buyer = buyer_service.get_buyer(db, buyer_id=buyer_id)
-    if db_buyer is None:
-        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
-    return schemas.Buyer.from_model(db_buyer)
+    try:
+        db_buyer = buyer_service.get_buyer(db, buyer_id=buyer_id)
+        return schemas.Buyer.from_model(db_buyer)
+    except exceptions.BuyerNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=List[schemas.Buyer])
@@ -52,4 +57,7 @@ def delete_buyer(
     buyer_service: BuyerService,
 ):
     """Delete buyer by ID using dependency injection"""
-    return buyer_service.delete_buyer(db, buyer_id=buyer_id)
+    try:
+        return buyer_service.delete_buyer(db, buyer_id=buyer_id)
+    except exceptions.BuyerNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))

@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, StockService
-from app.src.domain.stock import schemas
+from app.src.domain.stock import exceptions, schemas
 
 router = APIRouter()
 
@@ -15,8 +15,13 @@ def create_stock(
     stock_service: StockService,
 ):
     """Create new stock using dependency injection"""
-    db_stock = stock_service.create_stock(db=db, stock=stock)
-    return schemas.Stock.from_model(db_stock)
+    try:
+        db_stock = stock_service.create_stock(db=db, stock=stock)
+        return schemas.Stock.from_model(db_stock)
+    except exceptions.StockAlreadyExistsError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except exceptions.InvalidStockError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/{stock_id}", response_model=schemas.Stock)
@@ -26,8 +31,11 @@ def read_stock(
     stock_service: StockService,
 ):
     """Get stock by ID using dependency injection"""
-    db_stock = stock_service.get_stock(db, stock_id=stock_id)
-    return schemas.Stock.from_model(db_stock)
+    try:
+        db_stock = stock_service.get_stock(db, stock_id=stock_id)
+        return schemas.Stock.from_model(db_stock)
+    except exceptions.StockNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=List[schemas.Stock])
@@ -49,4 +57,7 @@ def delete_stock(
     stock_service: StockService,
 ):
     """Delete stock by ID using dependency injection"""
-    return stock_service.remove_stock(db, stock_id=stock_id)
+    try:
+        return stock_service.delete_stock(db, stock_id=stock_id)
+    except exceptions.StockNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))

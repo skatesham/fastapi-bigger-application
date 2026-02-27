@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 from app.src.core.conversion import convert_model_to_schema, convert_many_models_to_schemas
 
 
@@ -10,6 +11,12 @@ class SellerCreate(BaseModel):
     name: str
     cpf: str
     phone: str
+
+
+class SellerUpdate(BaseModel):
+    name: Optional[str] = None
+    cpf: Optional[str] = None
+    phone: Optional[str] = None
 
 
 class Seller(SellerBase):

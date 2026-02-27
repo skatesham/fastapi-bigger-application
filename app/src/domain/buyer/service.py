@@ -1,39 +1,65 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from . import exceptions, repository, schemas
 
 
-def create_buyer(db: Session, buyer: schemas.BuyerCreate):
-    buyer_dict = buyer.dict()
-    address_dict = buyer_dict["address"]
+class BuyerService:
+    def __init__(self):
+        self.buyer_repository = repository.buyer_repository
 
-    # FIXME: Less code could be use with something like:
-    # FIXME: db_buyer = models.Buyer(**db_buyer.model_dump(exclude={'XXX', 'YYY'}))
-    db_buyer = models.Buyer(
-        name=buyer_dict["name"],
-        phone=buyer_dict["phone"],
-        address_cep=address_dict["cep"],
-        address_public_place=address_dict["public_place"],
-        address_city=address_dict["city"],
-        address_district=address_dict["district"],
-        address_state=address_dict["state"],
-    )
+    def create_buyer(self, db: Session, buyer: schemas.BuyerCreate) -> schemas.Buyer:
+        """Create a new buyer"""
+        # Check if buyer with same phone already exists
+        existing_buyer = self.buyer_repository.get_by_phone(db, phone=buyer.phone)
+        if existing_buyer:
+            raise exceptions.BuyerAlreadyExistsError("phone", buyer.phone)
+        
+        # Create buyer
+        db_buyer = self.buyer_repository.create(db, obj_in=buyer)
+        return schemas.Buyer.from_model(db_buyer)
 
-    db.add(db_buyer)
-    db.commit()
-    db.refresh(db_buyer)
-    return db_buyer
+    def get_buyer(self, db: Session, buyer_id: int) -> schemas.Buyer:
+        """Get buyer by ID"""
+        db_buyer = self.buyer_repository.get_by_id(db, id=buyer_id)
+        if db_buyer is None:
+            raise exceptions.BuyerNotFoundError(buyer_id)
+        
+        return schemas.Buyer.from_model(db_buyer)
+
+    def get_buyers(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Buyer]:
+        """Get multiple buyers with pagination"""
+        db_buyers = self.buyer_repository.get_multi(db, skip=skip, limit=limit)
+        return schemas.Buyer.from_models(db_buyers)
+
+    def update_buyer(self, db: Session, buyer_id: int, buyer_update: schemas.BuyerUpdate) -> schemas.Buyer:
+        """Update buyer"""
+        db_buyer = self.buyer_repository.get_by_id(db, id=buyer_id)
+        if db_buyer is None:
+            raise exceptions.BuyerNotFoundError(buyer_id)
+        
+        # Check if phone is being updated and already exists
+        if buyer_update.phone and buyer_update.phone != db_buyer.phone:
+            existing_buyer = self.buyer_repository.get_by_phone(db, phone=buyer_update.phone)
+            if existing_buyer:
+                raise exceptions.BuyerAlreadyExistsError("phone", buyer_update.phone)
+        
+        # Update buyer
+        updated_buyer = self.buyer_repository.update(db, db_obj=db_buyer, obj_in=buyer_update)
+        return schemas.Buyer.from_model(updated_buyer)
+
+    def delete_buyer(self, db: Session, buyer_id: int) -> bool:
+        """Delete buyer"""
+        try:
+            self.buyer_repository.delete(db, id=buyer_id)
+            return True
+        except ValueError:
+            raise exceptions.BuyerNotFoundError(buyer_id)
+
+    def search_buyers_by_name(self, db: Session, name: str) -> list[schemas.Buyer]:
+        """Search buyers by name"""
+        db_buyers = self.buyer_repository.get_by_name(db, name=name)
+        return schemas.Buyer.from_models(db_buyers)
 
 
-def get_buyer(db: Session, buyer_id: int):
-    return db.query(models.Buyer).filter(models.Buyer.id == buyer_id).first()
-
-
-def get_buyers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Buyer).offset(skip).limit(limit).all()
-
-
-def remove_buyer(db: Session, db_buyer: models.Buyer):
-    db.delete(db_buyer)
-    db.commit()
-    return True
+# Create singleton instance
+buyer_service = BuyerService()

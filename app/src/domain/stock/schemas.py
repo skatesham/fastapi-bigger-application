@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 from ..car.schemas import Car
 from app.src.core.conversion import convert_model_to_schema, convert_many_models_to_schemas
 
@@ -10,6 +11,11 @@ class StockBase(BaseModel):
 class StockCreate(BaseModel):
     car_id: int
     quantity: int
+
+
+class StockUpdate(BaseModel):
+    car_id: Optional[int] = None
+    quantity: Optional[int] = None
 
 
 class Stock(StockBase):

@@ -1,41 +1,94 @@
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from ....resources.strings import STOCK_OUT_OF_STOCK_ERROR
-from . import models, schemas
+from . import exceptions, repository, schemas
 
 
-def create_stock(db: Session, stock: schemas.StockCreate):
-    db_stock = models.Stock(**stock.dict())
-    db.add(db_stock)
-    db.commit()
-    db.refresh(db_stock)
-    return db_stock
+class StockService:
+    def __init__(self):
+        self.stock_repository = repository.stock_repository
+
+    def create_stock(self, db: Session, stock: schemas.StockCreate) -> schemas.Stock:
+        """Create a new stock"""
+        # Check if stock already exists for this car
+        existing_stock = self.stock_repository.get_by_car_id(db, car_id=stock.car_id)
+        if existing_stock:
+            raise exceptions.StockAlreadyExistsError(stock.car_id)
+        
+        # Create stock
+        db_stock = self.stock_repository.create(db, obj_in=stock)
+        return schemas.Stock.from_model(db_stock)
+
+    def get_stock(self, db: Session, stock_id: int) -> schemas.Stock:
+        """Get stock by ID"""
+        db_stock = self.stock_repository.get_by_id(db, id=stock_id)
+        if db_stock is None:
+            raise exceptions.StockNotFoundError(stock_id)
+        
+        return schemas.Stock.from_model(db_stock)
+
+    def get_stock_by_car(self, db: Session, car_id: int) -> schemas.Stock:
+        """Get stock by car ID"""
+        db_stock = self.stock_repository.get_by_car_id(db, car_id=car_id)
+        if db_stock is None:
+            raise exceptions.StockNotFoundError(0)  # Car lookup, no stock ID
+        
+        return schemas.Stock.from_model(db_stock)
+
+    def buy_car_from_stock(self, db: Session, car_id: int, quantity: int) -> schemas.Stock:
+        """Buy car from stock (reduce quantity)"""
+        db_stock = self.stock_repository.get_by_car_id(db, car_id=car_id)
+        if db_stock is None:
+            raise exceptions.StockNotFoundError(0)
+        
+        if not db_stock.hasStock(quantity):
+            raise exceptions.InsufficientStockError(car_id, quantity, db_stock.quantity)
+        
+        # Reduce quantity
+        db_stock.reduce_quantity(quantity)
+        db.add(db_stock)
+        db.commit()
+        db.refresh(db_stock)
+        return schemas.Stock.from_model(db_stock)
+
+    def get_stocks(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Stock]:
+        """Get multiple stocks with pagination"""
+        db_stocks = self.stock_repository.get_multi(db, skip=skip, limit=limit)
+        return schemas.Stock.from_models(db_stocks)
+
+    def update_stock(self, db: Session, stock_id: int, stock_update: schemas.StockUpdate) -> schemas.Stock:
+        """Update stock"""
+        db_stock = self.stock_repository.get_by_id(db, id=stock_id)
+        if db_stock is None:
+            raise exceptions.StockNotFoundError(stock_id)
+        
+        # Check if car_id is being updated and already exists
+        if stock_update.car_id and stock_update.car_id != db_stock.car_id:
+            existing_stock = self.stock_repository.get_by_car_id(db, car_id=stock_update.car_id)
+            if existing_stock:
+                raise exceptions.StockAlreadyExistsError(stock_update.car_id)
+        
+        # Update stock
+        updated_stock = self.stock_repository.update(db, db_obj=db_stock, obj_in=stock_update)
+        return schemas.Stock.from_model(updated_stock)
+
+    def delete_stock(self, db: Session, stock_id: int) -> bool:
+        """Delete stock"""
+        try:
+            self.stock_repository.delete(db, id=stock_id)
+            return True
+        except ValueError:
+            raise exceptions.StockNotFoundError(stock_id)
+
+    def get_low_stock_items(self, db: Session, threshold: int = 5) -> list[schemas.Stock]:
+        """Get stocks with quantity below threshold"""
+        db_stocks = self.stock_repository.get_low_stock(db, threshold=threshold)
+        return schemas.Stock.from_models(db_stocks)
+
+    def get_available_stocks(self, db: Session) -> list[schemas.Stock]:
+        """Get all stocks with quantity > 0"""
+        db_stocks = self.stock_repository.get_available_stock(db)
+        return schemas.Stock.from_models(db_stocks)
 
 
-def get_stock(db: Session, stock_id: int):
-    return db.query(models.Stock).filter(models.Stock.id == stock_id).first()
-
-
-def get_stock_by_car(db: Session, car_id: int):
-    return db.query(models.Stock).filter(models.Stock.car_id == car_id).first()
-
-
-def buy_car_from_stock(db: Session, car_id: int, quantity: int):
-    db_stock = get_stock_by_car(db, car_id=car_id)
-    if not db_stock.hasStock(quantity):
-        raise HTTPException(status_code=422, detail=STOCK_OUT_OF_STOCK_ERROR)
-    db_stock.reduce_quantity(quantity)
-    db.commit()
-    db.refresh(db_stock)
-    return db_stock
-
-
-def get_stocks(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Stock).offset(skip).limit(limit).all()
-
-
-def remove_stock(db: Session, db_stock: models.Stock):
-    db.delete(db_stock)
-    db.commit()
-    return True
+# Create singleton instance
+stock_service = StockService()

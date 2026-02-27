@@ -12,12 +12,23 @@ from sqlalchemy.orm import Session
 from app.src.core.database import SessionLocal
 from app.src.core.config import SECRET_KEY, ALGORITHM
 from app.src.core.security import get_token_header, get_query_token, TokenHeader, QueryToken
-from app.src.domain.buyer import service as buyer_service
-from app.src.domain.car import repository as car_repository, service as car_service
-from app.src.domain.sale import service as sale_service
-from app.src.domain.seller import service as seller_service
-from app.src.domain.stock import service as stock_service
-from app.src.domain.user import service as user_service
+# Import the actual classes for type hints
+from app.src.domain.buyer.service import BuyerService as BuyerServiceClass
+from app.src.domain.car.repository import CarRepository as CarRepositoryClass
+from app.src.domain.car.service import CarService as CarServiceClass
+from app.src.domain.sale.service import SaleService as SaleServiceClass
+from app.src.domain.seller.service import SellerService as SellerServiceClass
+from app.src.domain.stock.service import StockService as StockServiceClass
+from app.src.domain.user.service import UserService as UserServiceClass
+
+# Import singleton instances
+from app.src.domain.buyer.service import buyer_service
+from app.src.domain.car.repository import car_repository
+from app.src.domain.car.service import car_service
+from app.src.domain.sale.service import sale_service
+from app.src.domain.seller.service import seller_service
+from app.src.domain.stock.service import stock_service
+from app.src.domain.user.service import user_service
 
 
 # Database Dependency
@@ -38,35 +49,35 @@ def get_db() -> Session:
 Database = Annotated[Session, Depends(get_db)]
 
 # Function-based dependencies for services
-def get_buyer_service() -> buyer_service:
+def get_buyer_service() -> BuyerServiceClass:
     return buyer_service
 
-def get_car_repository() -> car_repository:
+def get_car_repository() -> CarRepositoryClass:
     return car_repository
 
-def get_car_service() -> car_service:
+def get_car_service() -> CarServiceClass:
     return car_service
 
-def get_sale_service() -> sale_service:
+def get_sale_service() -> SaleServiceClass:
     return sale_service
 
-def get_seller_service() -> seller_service:
+def get_seller_service() -> SellerServiceClass:
     return seller_service
 
-def get_stock_service() -> stock_service:
+def get_stock_service() -> StockServiceClass:
     return stock_service
 
-def get_user_service() -> user_service:
+def get_user_service() -> UserServiceClass:
     return user_service
 
 # Annotated Dependencies for clean injection
-BuyerService = Annotated[buyer_service, Depends(get_buyer_service)]
-CarRepository = Annotated[car_repository, Depends(get_car_repository)]
-CarService = Annotated[car_service, Depends(get_car_service)]
-SaleService = Annotated[sale_service, Depends(get_sale_service)]
-SellerService = Annotated[seller_service, Depends(get_seller_service)]
-StockService = Annotated[stock_service, Depends(get_stock_service)]
-UserService = Annotated[user_service, Depends(get_user_service)]
+BuyerService = Annotated[BuyerServiceClass, Depends(get_buyer_service)]
+CarRepository = Annotated[CarRepositoryClass, Depends(get_car_repository)]
+CarService = Annotated[CarServiceClass, Depends(get_car_service)]
+SaleService = Annotated[SaleServiceClass, Depends(get_sale_service)]
+SellerService = Annotated[SellerServiceClass, Depends(get_seller_service)]
+StockService = Annotated[StockServiceClass, Depends(get_stock_service)]
+UserService = Annotated[UserServiceClass, Depends(get_user_service)]
 
 # Security Annotated Dependencies
 TokenHeader = Annotated[dict, Depends(get_token_header)]

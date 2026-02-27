@@ -1,25 +1,23 @@
+from typing import List, Optional
+
 from sqlalchemy.orm import Session
 
+from app.src.core.repository import CRUDBase
 from . import models, schemas
 
 
-def create_car(db: Session, car: schemas.CarCreate):
-    db_car = models.Car(**car.dict())
-    db.add(db_car)
-    db.commit()
-    db.refresh(db_car)
-    return db_car
+class CarRepository(CRUDBase[models.Car, schemas.CarCreate, schemas.CarUpdate]):
+    def __init__(self):
+        super().__init__(models.Car)
+
+    def get_by_brand(self, db: Session, *, brand: str) -> List[models.Car]:
+        """Get cars by brand"""
+        return db.query(self.model).filter(self.model.brand.ilike(f"%{brand}%")).all()
+
+    def get_by_year(self, db: Session, *, year: int) -> List[models.Car]:
+        """Get cars by year"""
+        return db.query(self.model).filter(self.model.year == year).all()
 
 
-def get_car(db: Session, car_id: int):
-    return db.query(models.Car).filter(models.Car.id == car_id).first()
-
-
-def get_cars(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Car).offset(skip).limit(limit).all()
-
-
-def remove_car(db: Session, db_car: models.Car):
-    db.delete(db_car)
-    db.commit()
-    return True
+# Create a singleton instance
+car_repository = CarRepository()

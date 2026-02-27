@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, CarService
-from app.src.domain.car import schemas
+from app.src.domain.car import exceptions, schemas
 
 router = APIRouter()
 
@@ -15,7 +15,10 @@ def create_car(
     car_service: CarService,
 ):
     """Create new car using dependency injection"""
-    return car_service.create_car(db=db, car=car)
+    try:
+        return car_service.create_car(db=db, car=car)
+    except exceptions.CarAlreadyExistsError as e:
+        raise HTTPException(status_code=409, detail=str(e))
 
 
 @router.get("/{car_id}", response_model=schemas.Car)
@@ -25,7 +28,10 @@ def read_car(
     car_service: CarService,
 ):
     """Get car by ID using dependency injection"""
-    return car_service.get_car(db, car_id=car_id)
+    try:
+        return car_service.get_car(db, car_id=car_id)
+    except exceptions.CarNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=List[schemas.Car])
@@ -47,4 +53,7 @@ def delete_car(
     car_service: CarService,
 ):
     """Delete car by ID using dependency injection"""
-    return car_service.remove_car(db, car_id=car_id)
+    try:
+        return car_service.delete_car(db, car_id=car_id)
+    except exceptions.CarNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))

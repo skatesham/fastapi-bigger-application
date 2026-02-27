@@ -17,7 +17,7 @@ from app.src.api.deps import (
     SellerService,
     StockService,
 )
-from app.src.domain.sale import schemas
+from app.src.domain.sale import exceptions, schemas
 
 router = APIRouter()
 
@@ -33,22 +33,29 @@ def create_sale(
     stock_service: StockService,
 ):
     """Create new sale using dependency injection"""
-    errors = []
+    try:
+        # Validate related entities exist
+        errors = []
+        if car_repository.get_by_id(db, id=sale.car_id) is None:
+            errors.append(CAR_DOES_NOT_EXIST_ERROR)
+        if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
+            errors.append(BUYER_DOES_NOT_EXIST_ERROR)
+        if seller_service.get_seller(db, seller_id=sale.seller_id) is None:
+            errors.append(SELLER_DOES_NOT_EXIST_ERROR)
+        if stock_service.get_stock_by_car(db, car_id=sale.car_id) is None:
+            errors.append(STOCK_DOES_NOT_EXIST_ERROR)
+        if len(errors) > 0:
+            raise HTTPException(status_code=404, detail=", ".join(errors))
 
-    if car_repository.get_car(db, car_id=sale.car_id) is None:
-        errors.append(CAR_DOES_NOT_EXIST_ERROR)
-    if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
-        errors.append(BUYER_DOES_NOT_EXIST_ERROR)
-    if seller_service.get_seller(db, seller_id=sale.seller_id) is None:
-        errors.append(SELLER_DOES_NOT_EXIST_ERROR)
-    if stock_service.get_stock_by_car(db, car_id=sale.car_id) is None:
-        errors.append(STOCK_DOES_NOT_EXIST_ERROR)
-    if len(errors) > 0:
-        raise HTTPException(status_code=404, detail=", ".join(errors))
-
-    stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
-    db_sale = sale_service.create_sale(db=db, sale=sale)
-    return schemas.Sale.from_model(db_sale)
+        stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
+        db_sale = sale_service.create_sale(db=db, sale=sale)
+        return schemas.Sale.from_model(db_sale)
+    except exceptions.SaleNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except exceptions.InvalidSaleError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except exceptions.CarNotAvailableError as e:
+        raise HTTPException(status_code=422, detail=str(e))
 
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
@@ -58,10 +65,11 @@ def read_sale(
     sale_service: SaleService,
 ):
     """Get sale by ID using dependency injection"""
-    db_sale = sale_service.get_sale(db, sale_id=sale_id)
-    if db_sale is None:
-        raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
-    return schemas.Sale.from_model(db_sale)
+    try:
+        db_sale = sale_service.get_sale(db, sale_id=sale_id)
+        return schemas.Sale.from_model(db_sale)
+    except exceptions.SaleNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=List[schemas.Sale])
@@ -83,4 +91,7 @@ def delete_sale(
     sale_service: SaleService,
 ):
     """Delete sale by ID using dependency injection"""
-    return sale_service.remove_sale(db, sale_id=sale_id)
+    try:
+        return sale_service.delete_sale(db, sale_id=sale_id)
+    except exceptions.SaleNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))

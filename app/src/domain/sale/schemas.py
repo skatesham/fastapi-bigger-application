@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -16,6 +17,12 @@ class SaleCreate(BaseModel):
     car_id: int
     seller_id: int
     buyer_id: int
+
+
+class SaleUpdate(BaseModel):
+    car_id: Optional[int] = None
+    seller_id: Optional[int] = None
+    buyer_id: Optional[int] = None
 
 
 class SaleCreateResponse(SaleCreate):
