@@ -1,18 +1,12 @@
-from typing import List, Annotated
+from typing import List
 
 from fastapi import APIRouter, HTTPException
-from sqlalchemy.orm import Session
 
-from ...resources.strings import BUYER_DOES_NOT_EXIST_ERROR
-from ..dependencies import Database, BuyerService, BuyerConverter
-from ..domain.buyer import schemas
+from app.resources.strings import BUYER_DOES_NOT_EXIST_ERROR
+from app.src.api.deps import Database, BuyerService, BuyerConverter
+from app.src.domain.buyer import schemas
 
-router = APIRouter(
-    prefix="/buyers",
-    tags=["buyers"],
-    dependencies=[],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
 
 @router.post("/", response_model=schemas.Buyer, status_code=201)

@@ -1,6 +1,6 @@
 """
-Professional Dependency Injection System using FastAPI Annotated dependencies
-Replaces manual imports with clean DI patterns
+Dependencies for API endpoints using FastAPI Annotated patterns
+Centralized dependency injection for clean architecture
 """
 
 from typing import Annotated, List, Optional
@@ -10,14 +10,18 @@ from fastapi import Depends, Header, HTTPException
 from sqlalchemy.orm import Session
 from jose import jwt
 
-from .database import SessionLocal
-from .domain.buyer import service as buyer_service
-from .domain.car import repository as car_repository, service as car_service
-from .domain.sale import service as sale_service
-from .domain.seller import service as seller_service
-from .domain.stock import service as stock_service
-from .domain.user import service as user_service
-from .routers.converter import buyer_converter, car_converter, sale_converter, seller_converter
+from app.src.database import SessionLocal
+from app.src.config import SECRET_KEY, ALGORITHM
+from app.src.domain.buyer import service as buyer_service
+from app.src.domain.car import repository as car_repository, service as car_service
+from app.src.domain.sale import service as sale_service
+from app.src.domain.seller import service as seller_service
+from app.src.domain.stock import service as stock_service
+from app.src.domain.user import service as user_service
+from app.src.api.converters import (
+    buyer_converter, car_converter, sale_converter, 
+    seller_converter, stock_converter
+)
 
 
 # Database Dependency
@@ -31,8 +35,7 @@ def get_db() -> Session:
 
 
 # Security Dependencies
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
+# Using config values from app.src.config
 
 
 def decode(token: str) -> dict:
@@ -94,6 +97,9 @@ def get_sale_converter() -> sale_converter:
 def get_seller_converter() -> seller_converter:
     return seller_converter
 
+def get_stock_converter() -> stock_converter:
+    return stock_converter
+
 # Annotated Dependencies for clean injection
 BuyerService = Annotated[buyer_service, Depends(get_buyer_service)]
 CarRepository = Annotated[car_repository, Depends(get_car_repository)]
@@ -106,6 +112,7 @@ BuyerConverter = Annotated[buyer_converter, Depends(get_buyer_converter)]
 CarConverter = Annotated[car_converter, Depends(get_car_converter)]
 SaleConverter = Annotated[sale_converter, Depends(get_sale_converter)]
 SellerConverter = Annotated[seller_converter, Depends(get_seller_converter)]
+StockConverter = Annotated[stock_converter, Depends(get_stock_converter)]
 
 # Security Annotated Dependencies
 TokenHeader = Annotated[dict, Depends(get_token_header)]
@@ -124,6 +131,7 @@ CommonDependencies = {
     "sale_converter": SaleConverter,
     "seller_service": SellerService,
     "seller_converter": SellerConverter,
+    "stock_converter": StockConverter,
     "stock_service": StockService,
     "user_service": UserService,
     "token_header": TokenHeader,

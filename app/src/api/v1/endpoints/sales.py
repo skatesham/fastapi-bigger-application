@@ -2,14 +2,14 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from ...resources.strings import (
+from app.resources.strings import (
     BUYER_DOES_NOT_EXIST_ERROR,
     CAR_DOES_NOT_EXIST_ERROR,
     SALES_DOES_NOT_EXIST_ERROR,
     SELLER_DOES_NOT_EXIST_ERROR,
     STOCK_DOES_NOT_EXIST_ERROR,
 )
-from ..dependencies import (
+from app.src.api.deps import (
     Database,
     BuyerService,
     CarRepository,
@@ -18,14 +18,9 @@ from ..dependencies import (
     StockService,
     SaleConverter,
 )
-from ..domain.sale import schemas
+from app.src.domain.sale import schemas
 
-router = APIRouter(
-    prefix="/sales",
-    tags=["sales"],
-    dependencies=[],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
 
 @router.post("/", response_model=schemas.Sale, status_code=201)

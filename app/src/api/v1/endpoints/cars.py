@@ -2,15 +2,10 @@ from typing import List
 
 from fastapi import APIRouter
 
-from ..dependencies import Database, CarService
-from ..domain.car import schemas
+from ...deps import Database, CarService
+from ....domain.car import schemas
 
-router = APIRouter(
-    prefix="/cars",
-    tags=["cars"],
-    dependencies=[],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
 
 @router.post("/", response_model=schemas.Car, status_code=201)

@@ -4,10 +4,9 @@ from starlette.exceptions import HTTPException
 
 from .src.config import ALLOWED_HOSTS, API_PREFIX
 from .src.database import Base, SessionLocal, engine
-from .src.dependencies import get_token_header
+from .src.api.deps import get_token_header
 from .src.internal import admin
-from .src.routers.api import router as router_api
-from .src.routers.handlers.http_error import http_error_handler
+from .src.api.v1.router import api_router
 
 ###
 # Main application file
@@ -24,10 +23,7 @@ def get_application() -> FastAPI:
     Base.metadata.create_all(bind=engine)
 
     ## Mapping api routes
-    application.include_router(router_api, prefix=API_PREFIX)
-
-    ## Add exception handlers
-    application.add_exception_handler(HTTPException, http_error_handler)
+    application.include_router(api_router, prefix=API_PREFIX + "/v1")
 
     ## Allow cors
     application.add_middleware(

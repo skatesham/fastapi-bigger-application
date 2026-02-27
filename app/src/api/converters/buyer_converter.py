@@ -1,10 +1,10 @@
 from typing import List
 
-from ...domain.buyer import models, schemas
+from app.src.domain.buyer import models, schemas
 
 
 def convert(db_buyer: models.Buyer):
-    """Customized convertion to response template"""
+    """Customized conversion to response template"""
     return schemas.Buyer(
         id=db_buyer.id,
         name=db_buyer.name,
