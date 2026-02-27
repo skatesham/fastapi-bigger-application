@@ -81,35 +81,3 @@ HTTP_404_NOT_FOUND = "Not Found"
 HTTP_409_CONFLICT = "Conflict"
 HTTP_422_UNPROCESSABLE_ENTITY = "Unprocessable Entity"
 HTTP_500_INTERNAL_SERVER_ERROR = "Internal Server Error"
-
-# Exception Messages - Dynamic Templates
-# These are templates for exceptions that need dynamic values
-
-# Not Found Templates
-CAR_NOT_FOUND_TEMPLATE = "Car with id {id} not found"
-BUYER_NOT_FOUND_TEMPLATE = "Buyer with id {id} not found"
-SELLER_NOT_FOUND_TEMPLATE = "Seller with id {id} not found"
-STOCK_NOT_FOUND_TEMPLATE = "Stock with id {id} not found"
-USER_NOT_FOUND_TEMPLATE = "User with id {id} not found"
-SALE_NOT_FOUND_TEMPLATE = "Sale with id {id} not found"
-ITEM_NOT_FOUND_TEMPLATE = "Item with id {id} not found"
-
-# Already Exists Templates
-CAR_ALREADY_EXISTS_TEMPLATE = "Car with {field} '{value}' already exists"
-BUYER_ALREADY_EXISTS_TEMPLATE = "Buyer with {field} '{value}' already exists"
-SELLER_ALREADY_EXISTS_TEMPLATE = "Seller with {field} '{value}' already exists"
-USER_ALREADY_EXISTS_TEMPLATE = "User with {field} '{value}' already exists"
-STOCK_ALREADY_EXISTS_TEMPLATE = "Stock already exists for car with id {car_id}"
-
-# Invalid Data Templates
-INVALID_BUYER_DATA_TEMPLATE = "Invalid buyer data: {message}"
-INVALID_SELLER_DATA_TEMPLATE = "Invalid seller data: {message}"
-INVALID_STOCK_DATA_TEMPLATE = "Invalid stock data: {message}"
-INVALID_USER_DATA_TEMPLATE = "Invalid user data: {message}"
-INVALID_SALE_DATA_TEMPLATE = "Invalid sale: {message}"
-INVALID_ITEM_DATA_TEMPLATE = "Invalid item data: {message}"
-
-# Business Logic Templates
-CAR_NOT_AVAILABLE_TEMPLATE = "Car with id {car_id} is not available for sale"
-INSUFFICIENT_STOCK_TEMPLATE = "Insufficient stock for car {car_id}: requested {requested}, available {available}"
-INACTIVE_USER_TEMPLATE = "User with id {user_id} is inactive"

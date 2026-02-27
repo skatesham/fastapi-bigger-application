@@ -18,71 +18,45 @@ INVALID_RESOURCE_ERROR = "Invalid resource data"
 
 # Success Messages
 RESOURCE_CREATED_SUCCESS = "Resource created successfully"
-
-# Exception Templates (for dynamic messages)
-RESOURCE_NOT_FOUND_TEMPLATE = "Resource with id {id} not found"
-RESOURCE_ALREADY_EXISTS_TEMPLATE = "Resource with {field} '{value}' already exists"
-INVALID_RESOURCE_DATA_TEMPLATE = "Invalid resource data: {message}"
 ```
 
-## 2. Add String Formatters (if needed)
-```bash
-# Add to app/resources/string_formatters.py
-def format_resource_not_found(resource_id: int) -> str:
-    return RESOURCE_NOT_FOUND_TEMPLATE.format(id=resource_id)
-
-def format_resource_already_exists(field: str, value: str) -> str:
-    return RESOURCE_ALREADY_EXISTS_TEMPLATE.format(field=field, value=value)
-```
-
-## 3. Create Exception Classes
-```bash
-# Create app/src/domain/{resource}/exceptions.py
-from app.resources.string_formatters import format_resource_not_found
-
-class ResourceNotFoundError(Exception):
-    def __init__(self, resource_id: int):
-        self.resource_id = resource_id
-        super().__init__(format_resource_not_found(resource_id))
-```
-
-## 4. Create Pydantic Models
+## 2. Create Pydantic Models
 ```bash
 # Create domain models in app/src/domain/
 touch app/src/domain/{resource}.py
 ```
 
-## 5. Create Database Model
+## 3. Create Database Model
 ```bash
 # Add SQLAlchemy model
 # Include in app/src/domain/models.py or separate file
 ```
 
-## 6. Create Service Layer
+## 4. Create Service Layer
 ```bash
 # Create service in app/src/core/
 touch app/src/core/{resource}_service.py
 ```
 
-## 7. Create API Endpoint
+## 5. Create API Endpoint
 ```bash
 # Create endpoint file
 touch app/src/api/v1/endpoints/{resource}.py
 ```
 
-## 8. Update Router
+## 6. Update Router
 ```bash
 # Add to app/src/api/v1/api.py
 # Import and include new router
 ```
 
-## 9. Create Tests
+## 7. Create Tests
 ```bash
 # Create test file
 touch tests/test_api/test_{resource}.py
 ```
 
-## 10. Generate Migration
+## 8. Generate Migration
 ```bash
 alembic revision --autogenerate -m "Add {resource} table"
 alembic upgrade head
@@ -169,9 +143,6 @@ return {
 
 ## Checklist
 - [ ] Add response messages to strings.py
-- [ ] Add exception templates to strings.py
-- [ ] Add string formatters (if needed)
-- [ ] Create exception classes with centralized strings
 - [ ] Pydantic models created
 - [ ] Database model added
 - [ ] Service layer implemented
@@ -180,4 +151,3 @@ return {
 - [ ] Tests written
 - [ ] Migration generated and applied
 - [ ] All HTTP exceptions use centralized strings
-- [ ] All exception classes use string formatters
