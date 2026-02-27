@@ -2,24 +2,12 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from jose import jwt
 
-from app.src.api.deps import Database, UserService
-from app.src.domain.user import schemas
-from app.src.config import SECRET_KEY, ALGORITHM
+from ...deps import Database, UserService
+from ....domain.user import schemas
+from ....core.security import create_access_token, SECRET_KEY, ALGORITHM
 
 router = APIRouter()
-
-
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create access token with expiration"""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 @router.post("/login/", response_model=dict)

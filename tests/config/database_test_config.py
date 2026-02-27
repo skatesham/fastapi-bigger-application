@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.src.database import Base
+from app.src.core.database import Base
 from app.src.api.deps import get_db
 
 ## Configure SQLite

@@ -3,7 +3,7 @@ from typing import Optional
 
 from jose import jwt
 
-from app.src.config import SECRET_KEY, ALGORITHM
+from app.src.core.config import SECRET_KEY, ALGORITHM
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

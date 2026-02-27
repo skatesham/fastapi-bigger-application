@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from ...database import Base
+from app.src.core.database import Base
 
 
 class Car(Base):

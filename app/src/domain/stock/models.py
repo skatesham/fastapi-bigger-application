@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from ...database import Base
+from app.src.core.database import Base
 
 
 class Stock(Base):

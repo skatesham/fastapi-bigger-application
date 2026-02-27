@@ -2,31 +2,73 @@
 
 [![codecov](https://codecov.io/gh/carshop/fastapi-erp/branch/main/graph/badge.svg)](https://codecov.io/gh/carshop/fastapi-erp)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-blue.svg)](https://www.sqlalchemy.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.133.1-green.svg)](https://fastapi.tiangolo.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.47-blue.svg)](https://www.sqlalchemy.org/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-2.12.5-orange.svg)](https://docs.pydantic.dev/)
 
-Professional REST API ERP system for car shop management built with FastAPI, SQLAlchemy 2.0, and modern Python patterns.
+Professional REST API ERP system for car shop management built with FastAPI 0.133, SQLAlchemy 2.0, and modern Python patterns.
+
+---
 
 ## ✨ Features
 
-- 🚀 **FastAPI 0.133+** - Modern async web framework
-- 🗄️ **SQLAlchemy 2.0** - Modern ORM with async support
-- 🔐 **JWT Authentication** - Secure token-based auth
-- 📊 **Pydantic V2** - Modern data validation
-- 🐳 **Docker Support** - Containerized deployment
-- 🧪 **High Test Coverage** - Comprehensive test suite
-- 📝 **Auto Documentation** - Swagger/OpenAPI docs
-- 🔧 **Professional Tooling** - Black, isort, mypy, pytest
+- 🚀 **FastAPI 0.133.1** - Latest stable version with modern patterns
+- 🗄️ **SQLAlchemy 2.0.47** - Modern ORM with async support
+- 🔐 **Professional Security** - JWT with core.security module
+- 📊 **Pydantic V2.12.5** - Modern data validation and serialization
+- 🏗️ **Clean Architecture** - Professional structure with core modules
+- 🧪 **Comprehensive Testing** - Tests separated from application code
+- 📝 **Auto Documentation** - Swagger/OpenAPI with `/docs`
+- 🔧 **Professional Tooling** - Black, isort, mypy, pytest, coverage
+- 🎯 **Dependency Injection** - FastAPI Annotated patterns
+- 📦 **Modern Packaging** - pyproject.toml with professional setup
+- 🔒 **Security Best Practices** - passlib, bcrypt, secure JWT handling
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: FastAPI 0.133+
-- **Database**: PostgreSQL with SQLAlchemy 2.0
-- **Authentication**: JWT with python-jose
-- **Validation**: Pydantic V2
-- **Testing**: pytest with async support
-- **Code Quality**: Black, isort, flake8, mypy
+- **Framework**: FastAPI 0.133.1
+- **Database**: PostgreSQL with SQLAlchemy 2.0.47
+- **Configuration**: Pydantic Settings V2
+- **Authentication**: JWT with python-jose[cryptography]
+- **Validation**: Pydantic V2.12.5 + Pydantic Settings 2.13.1
+- **Testing**: pytest 9.0.2 + pytest-asyncio 1.3.0 + pytest-cov 7.0.0
+- **Code Quality**: Black 26.1.0, isort 8.0.0, flake8 7.3.0, mypy 1.19.1
+- **Security**: passlib[bcrypt] 1.7.4, python-multipart 0.0.6
+- **Database Tools**: psycopg2-binary 2.9.0, alembic 1.12.0
 - **Documentation**: Auto-generated Swagger/OpenAPI
+- **Architecture**: Clean API structure with v1 versioning
+
+---
+
+## 🏗️ Project Structure
+
+```
+fastapi-bigger-application/
+├── app/                    # Application source code
+│   ├── src/
+│   │   ├── api/           # API layer (v1)
+│   │   │   ├── deps.py    # Dependencies injection
+│   │   │   ├── converters/ # Response converters
+│   │   │   └── v1/
+│   │   │       └── endpoints/
+│   │   ├── core/          # Core modules
+│   │   │   ├── config.py  # Pydantic Settings
+│   │   │   ├── database.py # Database setup
+│   │   │   └── security.py # JWT & auth
+│   │   ├── domain/        # Business logic
+│   │   └── internal/      # Internal utilities
+│   └── main.py           # Application entry point
+├── tests/                # Test suite (external)
+├── pyproject.toml       # Modern Python packaging
+├── requirements.txt     # Dependencies
+├── setup.cfg            # Flake8 configuration
+├── .coveragerc          # Coverage configuration
+└── .env.example        # Environment template
+```
+
+---
 
 ## 🚀 Quick Start
 
@@ -54,28 +96,34 @@ pip install -e ".[dev]"
 cp .env.example .env
 # Edit .env with your configuration
 
-# Run database migrations
-alembic upgrade head
-
 # Start the application
 uvicorn app.main:app --reload
 ```
 
-### Docker Setup
+### Environment Configuration
+
+Create `.env` file based on `.env.example`:
 
 ```bash
-# Start database
-docker-compose up -d
+# Database
+DATABASE_URL=postgresql://user:password@localhost/dbname
 
-# Run application
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+# Security
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+
+# CORS
+ALLOWED_HOSTS=localhost,127.0.0.1
 ```
 
-## 📚 Documentation
+---
 
+## 📚 API Documentation
+
+Once running, access:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI Spec**: http://localhost:8000/openapi.json
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
 
 ## 🧪 Testing
 
@@ -84,15 +132,13 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 pytest
 
 # Run with coverage
-pytest --cov=app
+pytest --cov=app --cov-report=html
 
-# Run specific test file
-pytest app/test/test_users.py
-
-# Run with markers
-pytest -m unit
-pytest -m integration
+# Run specific test
+pytest tests/test_jwt.py -v
 ```
+
+---
 
 ## 🔧 Development
 
@@ -100,19 +146,17 @@ pytest -m integration
 
 ```bash
 # Format code
-black app/
-isort app/
+black app/ tests/
+isort app/ tests/
 
-# Lint code
-flake8 app/
+# Lint
+flake8 app/ tests/
+
+# Type checking
 mypy app/
 
-# Run security checks
+# Security check
 bandit -r app/
-
-# Pre-commit hooks
-pre-commit install
-pre-commit run --all-files
 ```
 
 ### Database Migrations
@@ -128,99 +172,72 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-## 📁 Project Structure
+---
 
-```
-fastapi-erp/
-├── app/
-│   ├── api/                 # API endpoints
-│   ├── core/               # Core configuration
-│   ├── crud/               # Database operations
-│   ├── models/             # SQLAlchemy models
-│   ├── schemas/            # Pydantic schemas
-│   ├── services/           # Business logic
-│   └── test/               # Tests
-├── alembic/                # Database migrations
-├── docs/                   # Documentation
-├── pyproject.toml          # Project configuration
-├── docker-compose.yml      # Docker setup
-└── README.md
-```
+## 📦 Deployment
 
-## 🔗 API Endpoints
-
-### Authentication
-- `POST /auth/login` - User login
-
-### Users
-- `GET /api/v1/users/` - List users
-- `POST /api/v1/users/` - Create user
-- `GET /api/v1/users/{id}` - Get user
-- `PUT /api/v1/users/{id}` - Update user
-- `DELETE /api/v1/users/{id}` - Delete user
-
-### Cars
-- `GET /api/v1/cars/` - List cars
-- `POST /api/v1/cars/` - Create car
-- `GET /api/v1/cars/{id}` - Get car
-- `PUT /api/v1/cars/{id}` - Update car
-- `DELETE /api/v1/cars/{id}` - Delete car
-
-### Sales
-- `GET /api/v1/sales/` - List sales
-- `POST /api/v1/sales/` - Create sale
-- `GET /api/v1/sales/{id}` - Get sale
-
-## 🌍 Environment Variables
+### Docker
 
 ```bash
-# Database
-DATABASE_URL=postgresql://user:password@localhost/dbname
-
-# Security
-SECRET_KEY=your-secret-key-here
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# Application
-DEBUG=false
-API_V1_STR=/api/v1
-PROJECT_NAME=FastAPI Car Shop ERP
+# Build and run with Docker Compose
+docker-compose up --build
 ```
 
-## 📈 Performance
+### Production
 
-- **Startup Time**: <2 seconds
-- **Response Time**: <100ms (average)
-- **Memory Usage**: <100MB (idle)
-- **Test Coverage**: >90%
+```bash
+# Install production dependencies
+pip install -e .
+
+# Run with Gunicorn (recommended for production)
+gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+```
+
+## 📊 API Endpoints
+
+### Authentication
+- `POST /api/v1/auth/login/` - User login
+
+### Resources
+- `GET /api/v1/buyers/` - List buyers
+- `POST /api/v1/buyers/` - Create buyer
+- `GET /api/v1/cars/` - List cars
+- `POST /api/v1/cars/` - Create car
+- `GET /api/v1/sales/` - List sales
+- `POST /api/v1/sales/` - Create sale
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Run tests and code quality checks
+5. Submit a pull request
+
+---
+
+## Source Documentation
+
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Bigger Application](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
+- [SQL](https://fastapi.tiangolo.com/tutorial/sql-databases/)
+- [Testing](https://fastapi.tiangolo.com/tutorial/testing/)  
+- [Pydantic](https://pydantic-docs.helpmanual.io/)  
+- [SQL Relational Database SQLAlchemy by FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/?h=databa#sql-relational-databases)
+- [SQLAlchemy 1.4](https://docs.sqlalchemy.org/en/14/tutorial/engine.html)  
+- [FastAPI "Real world example app"](https://github.com/nsidnev/fastapi-realworld-example-app)
+
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework
-- [SQLAlchemy](https://www.sqlalchemy.org/) - Python SQL toolkit
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - Data validation
-- [Pytest](https://pytest.org/) - Testing framework
-
-## 📞 Support
-
-- 📧 Email: dev@carshop.com
-- 🐛 Issues: [GitHub Issues](https://github.com/carshop/fastapi-erp/issues)
-- 📖 Docs: [Documentation](https://fastapi-car-shop-erp.readthedocs.io/)
-
 ---
+
+## Created by
+> Sham Vinicius Fiorin
 
 **Built with ❤️ using FastAPI and modern Python patterns**
 
+---

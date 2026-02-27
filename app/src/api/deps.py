@@ -6,12 +6,12 @@ Centralized dependency injection for clean architecture
 from typing import Annotated, List, Optional
 from functools import lru_cache
 
-from fastapi import Depends, Header, HTTPException
+from fastapi import Depends
 from sqlalchemy.orm import Session
-from jose import jwt
 
-from app.src.database import SessionLocal
-from app.src.config import SECRET_KEY, ALGORITHM
+from app.src.core.database import SessionLocal
+from app.src.core.config import SECRET_KEY, ALGORITHM
+from app.src.core.security import get_token_header, get_query_token, TokenHeader, QueryToken
 from app.src.domain.buyer import service as buyer_service
 from app.src.domain.car import repository as car_repository, service as car_service
 from app.src.domain.sale import service as sale_service
@@ -35,29 +35,7 @@ def get_db() -> Session:
 
 
 # Security Dependencies
-# Using config values from app.src.config
-
-
-def decode(token: str) -> dict:
-    """Decode JWT token"""
-    stripped_token = token.replace("Bearer ", "")
-    return jwt.decode(stripped_token, SECRET_KEY, algorithms=[ALGORITHM])
-
-
-async def get_token_header(x_token: str = Header(...)) -> dict:
-    """Example header validation dependency"""
-    payload = decode(x_token)
-    username: str = payload.get("email")
-    if username is None:
-        raise HTTPException(status_code=403, detail="Unauthorized")
-    return payload
-
-
-async def get_query_token(token: str) -> str:
-    """Example query token validation"""
-    if token != "jessica":
-        raise HTTPException(status_code=400, detail="No Jessica token provided")
-    return token
+# Using core.security module
 
 
 # Service Dependencies - Using functions directly since no classes exist yet

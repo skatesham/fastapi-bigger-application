@@ -2,9 +2,9 @@ from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException
 
-from .src.config import ALLOWED_HOSTS, API_PREFIX
-from .src.database import Base, SessionLocal, engine
-from .src.api.deps import get_token_header
+from .src.core.config import ALLOWED_HOSTS, API_PREFIX
+from .src.core.database import Base, SessionLocal, engine
+from .src.core.security import get_token_header
 from .src.internal import admin
 from .src.api.v1.router import api_router
 
