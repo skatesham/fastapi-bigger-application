@@ -1,7 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException
 
 from ...resources.strings import (
     BUYER_DOES_NOT_EXIST_ERROR,
@@ -10,13 +9,16 @@ from ...resources.strings import (
     SELLER_DOES_NOT_EXIST_ERROR,
     STOCK_DOES_NOT_EXIST_ERROR,
 )
-from ..dependencies import get_db
-from ..domain.buyer import service as buyer_service
-from ..domain.car import repository as car_repository
-from ..domain.sale import schemas, service
-from ..domain.seller import service as seller_service
-from ..domain.stock import service as stock_service
-from .converter import sale_converter
+from ..dependencies import (
+    Database,
+    BuyerService,
+    CarRepository,
+    SaleService,
+    SellerService,
+    StockService,
+    SaleConverter,
+)
+from ..domain.sale import schemas
 
 router = APIRouter(
     prefix="/sales",
@@ -27,7 +29,17 @@ router = APIRouter(
 
 
 @router.post("/", response_model=schemas.Sale, status_code=201)
-def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
+def create_sale(
+    sale: schemas.SaleCreate,
+    db: Database,
+    buyer_service: BuyerService,
+    car_repository: CarRepository,
+    sale_service: SaleService,
+    seller_service: SellerService,
+    stock_service: StockService,
+    sale_converter: SaleConverter,
+):
+    """Create new sale using dependency injection"""
     errors = []
 
     if car_repository.get_car(db, car_id=sale.car_id) is None:
@@ -42,27 +54,42 @@ def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=", ".join(errors))
 
     stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
-    db_sale = service.create_sale(db=db, sale=sale)
+    db_sale = sale_service.create_sale(db=db, sale=sale)
     return sale_converter.convert(db_sale)
 
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
-def read_sale(sale_id: int, db: Session = Depends(get_db)):
-    db_sale = service.get_sale(db, sale_id=sale_id)
+def read_sale(
+    sale_id: int,
+    db: Database,
+    sale_service: SaleService,
+    sale_converter: SaleConverter,
+):
+    """Get sale by ID using dependency injection"""
+    db_sale = sale_service.get_sale(db, sale_id=sale_id)
     if db_sale is None:
         raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
     return sale_converter.convert(db_sale)
 
 
 @router.get("/", response_model=List[schemas.Sale])
-def read_sales(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    sales = service.get_sales(db, skip=skip, limit=limit)
-    return sale_converter.convert_many(sales)
+def read_sales(
+    db: Database,
+    sale_service: SaleService,
+    sale_converter: SaleConverter,
+    skip: int = 0,
+    limit: int = 100,
+):
+    """Get all sales with pagination using dependency injection"""
+    db_sales = sale_service.get_sales(db, skip=skip, limit=limit)
+    return sale_converter.convert_many(db_sales)
 
 
 @router.delete("/{sale_id}", response_model=bool)
-def delete_sale(sale_id: int, db: Session = Depends(get_db)):
-    db_sale = service.get_sale(db, sale_id=sale_id)
-    if db_sale is None:
-        raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
-    return service.remove_sale(db, db_sale=db_sale)
+def delete_sale(
+    sale_id: int,
+    db: Database,
+    sale_service: SaleService,
+):
+    """Delete sale by ID using dependency injection"""
+    return sale_service.remove_sale(db, sale_id=sale_id)

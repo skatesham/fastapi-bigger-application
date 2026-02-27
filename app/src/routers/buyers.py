@@ -1,12 +1,11 @@
-from typing import List
+from typing import List, Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 
 from ...resources.strings import BUYER_DOES_NOT_EXIST_ERROR
-from ..dependencies import get_db
-from ..domain.buyer import schemas, service
-from .converter.buyer_converter import convert, convert_many
+from ..dependencies import Database, BuyerService, BuyerConverter
+from ..domain.buyer import schemas
 
 router = APIRouter(
     prefix="/buyers",
@@ -17,28 +16,49 @@ router = APIRouter(
 
 
 @router.post("/", response_model=schemas.Buyer, status_code=201)
-def create_buyer(buyer: schemas.BuyerCreate, db: Session = Depends(get_db)):
-    # FIXME: This conversion is an Error... Fast API can convert it automatically.
-    return convert(service.create_buyer(db=db, buyer=buyer))
+def create_buyer(
+    buyer: schemas.BuyerCreate,
+    db: Database,
+    buyer_service: BuyerService,
+    buyer_converter: BuyerConverter,
+):
+    """Create new buyer using dependency injection"""
+    db_buyer = buyer_service.create_buyer(db=db, buyer=buyer)
+    return buyer_converter.convert(db_buyer)
 
 
 @router.get("/{buyer_id}", response_model=schemas.Buyer)
-def read_buyer(buyer_id: int, db: Session = Depends(get_db)):
-    db_buyer = service.get_buyer(db, buyer_id=buyer_id)
+def read_buyer(
+    buyer_id: int,
+    db: Database,
+    buyer_service: BuyerService,
+    buyer_converter: BuyerConverter,
+):
+    """Get buyer by ID using dependency injection"""
+    db_buyer = buyer_service.get_buyer(db, buyer_id=buyer_id)
     if db_buyer is None:
         raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
-    return convert(db_buyer)
+    return buyer_converter.convert(db_buyer)
 
 
 @router.get("/", response_model=List[schemas.Buyer])
-def read_buyers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    buyers = service.get_buyers(db, skip=skip, limit=limit)
-    return convert_many(buyers)
+def read_buyers(
+    db: Database,
+    buyer_service: BuyerService,
+    buyer_converter: BuyerConverter,
+    skip: int = 0,
+    limit: int = 100,
+):
+    """Get all buyers with pagination using dependency injection"""
+    db_buyers = buyer_service.get_buyers(db, skip=skip, limit=limit)
+    return buyer_converter.convert_many(db_buyers)
 
 
 @router.delete("/{buyer_id}", response_model=bool)
-def delete_buyer(buyer_id: int, db: Session = Depends(get_db)):
-    db_buyer = service.get_buyer(db, buyer_id=buyer_id)
-    if db_buyer is None:
-        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
-    return service.remove_buyer(db, db_buyer=db_buyer)
+def delete_buyer(
+    buyer_id: int,
+    db: Database,
+    buyer_service: BuyerService,
+):
+    """Delete buyer by ID using dependency injection"""
+    return buyer_service.delete_buyer(db, buyer_id=buyer_id)
