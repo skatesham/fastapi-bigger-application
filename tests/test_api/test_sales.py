@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from ...main import app
+from app.main import app
 from ..base_insertion import (
     insert_into_buyers,
     insert_into_cars,

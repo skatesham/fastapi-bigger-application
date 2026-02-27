@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from ...src.database import Base
-from ...src.dependencies import get_db
+from app.src.database import Base
+from app.src.api.deps import get_db
 
 ## Configure SQLite
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"

@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from ...main import app
+from app.main import app
 from ..base_insertion import insert_into_sellers
 from ..database_test import clear_database, configure_test_database
 from ..templates.seller_tempĺates import seller_json, seller_not_found_error

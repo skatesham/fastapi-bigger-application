@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from ...main import app
+from app.main import app
 from ..base_insertion import insert_into_cars
 from ..database_test import clear_database, configure_test_database
 from ..templates.car_tempĺates import car_json, car_not_found_error
