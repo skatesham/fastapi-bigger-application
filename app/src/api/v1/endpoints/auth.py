@@ -4,9 +4,9 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException
 from jose import jwt
 
-from ...deps import Database, UserService
-from ....domain.user import schemas
-from ....config import SECRET_KEY, ALGORITHM
+from app.src.api.deps import Database, UserService
+from app.src.domain.user import schemas
+from app.src.config import SECRET_KEY, ALGORITHM
 
 router = APIRouter()
 

@@ -2,8 +2,8 @@ from typing import List
 
 from fastapi import APIRouter
 
-from ...deps import Database, StockService, StockConverter
-from ....domain.stock import schemas
+from app.src.api.deps import Database, StockService, StockConverter
+from app.src.domain.stock import schemas
 
 router = APIRouter()
 

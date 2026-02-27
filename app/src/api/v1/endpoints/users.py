@@ -2,8 +2,8 @@ from typing import List
 
 from fastapi import APIRouter
 
-from ...deps import Database, UserService
-from ....domain.user import schemas
+from app.src.api.deps import Database, UserService
+from app.src.domain.user import schemas
 
 router = APIRouter()
 
