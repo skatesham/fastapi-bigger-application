@@ -2,16 +2,114 @@
 # Centralize response messages
 ###
 
-# Errors does not exist
+# Errors - Resource Not Found (404)
 CAR_DOES_NOT_EXIST_ERROR = "car does not exist"
 STOCK_DOES_NOT_EXIST_ERROR = "stock does not exist"
 BUYER_DOES_NOT_EXIST_ERROR = "buyer does not exist"
 SELLER_DOES_NOT_EXIST_ERROR = "seller does not exist"
 SALES_DOES_NOT_EXIST_ERROR = "sale does not exist"
 USER_DOES_NOT_EXIST_ERROR = "user does not exist"
+ITEM_DOES_NOT_EXIST_ERROR = "item does not exist"
 
-# Errors already exists
-STOCK_ALREADY_EXISTS_ERROR = "stock already exist"
+# Errors - Resource Already Exists (409)
+CAR_ALREADY_EXISTS_ERROR = "car already exists"
+BUYER_ALREADY_EXISTS_ERROR = "buyer already exists"
+SELLER_ALREADY_EXISTS_ERROR = "seller already exists"
+STOCK_ALREADY_EXISTS_ERROR = "stock already exists"
+USER_ALREADY_EXISTS_ERROR = "user already exists"
+EMAIL_ALREADY_REGISTERED_ERROR = "Email already registered"
 
-# Errors Out of Stock
+# Errors - Invalid Data (400)
+INVALID_USER_ERROR = "Invalid user data"
+INVALID_BUYER_ERROR = "Invalid buyer data"
+INVALID_SELLER_ERROR = "Invalid seller data"
+INVALID_STOCK_ERROR = "Invalid stock data"
+INVALID_SALE_ERROR = "Invalid sale data"
+INVALID_ITEM_ERROR = "Invalid item data"
+
+# Errors - Business Logic (422)
+CAR_NOT_AVAILABLE_ERROR = "Car not available"
 STOCK_OUT_OF_STOCK_ERROR = "out of stock"
+INSUFFICIENT_STOCK_ERROR = "Insufficient stock"
+INACTIVE_USER_ERROR = "User is inactive"
+
+# Authentication & Authorization Errors
+UNAUTHORIZED_ERROR = "Unauthorized"
+NO_JESSICA_TOKEN_ERROR = "No Jessica token provided"
+
+# Success Messages
+ADMIN_SUCCESS_MESSAGE = "Admin getting schwifty"
+CAR_CREATED_SUCCESS = "Car created successfully"
+BUYER_CREATED_SUCCESS = "Buyer created successfully"
+SELLER_CREATED_SUCCESS = "Seller created successfully"
+STOCK_CREATED_SUCCESS = "Stock created successfully"
+USER_CREATED_SUCCESS = "User created successfully"
+SALE_CREATED_SUCCESS = "Sale created successfully"
+
+# Generic Messages
+RESOURCE_CREATED = "Resource created successfully"
+RESOURCE_UPDATED = "Resource updated successfully"
+RESOURCE_DELETED = "Resource deleted successfully"
+RESOURCE_FOUND = "Resource found successfully"
+RESOURCES_FOUND = "Resources found successfully"
+
+# Validation Messages
+VALIDATION_ERROR = "Validation failed"
+MISSING_REQUIRED_FIELD = "Missing required field"
+INVALID_FIELD_FORMAT = "Invalid field format"
+FIELD_TOO_LONG = "Field exceeds maximum length"
+FIELD_TOO_SHORT = "Field below minimum length"
+
+# Database Messages
+DATABASE_CONNECTION_ERROR = "Database connection failed"
+DATABASE_ERROR = "Database operation failed"
+MIGRATION_ERROR = "Database migration failed"
+
+# Service Messages
+SERVICE_UNAVAILABLE = "Service temporarily unavailable"
+INTERNAL_SERVER_ERROR = "Internal server error"
+REQUEST_TIMEOUT = "Request timeout"
+RATE_LIMIT_EXCEEDED = "Rate limit exceeded"
+
+# HTTP Status Descriptions
+HTTP_200_OK = "OK"
+HTTP_201_CREATED = "Created"
+HTTP_400_BAD_REQUEST = "Bad Request"
+HTTP_401_UNAUTHORIZED = "Unauthorized"
+HTTP_403_FORBIDDEN = "Forbidden"
+HTTP_404_NOT_FOUND = "Not Found"
+HTTP_409_CONFLICT = "Conflict"
+HTTP_422_UNPROCESSABLE_ENTITY = "Unprocessable Entity"
+HTTP_500_INTERNAL_SERVER_ERROR = "Internal Server Error"
+
+# Exception Messages - Dynamic Templates
+# These are templates for exceptions that need dynamic values
+
+# Not Found Templates
+CAR_NOT_FOUND_TEMPLATE = "Car with id {id} not found"
+BUYER_NOT_FOUND_TEMPLATE = "Buyer with id {id} not found"
+SELLER_NOT_FOUND_TEMPLATE = "Seller with id {id} not found"
+STOCK_NOT_FOUND_TEMPLATE = "Stock with id {id} not found"
+USER_NOT_FOUND_TEMPLATE = "User with id {id} not found"
+SALE_NOT_FOUND_TEMPLATE = "Sale with id {id} not found"
+ITEM_NOT_FOUND_TEMPLATE = "Item with id {id} not found"
+
+# Already Exists Templates
+CAR_ALREADY_EXISTS_TEMPLATE = "Car with {field} '{value}' already exists"
+BUYER_ALREADY_EXISTS_TEMPLATE = "Buyer with {field} '{value}' already exists"
+SELLER_ALREADY_EXISTS_TEMPLATE = "Seller with {field} '{value}' already exists"
+USER_ALREADY_EXISTS_TEMPLATE = "User with {field} '{value}' already exists"
+STOCK_ALREADY_EXISTS_TEMPLATE = "Stock already exists for car with id {car_id}"
+
+# Invalid Data Templates
+INVALID_BUYER_DATA_TEMPLATE = "Invalid buyer data: {message}"
+INVALID_SELLER_DATA_TEMPLATE = "Invalid seller data: {message}"
+INVALID_STOCK_DATA_TEMPLATE = "Invalid stock data: {message}"
+INVALID_USER_DATA_TEMPLATE = "Invalid user data: {message}"
+INVALID_SALE_DATA_TEMPLATE = "Invalid sale: {message}"
+INVALID_ITEM_DATA_TEMPLATE = "Invalid item data: {message}"
+
+# Business Logic Templates
+CAR_NOT_AVAILABLE_TEMPLATE = "Car with id {car_id} is not available for sale"
+INSUFFICIENT_STOCK_TEMPLATE = "Insufficient stock for car {car_id}: requested {requested}, available {available}"
+INACTIVE_USER_TEMPLATE = "User with id {user_id} is inactive"

@@ -8,6 +8,8 @@ from app.resources.strings import (
     SALES_DOES_NOT_EXIST_ERROR,
     SELLER_DOES_NOT_EXIST_ERROR,
     STOCK_DOES_NOT_EXIST_ERROR,
+    INVALID_SALE_ERROR,
+    CAR_NOT_AVAILABLE_ERROR,
 )
 from app.src.api.deps import (
     Database,
@@ -51,11 +53,11 @@ def create_sale(
         db_sale = sale_service.create_sale(db=db, sale=sale)
         return schemas.Sale.from_model(db_sale)
     except exceptions.SaleNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
     except exceptions.InvalidSaleError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=INVALID_SALE_ERROR)
     except exceptions.CarNotAvailableError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=CAR_NOT_AVAILABLE_ERROR)
 
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
@@ -69,7 +71,7 @@ def read_sale(
         db_sale = sale_service.get_sale(db, sale_id=sale_id)
         return schemas.Sale.from_model(db_sale)
     except exceptions.SaleNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
 
 
 @router.get("/", response_model=List[schemas.Sale])
@@ -94,4 +96,4 @@ def delete_sale(
     try:
         return sale_service.delete_sale(db, sale_id=sale_id)
     except exceptions.SaleNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)

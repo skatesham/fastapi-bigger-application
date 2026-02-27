@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, StockService
 from app.src.domain.stock import exceptions, schemas
+from app.resources.strings import STOCK_ALREADY_EXISTS_ERROR, STOCK_DOES_NOT_EXIST_ERROR, INVALID_STOCK_ERROR
 
 router = APIRouter()
 
@@ -19,9 +20,9 @@ def create_stock(
         db_stock = stock_service.create_stock(db=db, stock=stock)
         return schemas.Stock.from_model(db_stock)
     except exceptions.StockAlreadyExistsError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=STOCK_ALREADY_EXISTS_ERROR)
     except exceptions.InvalidStockError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=INVALID_STOCK_ERROR)
 
 
 @router.get("/{stock_id}", response_model=schemas.Stock)
@@ -35,7 +36,7 @@ def read_stock(
         db_stock = stock_service.get_stock(db, stock_id=stock_id)
         return schemas.Stock.from_model(db_stock)
     except exceptions.StockNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=STOCK_DOES_NOT_EXIST_ERROR)
 
 
 @router.get("/", response_model=List[schemas.Stock])
@@ -60,4 +61,4 @@ def delete_stock(
     try:
         return stock_service.delete_stock(db, stock_id=stock_id)
     except exceptions.StockNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=STOCK_DOES_NOT_EXIST_ERROR)

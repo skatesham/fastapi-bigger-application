@@ -10,6 +10,7 @@ from fastapi import Depends, Header, HTTPException
 from jose import jwt
 
 from .config import SECRET_KEY, ALGORITHM
+from ...resources.strings import UNAUTHORIZED_ERROR, NO_JESSICA_TOKEN_ERROR
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -34,14 +35,14 @@ async def get_token_header(x_token: str = Header(...)) -> dict:
     payload = decode_token(x_token)
     username: str = payload.get("email")
     if username is None:
-        raise HTTPException(status_code=403, detail="Unauthorized")
+        raise HTTPException(status_code=403, detail=UNAUTHORIZED_ERROR)
     return payload
 
 
 async def get_query_token(token: str) -> str:
     """Example query token validation"""
     if token != "jessica":
-        raise HTTPException(status_code=400, detail="No Jessica token provided")
+        raise HTTPException(status_code=400, detail=NO_JESSICA_TOKEN_ERROR)
     return token
 
 

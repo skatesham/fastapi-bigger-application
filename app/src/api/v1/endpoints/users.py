@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, UserService
 from app.src.domain.user import exceptions, schemas
+from app.resources.strings import USER_ALREADY_EXISTS_ERROR, USER_DOES_NOT_EXIST_ERROR, INVALID_USER_ERROR
 
 router = APIRouter()
 
@@ -18,9 +19,9 @@ def create_user(
     try:
         return user_service.create_user(db=db, user=user)
     except exceptions.UserAlreadyExistsError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=USER_ALREADY_EXISTS_ERROR)
     except exceptions.InvalidUserError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=INVALID_USER_ERROR)
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -33,7 +34,7 @@ def read_user(
     try:
         return user_service.get_user(db, user_id=user_id)
     except exceptions.UserNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=USER_DOES_NOT_EXIST_ERROR)
 
 
 @router.get("/", response_model=List[schemas.User])

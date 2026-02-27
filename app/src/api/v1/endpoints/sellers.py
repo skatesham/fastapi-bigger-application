@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, SellerService
 from app.src.domain.seller import exceptions, schemas
+from app.resources.strings import SELLER_ALREADY_EXISTS_ERROR, SELLER_DOES_NOT_EXIST_ERROR, INVALID_SELLER_ERROR
 
 router = APIRouter()
 
@@ -19,9 +20,9 @@ def create_seller(
         db_seller = seller_service.create_seller(db=db, seller=seller)
         return schemas.Seller.from_model(db_seller)
     except exceptions.SellerAlreadyExistsError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=SELLER_ALREADY_EXISTS_ERROR)
     except exceptions.InvalidSellerError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=INVALID_SELLER_ERROR)
 
 
 @router.get("/{seller_id}", response_model=schemas.Seller)
@@ -35,7 +36,7 @@ def read_seller(
         db_seller = seller_service.get_seller(db, seller_id=seller_id)
         return schemas.Seller.from_model(db_seller)
     except exceptions.SellerNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=SELLER_DOES_NOT_EXIST_ERROR)
 
 
 @router.get("/", response_model=List[schemas.Seller])
@@ -60,4 +61,4 @@ def delete_seller(
     try:
         return seller_service.delete_seller(db, seller_id=seller_id)
     except exceptions.SellerNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=SELLER_DOES_NOT_EXIST_ERROR)

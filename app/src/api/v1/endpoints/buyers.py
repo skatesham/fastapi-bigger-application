@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.src.api.deps import Database, BuyerService
 from app.src.domain.buyer import exceptions, schemas
+from app.resources.strings import BUYER_ALREADY_EXISTS_ERROR, BUYER_DOES_NOT_EXIST_ERROR, INVALID_BUYER_ERROR
 
 router = APIRouter()
 
@@ -19,9 +20,9 @@ def create_buyer(
         db_buyer = buyer_service.create_buyer(db=db, buyer=buyer)
         return schemas.Buyer.from_model(db_buyer)
     except exceptions.BuyerAlreadyExistsError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=BUYER_ALREADY_EXISTS_ERROR)
     except exceptions.BuyerInvalidDataError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=INVALID_BUYER_ERROR)
 
 
 @router.get("/{buyer_id}", response_model=schemas.Buyer)
@@ -35,7 +36,7 @@ def read_buyer(
         db_buyer = buyer_service.get_buyer(db, buyer_id=buyer_id)
         return schemas.Buyer.from_model(db_buyer)
     except exceptions.BuyerNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
 
 
 @router.get("/", response_model=List[schemas.Buyer])
@@ -60,4 +61,4 @@ def delete_buyer(
     try:
         return buyer_service.delete_buyer(db, buyer_id=buyer_id)
     except exceptions.BuyerNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=BUYER_DOES_NOT_EXIST_ERROR)
