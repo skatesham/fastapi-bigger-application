@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from . import exceptions, repository, schemas
 
@@ -9,9 +12,30 @@ class SaleService:
 
     def create_sale(self, db: Session, sale: schemas.SaleCreate) -> schemas.Sale:
         """Create a new sale"""
+        # Validate that car exists
+        from app.src.domain.car.repository import car_repository
+        from app.src.domain.car.exceptions import CarNotFoundError
+        car = car_repository.get_by_id(db, id=sale.car_id)
+        if not car:
+            raise CarNotFoundError(sale.car_id)
+        
+        # Validate that buyer exists
+        from app.src.domain.buyer.repository import buyer_repository
+        from app.src.domain.buyer.exceptions import BuyerNotFoundError
+        buyer = buyer_repository.get_by_id(db, id=sale.buyer_id)
+        if not buyer:
+            raise BuyerNotFoundError(sale.buyer_id)
+        
+        # Validate that seller exists
+        from app.src.domain.seller.repository import seller_repository
+        from app.src.domain.seller.exceptions import SellerNotFoundError
+        seller = seller_repository.get_by_id(db, id=sale.seller_id)
+        if not seller:
+            raise SellerNotFoundError(sale.seller_id)
+        
         # Create sale using repository
         db_sale = self.sale_repository.create(db, obj_in=sale)
-        return schemas.Sale.from_model(db_sale)
+        return db_sale
 
     def get_sale(self, db: Session, sale_id: int) -> schemas.Sale:
         """Get sale by ID"""
@@ -19,12 +43,12 @@ class SaleService:
         if db_sale is None:
             raise exceptions.SaleNotFoundError(sale_id)
         
-        return schemas.Sale.from_model(db_sale)
+        return db_sale
 
-    def get_sales(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Sale]:
-        """Get multiple sales with pagination"""
-        db_sales = self.sale_repository.get_multi(db, skip=skip, limit=limit)
-        return schemas.Sale.from_models(db_sales)
+    def get_sales(self, db: Session) -> Page[schemas.Sale]:
+        """Get all sales with pagination"""
+        from .models import Sale
+        return paginate(db, select(Sale).order_by(Sale.id))
 
     def update_sale(self, db: Session, sale_id: int, sale_update: schemas.SaleUpdate) -> schemas.Sale:
         """Update sale"""
@@ -33,7 +57,7 @@ class SaleService:
             raise exceptions.SaleNotFoundError(sale_id)
         
         updated_sale = self.sale_repository.update(db, db_obj=db_sale, obj_in=sale_update)
-        return schemas.Sale.from_model(updated_sale)
+        return updated_sale
 
     def delete_sale(self, db: Session, sale_id: int) -> bool:
         """Delete sale"""
@@ -46,17 +70,17 @@ class SaleService:
     def get_sales_by_car(self, db: Session, car_id: int) -> list[schemas.Sale]:
         """Get sales by car ID"""
         db_sales = self.sale_repository.get_by_car_id(db, car_id=car_id)
-        return schemas.Sale.from_models(db_sales)
+        return db_sales
 
     def get_sales_by_buyer(self, db: Session, buyer_id: int) -> list[schemas.Sale]:
         """Get sales by buyer ID"""
         db_sales = self.sale_repository.get_by_buyer_id(db, buyer_id=buyer_id)
-        return schemas.Sale.from_models(db_sales)
+        return db_sales
 
     def get_sales_by_seller(self, db: Session, seller_id: int) -> list[schemas.Sale]:
         """Get sales by seller ID"""
         db_sales = self.sale_repository.get_by_seller_id(db, seller_id=seller_id)
-        return schemas.Sale.from_models(db_sales)
+        return db_sales
 
 
 # Create singleton instance

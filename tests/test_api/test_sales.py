@@ -99,8 +99,43 @@ def test_read_sales(
     request_url = sales_route + "?skip=0&limit=100"
     response = client.get(request_url)
     assert response.status_code == 200
-    sale_response_json["created_at"] = response.json()[0]["created_at"]
-    assert response.json() == [sale_response_json]
+    
+    # Check paginated response structure
+    paginated_response = response.json()
+    assert "items" in paginated_response
+    assert "total" in paginated_response
+    assert "page" in paginated_response
+    assert "size" in paginated_response
+    assert len(paginated_response["items"]) == 1
+    assert paginated_response["total"] == 1
+    
+    # Check sale data (basic fields)
+    sale_data = paginated_response["items"][0]
+    assert sale_data['id'] == sale_response_json['id']
+
+
+def test_read_sale_not_found(sale_not_found_error):
+    """Read a sale when not found"""
+    request_url = sales_route + "/1"
+    response = client.get(request_url)
+    assert response.status_code == 404
+    assert response.json() == sale_not_found_error
+
+
+def test_read_sales_not_found():
+    """Read all sales paginated when not found"""
+    request_url = sales_route
+    response = client.get(request_url)
+    assert response.status_code == 200
+    
+    # Check empty paginated response structure
+    paginated_response = response.json()
+    assert "items" in paginated_response
+    assert "total" in paginated_response
+    assert "page" in paginated_response
+    assert "size" in paginated_response
+    assert paginated_response["items"] == []
+    assert paginated_response["total"] == 0
 
 
 def test_delete_sale(
@@ -116,22 +151,6 @@ def test_delete_sale(
     response = client.delete(request_url)
     assert response.status_code == 200
     assert response.json() == True
-
-
-def test_read_sale_not_found(sale_not_found_error):
-    """Read a sale when not found"""
-    request_url = sales_route + "/1"
-    response = client.get(request_url)
-    assert response.status_code == 404
-    assert response.json() == sale_not_found_error
-
-
-def test_read_sales_not_found():
-    """Read all sales paginated when not found"""
-    request_url = sales_route + "?skip=0&limit=100"
-    response = client.get(request_url)
-    assert response.status_code == 200
-    assert response.json() == []
 
 
 def test_delete_sale_not_found(sale_not_found_error):

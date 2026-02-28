@@ -1,6 +1,10 @@
 from typing import List
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app.src.api.deps import Database, CarService
 from app.src.domain.car import exceptions, schemas
@@ -35,16 +39,13 @@ def read_car(
         raise HTTPException(status_code=404, detail=CAR_DOES_NOT_EXIST_ERROR)
 
 
-@router.get("/", response_model=List[schemas.Car])
+@router.get("/", response_model=Page[schemas.Car])
 def read_cars(
     db: Database,
     car_service: CarService,
-    skip: int = 0,
-    limit: int = 100,
 ):
-    """Get all cars with pagination using dependency injection"""
-    cars = car_service.get_cars(db, skip=skip, limit=limit)
-    return cars
+    """Get all cars with automatic pagination"""
+    return car_service.get_cars(db)
 
 
 @router.delete("/{car_id}", response_model=bool)
@@ -58,3 +59,13 @@ def delete_car(
         return car_service.delete_car(db, car_id=car_id)
     except exceptions.CarNotFoundError as e:
         raise HTTPException(status_code=404, detail=CAR_DOES_NOT_EXIST_ERROR)
+
+
+@router.get("/search/", response_model=List[schemas.Car])
+def search_cars(
+    db: Database,
+    car_service: CarService,
+    brand: str = Query(..., description="Search cars by brand"),
+):
+    """Search cars by brand"""
+    return car_service.search_cars_by_brand(db, brand=brand)

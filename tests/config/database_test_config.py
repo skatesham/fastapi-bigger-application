@@ -35,12 +35,15 @@ def truncate_tables(tables):
     """Truncate rows of all input tables"""
 
     with engine.connect() as con:
-        IGNORE_CONSTRAINTS = """PRAGMA ignore_check_constraints = 0"""
-        DISABLE_IGNORE_CONSTRAINTS = """PRAGMA ignore_check_constraints = 1"""
-
-        statement = """DELETE FROM {table:s}"""
+        # Use text() for proper SQL execution
+        from sqlalchemy import text
+        
+        IGNORE_CONSTRAINTS = text("PRAGMA ignore_check_constraints = 0")
+        DISABLE_IGNORE_CONSTRAINTS = text("PRAGMA ignore_check_constraints = 1")
 
         con.execute(IGNORE_CONSTRAINTS)
-        for line in tables:
-            con.execute(statement.format(table=line))
+        for table in tables:
+            DELETE_STATEMENT = text(f"DELETE FROM {table}")
+            con.execute(DELETE_STATEMENT)
         con.execute(DISABLE_IGNORE_CONSTRAINTS)
+        con.commit()

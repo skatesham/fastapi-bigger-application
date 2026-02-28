@@ -13,4 +13,4 @@ def seller_json():
 
 @pytest.fixture
 def seller_not_found_error():
-    return {"errors": ["seller does not exist"]}
+    return {"detail": "seller does not exist"}

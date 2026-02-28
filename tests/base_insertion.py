@@ -19,7 +19,8 @@ def insert_into_cars(input):
         )
 
         for line in data:
-            con.execute(statement, **line)
+            con.execute(statement, line)
+        con.commit()
 
 
 def insert_into_sellers(input):
@@ -32,7 +33,8 @@ def insert_into_sellers(input):
         )
 
         for line in data:
-            con.execute(statement, **line)
+            con.execute(statement, line)
+        con.commit()
 
 
 def insert_into_buyers(input):
@@ -58,7 +60,8 @@ def insert_into_buyers(input):
             :address_district, :address_city, :address_state)""")
 
         for line in data:
-            con.execute(statement, **line)
+            con.execute(statement, line)
+        con.commit()
 
 
 def insert_into_stocks(input):
@@ -71,7 +74,8 @@ def insert_into_stocks(input):
         )
 
         for line in data:
-            con.execute(statement, **line)
+            con.execute(statement, line)
+        con.commit()
 
 
 def insert_into_sales(input):
@@ -84,13 +88,14 @@ def insert_into_sales(input):
         )
 
         for line in data:
-            con.execute(statement, **line)
+            con.execute(statement, line)
+        con.commit()
 
 
 def read_stock_by_id(id):
     with engine.connect() as con:
-        statement = "SELECT * FROM stocks WHERE id = " + str(id)
+        statement = text("SELECT * FROM stocks WHERE id = :id")
         keys = ("id", "quantity", "car_id")
-        for row in con.execute(statement):
+        for row in con.execute(statement, {"id": id}):
             return dict(zip(keys, row))
     return None

@@ -61,7 +61,7 @@ class BuyerService:
     def search_buyers_by_name(self, db: Session, name: str) -> list[schemas.Buyer]:
         """Search buyers by name"""
         db_buyers = self.buyer_repository.get_by_name(db, name=name)
-        return db_buyers
+        return list(map(schemas.Buyer.model_validate, db_buyers))
 
 
 # Create singleton instance

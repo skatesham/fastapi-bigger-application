@@ -22,14 +22,14 @@ def stock_response_json():
 
 @pytest.fixture
 def stock_not_found_error():
-    return {"errors": ["stock does not exist"]}
+    return {"detail": "stock does not exist"}
 
 
 @pytest.fixture
 def stock_already_exist():
-    return {"errors": ["stock already exist"]}
+    return {"detail": "stock already exists"}
 
 
 @pytest.fixture
 def stock_out_of_stock():
-    return {"errors": ["out of stock"]}
+    return {"detail": "out of stock"}

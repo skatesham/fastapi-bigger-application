@@ -1,4 +1,6 @@
 from typing import List
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from fastapi import APIRouter, HTTPException
 
@@ -17,7 +19,7 @@ def create_user(
 ):
     """Create new user using dependency injection"""
     try:
-        return user_service.create_user(db=db, user=user)
+        return(user_service).create_user(db=db, user=user)
     except exceptions.UserAlreadyExistsError as e:
         raise HTTPException(status_code=409, detail=USER_ALREADY_EXISTS_ERROR)
     except exceptions.InvalidUserError as e:
@@ -32,18 +34,15 @@ def read_user(
 ):
     """Get user by ID using dependency injection"""
     try:
-        return user_service.get_user(db, user_id=user_id)
+        return(user_service).get_user(db, user_id=user_id)
     except exceptions.UserNotFoundError as e:
         raise HTTPException(status_code=404, detail=USER_DOES_NOT_EXIST_ERROR)
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model=Page[schemas.User])
 def read_users(
     db: Database,
     user_service: UserService,
-    skip: int = 0,
-    limit: int = 100,
 ):
-    """Get all users with pagination using dependency injection"""
-    users = user_service.get_users(db, skip=skip, limit=limit)
-    return users
+    """Get all users with automatic pagination"""
+    return user_service.get_users(db)

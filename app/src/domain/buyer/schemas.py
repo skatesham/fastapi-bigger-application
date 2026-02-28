@@ -1,6 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
-from app.src.core.conversion import convert_model_to_schema, convert_many_models_to_schemas
 
 
 class Address(BaseModel):
@@ -41,25 +40,10 @@ class BuyerSimpleResponse(BaseModel):
 class Buyer(BuyerBase):
     name: str
     phone: str
-    address: Address
+    address_cep: str
+    address_public_place: str
+    address_city: str
+    address_district: str
+    address_state: str
 
-    class Config:
-        from_attributes = True
-    
-    @classmethod
-    def from_model(cls, db_model):
-        """Convert SQLAlchemy model to Pydantic schema directly"""
-        return convert_model_to_schema(
-            db_model=db_model,
-            schema_class=cls,
-            nested_objects={'address': Address}
-        )
-    
-    @classmethod
-    def from_models(cls, db_models):
-        """Convert list of SQLAlchemy models to Pydantic schemas directly"""
-        return convert_many_models_to_schemas(
-            db_models=db_models,
-            schema_class=cls,
-            nested_objects={'address': Address}
-        )
+    model_config = ConfigDict(from_attributes=True)

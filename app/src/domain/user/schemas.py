@@ -1,48 +1,25 @@
-from typing import List, Optional
+from typing import Optional
 
-from pydantic import BaseModel
-
-
-class ItemBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-
-
-class ItemCreate(ItemBase):
-    pass
-
-
-class ItemUpdate(ItemBase):
-    title: Optional[str] = None
-    description: Optional[str] = None
-
-
-class Item(ItemBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        from_attributes = True
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(..., min_length=8, description="Password must be at least 8 characters long")
+    is_active: Optional[bool] = True
 
 
 class UserUpdate(UserBase):
-    email: Optional[str] = None
-    password: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=8, description="Password must be at least 8 characters long")
     is_active: Optional[bool] = None
 
 
 class User(UserBase):
     id: int
     is_active: bool
-    items: List[Item] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

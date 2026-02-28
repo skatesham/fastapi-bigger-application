@@ -39,10 +39,18 @@ def test_read_cars(car_json):
     """Read all cars paginated with success"""
     insert_into_cars(car_json)
 
-    request_url = CAR_ROUTE + "?skip=0&limit=100"
+    request_url = CAR_ROUTE  # Remove pagination params since we use automatic pagination
     response = client.get(request_url)
     assert response.status_code == 200
-    assert response.json() == [car_json]
+    
+    # Check paginated response structure
+    paginated_response = response.json()
+    assert "items" in paginated_response
+    assert "total" in paginated_response
+    assert "page" in paginated_response
+    assert "size" in paginated_response
+    assert paginated_response["items"] == [car_json]
+    assert paginated_response["total"] == 1
 
 
 def test_delete_car(car_json):
@@ -65,10 +73,18 @@ def test_read_car_not_found(car_not_found_error):
 
 def test_read_cars_not_found():
     """Read all cars paginated when not found"""
-    request_url = CAR_ROUTE + "?skip=0&limit=100"
+    request_url = CAR_ROUTE
     response = client.get(request_url)
     assert response.status_code == 200
-    assert response.json() == []
+    
+    # Check empty paginated response structure
+    paginated_response = response.json()
+    assert "items" in paginated_response
+    assert "total" in paginated_response
+    assert "page" in paginated_response
+    assert "size" in paginated_response
+    assert paginated_response["items"] == []
+    assert paginated_response["total"] == 0
 
 
 def test_delete_car_not_found(car_not_found_error):

@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from . import exceptions, repository, schemas
 
@@ -16,7 +19,7 @@ class SellerService:
         
         # Create seller
         db_seller = self.seller_repository.create(db, obj_in=seller)
-        return schemas.Seller.from_model(db_seller)
+        return db_seller
 
     def get_seller(self, db: Session, seller_id: int) -> schemas.Seller:
         """Get seller by ID"""
@@ -24,12 +27,12 @@ class SellerService:
         if db_seller is None:
             raise exceptions.SellerNotFoundError(seller_id)
         
-        return schemas.Seller.from_model(db_seller)
+        return db_seller
 
-    def get_sellers(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Seller]:
-        """Get multiple sellers with pagination"""
-        db_sellers = self.seller_repository.get_multi(db, skip=skip, limit=limit)
-        return schemas.Seller.from_models(db_sellers)
+    def get_sellers(self, db: Session) -> Page[schemas.Seller]:
+        """Get all sellers with pagination"""
+        from .models import Seller
+        return paginate(db, select(Seller).order_by(Seller.id))
 
     def update_seller(self, db: Session, seller_id: int, seller_update: schemas.SellerUpdate) -> schemas.Seller:
         """Update seller"""
@@ -61,12 +64,12 @@ class SellerService:
         if db_seller is None:
             raise exceptions.SellerNotFoundError(0)  # CPF lookup, no ID
         
-        return schemas.Seller.from_model(db_seller)
+        return db_seller
 
     def search_sellers_by_name(self, db: Session, name: str) -> list[schemas.Seller]:
         """Search sellers by name"""
         db_sellers = self.seller_repository.get_by_name(db, name=name)
-        return schemas.Seller.from_models(db_sellers)
+        return db_sellers
 
 
 # Create singleton instance

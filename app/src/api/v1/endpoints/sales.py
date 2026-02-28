@@ -1,25 +1,19 @@
 from typing import List
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
-from app.resources.strings import (
-    BUYER_DOES_NOT_EXIST_ERROR,
-    CAR_DOES_NOT_EXIST_ERROR,
-    SALES_DOES_NOT_EXIST_ERROR,
-    SELLER_DOES_NOT_EXIST_ERROR,
-    STOCK_DOES_NOT_EXIST_ERROR,
-    INVALID_SALE_ERROR,
-    CAR_NOT_AVAILABLE_ERROR,
-)
-from app.src.api.deps import (
-    Database,
-    BuyerService,
-    CarRepository,
-    SaleService,
-    SellerService,
-    StockService,
-)
-from app.src.domain.sale import exceptions, schemas
+from app.src.api.deps import Database, SaleService, StockService
+from app.src.domain.sale import exceptions as sale_exceptions
+from app.src.domain.car import exceptions as car_exceptions
+from app.src.domain.buyer import exceptions as buyer_exceptions
+from app.src.domain.seller import exceptions as seller_exceptions
+from app.src.domain.stock import exceptions as stock_exceptions
+from app.src.domain.sale import schemas
+from app.resources.strings import SALES_ALREADY_EXISTS_ERROR, SALES_DOES_NOT_EXIST_ERROR, INVALID_SALE_ERROR
 
 router = APIRouter()
 
@@ -28,36 +22,29 @@ router = APIRouter()
 def create_sale(
     sale: schemas.SaleCreate,
     db: Database,
-    buyer_service: BuyerService,
-    car_repository: CarRepository,
     sale_service: SaleService,
-    seller_service: SellerService,
     stock_service: StockService,
 ):
     """Create new sale using dependency injection"""
     try:
-        # Validate related entities exist
-        errors = []
-        if car_repository.get_by_id(db, id=sale.car_id) is None:
-            errors.append(CAR_DOES_NOT_EXIST_ERROR)
-        if buyer_service.get_buyer(db, buyer_id=sale.buyer_id) is None:
-            errors.append(BUYER_DOES_NOT_EXIST_ERROR)
-        if seller_service.get_seller(db, seller_id=sale.seller_id) is None:
-            errors.append(SELLER_DOES_NOT_EXIST_ERROR)
-        if stock_service.get_stock_by_car(db, car_id=sale.car_id) is None:
-            errors.append(STOCK_DOES_NOT_EXIST_ERROR)
-        if len(errors) > 0:
-            raise HTTPException(status_code=404, detail=", ".join(errors))
-
+        # Reduce stock quantity
         stock_service.buy_car_from_stock(db, car_id=sale.car_id, quantity=1)
         db_sale = sale_service.create_sale(db=db, sale=sale)
-        return schemas.Sale.from_model(db_sale)
-    except exceptions.SaleNotFoundError as e:
+        return db_sale
+    except car_exceptions.CarNotFoundError as e:
+        raise HTTPException(status_code=404, detail="car does not exist")
+    except buyer_exceptions.BuyerNotFoundError as e:
+        raise HTTPException(status_code=404, detail="buyer does not exist")
+    except seller_exceptions.SellerNotFoundError as e:
+        raise HTTPException(status_code=404, detail="seller does not exist")
+    except stock_exceptions.StockNotFoundError as e:
+        raise HTTPException(status_code=404, detail="stock does not exist")
+    except stock_exceptions.InsufficientStockError as e:
+        raise HTTPException(status_code=422, detail="out of stock")
+    except sale_exceptions.SaleNotFoundError as e:
         raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
-    except exceptions.InvalidSaleError as e:
+    except sale_exceptions.InvalidSaleError as e:
         raise HTTPException(status_code=400, detail=INVALID_SALE_ERROR)
-    except exceptions.CarNotAvailableError as e:
-        raise HTTPException(status_code=422, detail=CAR_NOT_AVAILABLE_ERROR)
 
 
 @router.get("/{sale_id}", response_model=schemas.Sale)
@@ -69,21 +56,18 @@ def read_sale(
     """Get sale by ID using dependency injection"""
     try:
         db_sale = sale_service.get_sale(db, sale_id=sale_id)
-        return schemas.Sale.from_model(db_sale)
-    except exceptions.SaleNotFoundError as e:
+        return db_sale
+    except sale_exceptions.SaleNotFoundError as e:
         raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
 
 
-@router.get("/", response_model=List[schemas.Sale])
+@router.get("/", response_model=Page[schemas.Sale])
 def read_sales(
     db: Database,
     sale_service: SaleService,
-    skip: int = 0,
-    limit: int = 100,
 ):
-    """Get all sales with pagination using dependency injection"""
-    db_sales = sale_service.get_sales(db, skip=skip, limit=limit)
-    return schemas.Sale.from_models(db_sales)
+    """Get all sales with automatic pagination"""
+    return sale_service.get_sales(db)
 
 
 @router.delete("/{sale_id}", response_model=bool)
@@ -95,5 +79,35 @@ def delete_sale(
     """Delete sale by ID using dependency injection"""
     try:
         return sale_service.delete_sale(db, sale_id=sale_id)
-    except exceptions.SaleNotFoundError as e:
+    except sale_exceptions.SaleNotFoundError as e:
         raise HTTPException(status_code=404, detail=SALES_DOES_NOT_EXIST_ERROR)
+
+
+@router.get("/search/by-car/", response_model=List[schemas.Sale])
+def search_sales_by_car(
+    db: Database,
+    sale_service: SaleService,
+    car_id: int = Query(..., description="Search sales by car ID"),
+):
+    """Get sales by car ID"""
+    return sale_service.get_sales_by_car(db, car_id=car_id)
+
+
+@router.get("/search/by-buyer/", response_model=List[schemas.Sale])
+def search_sales_by_buyer(
+    db: Database,
+    sale_service: SaleService,
+    buyer_id: int = Query(..., description="Search sales by buyer ID"),
+):
+    """Get sales by buyer ID"""
+    return sale_service.get_sales_by_buyer(db, buyer_id=buyer_id)
+
+
+@router.get("/search/by-seller/", response_model=List[schemas.Sale])
+def search_sales_by_seller(
+    db: Database,
+    sale_service: SaleService,
+    seller_id: int = Query(..., description="Search sales by seller ID"),
+):
+    """Get sales by seller ID"""
+    return sale_service.get_sales_by_seller(db, seller_id=seller_id)

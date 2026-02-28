@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from . import exceptions, repository, schemas
 
@@ -19,7 +22,7 @@ class CarService:
         
         # Create car
         db_car = self.car_repository.create(db, obj_in=car)
-        return schemas.Car.from_model(db_car)
+        return db_car
 
     def get_car(self, db: Session, car_id: int) -> schemas.Car:
         """Get car by ID"""
@@ -27,12 +30,12 @@ class CarService:
         if db_car is None:
             raise exceptions.CarNotFoundError(car_id)
         
-        return schemas.Car.from_model(db_car)
+        return db_car
 
-    def get_cars(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Car]:
-        """Get multiple cars with pagination"""
-        db_cars = self.car_repository.get_multi(db, skip=skip, limit=limit)
-        return schemas.Car.from_models(db_cars)
+    def get_cars(self, db: Session) -> Page[schemas.Car]:
+        """Get all cars with pagination"""
+        from .models import Car
+        return paginate(db, select(Car).order_by(Car.id))
 
     def update_car(self, db: Session, car_id: int, car_update: schemas.CarUpdate) -> schemas.Car:
         """Update car"""
@@ -57,7 +60,7 @@ class CarService:
         
         # Update car
         updated_car = self.car_repository.update(db, db_obj=db_car, obj_in=car_update)
-        return schemas.Car.from_model(updated_car)
+        return updated_car
 
     def delete_car(self, db: Session, car_id: int) -> bool:
         """Delete car"""
@@ -71,7 +74,7 @@ class CarService:
         """Search cars by brand"""
         db_cars = self.car_repository.get_multi(db)
         filtered_cars = [car for car in db_cars if car.brand.lower() == brand.lower()]
-        return schemas.Car.from_models(filtered_cars)
+        return filtered_cars
 
 
 # Create singleton instance

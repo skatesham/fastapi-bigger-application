@@ -16,6 +16,7 @@ CAR_ALREADY_EXISTS_ERROR = "car already exists"
 BUYER_ALREADY_EXISTS_ERROR = "buyer already exists"
 SELLER_ALREADY_EXISTS_ERROR = "seller already exists"
 STOCK_ALREADY_EXISTS_ERROR = "stock already exists"
+SALES_ALREADY_EXISTS_ERROR = "sale already exists"
 USER_ALREADY_EXISTS_ERROR = "user already exists"
 EMAIL_ALREADY_REGISTERED_ERROR = "Email already registered"
 

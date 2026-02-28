@@ -1,6 +1,7 @@
 # FastAPI Car Shop ERP
 
-[![codecov](https://codecov.io/gh/carshop/fastapi-erp/branch/main/graph/badge.svg)](https://codecov.io/gh/carshop/fastapi-erp)
+
+[![Coverage: 78%](https://img.shields.io/badge/coverage-78%25-brightgreen.svg)](tests/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.133.1-green.svg)](https://fastapi.tiangolo.com/)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.47-blue.svg)](https://www.sqlalchemy.org/)
@@ -334,6 +335,7 @@ spec:
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Bigger Application](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
 - [SQL](https://fastapi.tiangolo.com/tutorial/sql-databases/)
+- [Pagination](https://uriyyo-fastapi-pagination.netlify.app/)
 - [Testing](https://fastapi.tiangolo.com/tutorial/testing/)  
 - [Pydantic](https://pydantic-docs.helpmanual.io/)  
 - [SQL Relational Database SQLAlchemy by FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/?h=databa#sql-relational-databases)

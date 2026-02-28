@@ -6,7 +6,7 @@ from app.src.core.repository import CRUDBase
 from . import models, schemas
 
 
-class UserRepository(CRUDBase[models.User, schemas.UserCreate, schemas.UserUpdate]):
+class UserRepository(CRUDBase[models.User, dict, schemas.UserUpdate]):
     def __init__(self):
         super().__init__(models.User)
 
@@ -31,21 +31,5 @@ class UserRepository(CRUDBase[models.User, schemas.UserCreate, schemas.UserUpdat
         return db_user
 
 
-class ItemRepository(CRUDBase[models.Item, schemas.ItemCreate, schemas.ItemUpdate]):
-    def __init__(self):
-        super().__init__(models.Item)
-
-    def get_by_owner(self, db: Session, *, owner_id: int) -> List[models.Item]:
-        """Get items by owner ID"""
-        return db.query(self.model).filter(self.model.owner_id == owner_id).all()
-
-    def search_by_title(self, db: Session, *, title: str) -> List[models.Item]:
-        """Search items by title (partial match)"""
-        return db.query(self.model).filter(
-            self.model.title.ilike(f"%{title}%")
-        ).all()
-
-
-# Create singleton instances
+# Create singleton instance
 user_repository = UserRepository()
-item_repository = ItemRepository()

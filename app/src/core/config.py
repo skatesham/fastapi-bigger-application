@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     # CORS Configuration
     ALLOWED_HOSTS: Optional[str] = Field(default="*")
     
+    # Environment Configuration
+    DEBUG: bool = Field(default=False)
+    ENVIRONMENT: str = Field(default="development")
+    
     @property
     def allowed_hosts_list(self) -> List[str]:
         """Convert comma-separated hosts to list"""

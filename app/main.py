@@ -1,6 +1,8 @@
 from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException
+from fastapi_pagination import add_pagination
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from .src.core.config import ALLOWED_HOSTS, API_PREFIX
 from .src.core.database import Base, SessionLocal, engine
@@ -42,6 +44,9 @@ def get_application() -> FastAPI:
         dependencies=[Depends(get_current_user)],
         responses={418: {"description": "I'm a teapot"}},
     )
+
+    ## Add pagination support
+    add_pagination(application)
 
     return application
 

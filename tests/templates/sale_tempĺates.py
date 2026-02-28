@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 
@@ -10,7 +10,7 @@ def sale_request_json():
         "car_id": 1,
         "seller_id": 1,
         "buyer_id": 1,
-        "created_at": str(datetime.utcnow()),
+        "created_at": str(datetime.now(timezone.utc)),
     }
 
 
@@ -22,13 +22,11 @@ def sale_response_json():
         "buyer": {
             "id": 1,
             "name": "Bruce Lee",
-            "address": {
-                "cep": "73770-000",
-                "public_place": "Banbusal",
-                "city": "Alto Paraiso de Goias",
-                "district": "Cidade Baixa",
-                "state": "Goias",
-            },
+            "address_cep": "73770-000",
+            "address_public_place": "Banbusal",
+            "address_city": "Alto Paraiso de Goias",
+            "address_district": "Cidade Baixa",
+            "address_state": "Goias",
             "phone": "12996651234",
         },
         "seller": {
@@ -43,13 +41,9 @@ def sale_response_json():
 
 @pytest.fixture
 def sale_not_found_error():
-    return {"errors": ["sale does not exist"]}
+    return {"detail": "sale does not exist"}
 
 
 @pytest.fixture
 def sale_all_not_found_error():
-    return {
-        "errors": [
-            "car does not exist, buyer does not exist, seller does not exist, stock does not exist"
-        ]
-    }
+    return {"detail": "stock does not exist"}

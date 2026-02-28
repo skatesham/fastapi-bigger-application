@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 from . import exceptions, repository, schemas
 
@@ -9,6 +12,13 @@ class StockService:
 
     def create_stock(self, db: Session, stock: schemas.StockCreate) -> schemas.Stock:
         """Create a new stock"""
+        # Check if car exists
+        from app.src.domain.car.repository import car_repository
+        from app.src.domain.car.exceptions import CarNotFoundError
+        car = car_repository.get_by_id(db, id=stock.car_id)
+        if not car:
+            raise CarNotFoundError(stock.car_id)
+        
         # Check if stock already exists for this car
         existing_stock = self.stock_repository.get_by_car_id(db, car_id=stock.car_id)
         if existing_stock:
@@ -16,7 +26,9 @@ class StockService:
         
         # Create stock
         db_stock = self.stock_repository.create(db, obj_in=stock)
-        return schemas.Stock.from_model(db_stock)
+        # Refresh to load relationships
+        db.refresh(db_stock)
+        return db_stock
 
     def get_stock(self, db: Session, stock_id: int) -> schemas.Stock:
         """Get stock by ID"""
@@ -24,7 +36,7 @@ class StockService:
         if db_stock is None:
             raise exceptions.StockNotFoundError(stock_id)
         
-        return schemas.Stock.from_model(db_stock)
+        return db_stock
 
     def get_stock_by_car(self, db: Session, car_id: int) -> schemas.Stock:
         """Get stock by car ID"""
@@ -32,7 +44,7 @@ class StockService:
         if db_stock is None:
             raise exceptions.StockNotFoundError(0)  # Car lookup, no stock ID
         
-        return schemas.Stock.from_model(db_stock)
+        return db_stock
 
     def buy_car_from_stock(self, db: Session, car_id: int, quantity: int) -> schemas.Stock:
         """Buy car from stock (reduce quantity)"""
@@ -48,12 +60,12 @@ class StockService:
         db.add(db_stock)
         db.commit()
         db.refresh(db_stock)
-        return schemas.Stock.from_model(db_stock)
+        return db_stock
 
-    def get_stocks(self, db: Session, skip: int = 0, limit: int = 100) -> list[schemas.Stock]:
-        """Get multiple stocks with pagination"""
-        db_stocks = self.stock_repository.get_multi(db, skip=skip, limit=limit)
-        return schemas.Stock.from_models(db_stocks)
+    def get_stocks(self, db: Session) -> Page[schemas.Stock]:
+        """Get all stocks with pagination"""
+        from .models import Stock
+        return paginate(db, select(Stock).order_by(Stock.id))
 
     def update_stock(self, db: Session, stock_id: int, stock_update: schemas.StockUpdate) -> schemas.Stock:
         """Update stock"""
@@ -82,12 +94,12 @@ class StockService:
     def get_low_stock_items(self, db: Session, threshold: int = 5) -> list[schemas.Stock]:
         """Get stocks with quantity below threshold"""
         db_stocks = self.stock_repository.get_low_stock(db, threshold=threshold)
-        return schemas.Stock.from_models(db_stocks)
+        return db_stocks
 
     def get_available_stocks(self, db: Session) -> list[schemas.Stock]:
         """Get all stocks with quantity > 0"""
         db_stocks = self.stock_repository.get_available_stock(db)
-        return schemas.Stock.from_models(db_stocks)
+        return db_stocks
 
 
 # Create singleton instance
