@@ -3,14 +3,12 @@ Dependencies for API endpoints using FastAPI Annotated patterns
 Centralized dependency injection for clean architecture
 """
 
-from typing import Annotated, List, Optional
-from functools import lru_cache
+from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.src.core.database import SessionLocal
-from app.src.core.config import SECRET_KEY, ALGORITHM
 from app.src.core.security import get_current_user
 # Import the actual classes for type hints
 from app.src.domain.buyer.service import BuyerService as BuyerServiceClass
@@ -45,39 +43,17 @@ def get_db() -> Session:
 # Using core.security module
 
 
-# Service Dependencies - Using functions directly since no classes exist yet
+# Service Dependencies - Direct singleton imports
 Database = Annotated[Session, Depends(get_db)]
 
-# Function-based dependencies for services
-def get_buyer_service() -> BuyerServiceClass:
-    return buyer_service
-
-def get_car_repository() -> CarRepositoryClass:
-    return car_repository
-
-def get_car_service() -> CarServiceClass:
-    return car_service
-
-def get_sale_service() -> SaleServiceClass:
-    return sale_service
-
-def get_seller_service() -> SellerServiceClass:
-    return seller_service
-
-def get_stock_service() -> StockServiceClass:
-    return stock_service
-
-def get_user_service() -> UserServiceClass:
-    return user_service
-
-# Annotated Dependencies for clean injection
-BuyerService = Annotated[BuyerServiceClass, Depends(get_buyer_service)]
-CarRepository = Annotated[CarRepositoryClass, Depends(get_car_repository)]
-CarService = Annotated[CarServiceClass, Depends(get_car_service)]
-SaleService = Annotated[SaleServiceClass, Depends(get_sale_service)]
-SellerService = Annotated[SellerServiceClass, Depends(get_seller_service)]
-StockService = Annotated[StockServiceClass, Depends(get_stock_service)]
-UserService = Annotated[UserServiceClass, Depends(get_user_service)]
+# Direct dependencies using singleton instances
+BuyerService = Annotated[BuyerServiceClass, Depends(lambda: buyer_service)]
+CarRepository = Annotated[CarRepositoryClass, Depends(lambda: car_repository)]
+CarService = Annotated[CarServiceClass, Depends(lambda: car_service)]
+SaleService = Annotated[SaleServiceClass, Depends(lambda: sale_service)]
+SellerService = Annotated[SellerServiceClass, Depends(lambda: seller_service)]
+StockService = Annotated[StockServiceClass, Depends(lambda: stock_service)]
+UserService = Annotated[UserServiceClass, Depends(lambda: user_service)]
 
 # Security Annotated Dependencies
 CurrentUser = Annotated[dict, Depends(get_current_user)]
@@ -92,13 +68,6 @@ CommonDependencies = {
     "sale_service": SaleService,
     "seller_service": SellerService,
     "stock_service": StockService,
-    "stock_service": StockService,
     "user_service": UserService,
     "current_user": CurrentUser,
 }
-
-
-@lru_cache()
-def get_dependency(name: str):
-    """Cached dependency getter for performance"""
-    return CommonDependencies.get(name)
