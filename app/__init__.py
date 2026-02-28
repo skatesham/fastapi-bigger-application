@@ -1,8 +1,8 @@
 """FastAPI Car Shop ERP - Professional ERP System"""
 
 __version__ = "1.0.0"
-__author__ = "Development Team"
-__email__ = "dev@carshop.com"
+__author__ = "Sham Vinicius Fiorin"
+__email__ = "sham.vinicius@gmail.com"
 
 
 def main():

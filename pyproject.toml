@@ -9,10 +9,10 @@ description = "Professional FastAPI ERP system for car shop management"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Development Team", email = "dev@carshop.com"}
+    {name = "Sham Vinicius Fiorin", email = "sham.vinicius@gmail.com"}
 ]
 maintainers = [
-    {name = "Development Team", email = "dev@carshop.com"}
+    {name = "Sham Vinicius Fiorin", email = "sham.vinicius@gmail.com"}
 ]
 keywords = ["fastapi", "erp", "car-shop", "postgresql", "python"]
 classifiers = [
