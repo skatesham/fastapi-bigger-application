@@ -16,6 +16,9 @@ pydantic>=2.4.0
 pydantic-settings>=2.0.0
 email-validator>=2.0.0
 
+# Pagination
+fastapi-pagination>=0.12.0
+
 # Authentication & Security
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4

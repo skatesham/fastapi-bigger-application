@@ -1,17 +1,55 @@
 # Use skatesham/skatesham-github user/password credentials
-version: '3.1'
-
 services:
 
   db:
-    image: postgres:alpine3.14
+    image: postgres:15-alpine
+    container_name: fastapi_db
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: skatesham
       POSTGRES_PASSWORD: skatesham-github
+      POSTGRES_DB: skatesham
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skatesham"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://skatesham:skatesham-github@db:5432/skatesham
+      - DEBUG=true
+      - ENVIRONMENT=development
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   adminer:
-    image: adminer
+    image: adminer:latest
+    container_name: fastapi_adminer
     ports:
-      - 9000:8080
+      - "9000:8080"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

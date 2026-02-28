@@ -18,7 +18,7 @@ cp .env.example .env
 ## 3. Database Setup
 ```bash
 # Generate initial migration
-docker compose up -d
+docker compose up db -d
 alembic revision --autogenerate -m "Initial migration"
 
 # Apply migrations

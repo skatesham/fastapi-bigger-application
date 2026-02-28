@@ -54,6 +54,12 @@ def get_application() -> FastAPI:
 app = get_application()
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Docker and monitoring"""
+    return {"status": "healthy", "service": "fastapi-car-shop-erp"}
+
+
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
     """

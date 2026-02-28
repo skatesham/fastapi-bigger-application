@@ -62,6 +62,10 @@ fastapi-bigger-application/
 │   │   └── internal/      # Internal utilities
 │   └── main.py           # Application entry point
 ├── tests/                # Test suite (external)
+├── Dockerfile            # Docker container configuration
+├── docker-compose.yml    # Docker Compose orchestration
+├── docker-dev.sh         # Interactive development script
+├── .dockerignore         # Docker build exclusions
 ├── pyproject.toml       # Modern Python packaging
 ├── requirements.txt     # Dependencies
 ├── setup.cfg            # Flake8 configuration
@@ -73,13 +77,55 @@ fastapi-bigger-application/
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🐳 Docker (Recommended - Automated)
+
+The fastest way to get started is using Docker Compose:
+
+```bash
+# Clone and start everything automatically
+git clone https://github.com/carshop/fastapi-erp.git
+cd fastapi-erp
+docker-compose up --build
+```
+
+#### 🚀 Interactive Development Script
+
+For an enhanced development experience, use our interactive script:
+
+```bash
+# Run the interactive development script
+./docker-dev.sh
+```
+
+The script provides:
+- **🚀 Auto-start services** with health checks
+- **📊 Service status monitoring**
+- **📋 Live logs viewing**
+- **🛑 Clean stop/reset options**
+- **🔗 Quick access URLs**
+- **🎨 Colored output and status indicators**
+
+That's it! 🎉 The application will be available at:
+- **API**: http://localhost:8000
+- **Documentation**: http://localhost:8000/docs
+- **Database Admin**: http://localhost:9000 (Adminer)
+
+Services included:
+- **FastAPI App** (port 8000) - Main application
+- **PostgreSQL** (port 5432) - Database with persistent data
+- **Adminer** (port 9000) - Database management interface
+
+### Local Development
+
+If you prefer to run locally:
+
+#### Prerequisites
 
 - Python 3.11+
 - PostgreSQL 12+
 - Docker & Docker Compose (optional)
 
-### Installation
+#### Installation
 
 ```bash
 # Clone the repository
@@ -190,12 +236,69 @@ alembic downgrade -1
 
 ## 📦 Deployment
 
-### Docker
+### 🐳 Docker (Recommended)
+
+#### Quick Start - One Command Setup
 
 ```bash
-# Build and run with Docker Compose
+# Clone and run everything automatically
+git clone https://github.com/carshop/fastapi-erp.git
+cd fastapi-erp
 docker-compose up --build
 ```
+
+#### Docker Services
+
+The `docker-compose.yml` includes three services:
+
+1. **api** - FastAPI Application
+   - Port: 8000
+   - Auto-reload with volume mounting
+   - Health checks enabled
+   - Depends on database
+
+2. **db** - PostgreSQL Database
+   - Port: 5432
+   - Persistent data volume
+   - Health checks for startup order
+   - Credentials: `skatesham:skatesham-github`
+
+3. **adminer** - Database Admin Interface
+   - Port: 9000
+   - Web-based database management
+   - Connect to `db` service
+
+#### Docker Commands
+
+```bash
+# Start all services
+docker-compose up --build
+
+# Start in background
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f api
+
+# Stop services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+
+# Rebuild specific service
+docker-compose up --build api
+
+# Access running container
+docker-compose exec api bash
+```
+
+#### Environment Variables
+
+The Docker setup automatically configures:
+- `DATABASE_URL=postgresql://skatesham:skatesham-github@db:5432/skatesham`
+- `DEBUG=true` (development mode)
+- `ENVIRONMENT=development`
 
 ### Production
 
