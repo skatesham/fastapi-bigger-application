@@ -340,6 +340,7 @@ spec:
 - [Pydantic](https://pydantic-docs.helpmanual.io/)  
 - [SQL Relational Database SQLAlchemy by FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/?h=databa#sql-relational-databases)
 - [SQLAlchemy 1.4](https://docs.sqlalchemy.org/en/14/tutorial/engine.html)  
+- [FastAPI Full Stack Template](https://github.com/fastapi/full-stack-fastapi-template)
 - [FastAPI "Real world example app"](https://github.com/nsidnev/fastapi-realworld-example-app)
 
 ---
