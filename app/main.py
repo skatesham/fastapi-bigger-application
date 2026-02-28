@@ -4,7 +4,7 @@ from starlette.exceptions import HTTPException
 
 from .src.core.config import ALLOWED_HOSTS, API_PREFIX
 from .src.core.database import Base, SessionLocal, engine
-from .src.core.security import get_token_header
+from .src.core.security import get_current_user
 from .src.internal import admin
 from .src.api.v1.router import api_router
 
@@ -39,7 +39,7 @@ def get_application() -> FastAPI:
         admin.router,
         prefix="/admin",
         tags=["admin"],
-        dependencies=[Depends(get_token_header)],
+        dependencies=[Depends(get_current_user)],
         responses={418: {"description": "I'm a teapot"}},
     )
 

@@ -16,12 +16,16 @@ class Settings(BaseSettings):
     
     # API Configuration
     API_PREFIX: str = "/api"
-    JWT_TOKEN_PREFIX: str = "Authorization"
     ROUTE_PREFIX_V1: str = "/v1"
+    VERSION: str = Field(default="2.0.1")
+    SERVICE_NAME: str = Field(default="fastapi-car-shop-erp")
+    SERVICE_DESCRIPTION: str = Field(default="Professional ERP system for car shop management")
+    SERVICE_AUTHOR: str = Field(default="Sham Vinicius Fiorin")
     
     # Security Configuration
     SECRET_KEY: str = Field(default="09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7")
     ALGORITHM: str = Field(default="HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30)
     
     # Database Configuration
     DATABASE_URL: str = Field(default="postgresql://skatesham:skatesham-github@localhost/skatesham")
@@ -42,9 +46,13 @@ settings = Settings()
 
 # Export constants for backward compatibility
 API_PREFIX = settings.API_PREFIX
-JWT_TOKEN_PREFIX = settings.JWT_TOKEN_PREFIX
 ROUTE_PREFIX_V1 = settings.ROUTE_PREFIX_V1
+VERSION = settings.VERSION
+SERVICE_NAME = settings.SERVICE_NAME
+SERVICE_DESCRIPTION = settings.SERVICE_DESCRIPTION
+SERVICE_AUTHOR = settings.SERVICE_AUTHOR
 ALLOWED_HOSTS = settings.allowed_hosts_list
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 DATABASE_URL = settings.DATABASE_URL

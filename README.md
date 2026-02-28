@@ -111,10 +111,23 @@ DATABASE_URL=postgresql://user:password@localhost/dbname
 # Security
 SECRET_KEY=your-secret-key-here
 ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Service Configuration
+SERVICE_NAME=fastapi-car-shop-erp
+SERVICE_VERSION=1.0.0
+SERVICE_DESCRIPTION=Professional ERP system for car shop management
+SERVICE_AUTHOR=Your Name
+
+# Application
+DEBUG=false
+ENVIRONMENT=production
 
 # CORS
-ALLOWED_HOSTS=localhost,127.0.0.1
+ALLOWED_HOSTS=localhost,127.0.0.1,yourdomain.com
 ```
+
+**Note**: All service information (name, version, description, author) is centralized in the configuration and automatically used by health/info endpoints.
 
 ---
 
@@ -195,8 +208,17 @@ gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
 
 ## 📊 API Endpoints
 
+### System & Health Monitoring
+- `GET /api/v1/system/health` - Complete health check with database connectivity and pool status
+- `GET /api/v1/system/health/live` - Kubernetes liveness probe (simple alive check)
+- `GET /api/v1/system/health/ready` - Kubernetes readiness probe (database connectivity)
+- `GET /api/v1/system/info` - Detailed service information and configuration
+- `GET /api/v1/` - API root endpoint with navigation links
+
 ### Authentication
-- `POST /api/v1/auth/login/` - User login
+- `POST /api/v1/auth/login/` - User login with OAuth2PasswordRequestForm
+- `POST /api/v1/auth/register/` - User registration with password hashing
+- `GET /api/v1/auth/me/` - Get current authenticated user info
 
 ### Resources
 - `GET /api/v1/buyers/` - List buyers
@@ -205,6 +227,97 @@ gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
 - `POST /api/v1/cars/` - Create car
 - `GET /api/v1/sales/` - List sales
 - `POST /api/v1/sales/` - Create sale
+
+### Health Check Examples
+
+#### Basic Health Check
+```bash
+curl http://localhost:8000/api/v1/system/health
+```
+
+Response:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "version": "1.0.0",
+  "service": "fastapi-car-shop-erp",
+  "checks": {
+    "database": {
+      "status": "healthy",
+      "message": "Database connection successful"
+    },
+    "database_pool": {
+      "status": "healthy",
+      "pool_size": 5,
+      "checked_in": 5,
+      "checked_out": 0,
+      "overflow": 0
+    }
+  }
+}
+```
+
+#### Service Information
+```bash
+curl http://localhost:8000/api/v1/system/info
+```
+
+Response:
+```json
+{
+  "service": {
+    "name": "fastapi-car-shop-erp",
+    "version": "1.0.0",
+    "description": "Professional ERP system for car shop management",
+    "author": "Sham Vinicius Fiorin"
+  },
+  "technology": {
+    "framework": "FastAPI",
+    "database": "PostgreSQL",
+    "orm": "SQLAlchemy",
+    "authentication": "JWT OAuth2"
+  },
+  "environment": {
+    "debug": false,
+    "database_configured": true,
+    "secret_key_configured": true,
+    "environment": "development"
+  }
+}
+```
+
+### Kubernetes Integration
+
+The health endpoints are designed for Kubernetes orchestration:
+
+```yaml
+# Kubernetes Deployment Example
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-erp
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        image: fastapi-erp:latest
+        ports:
+        - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /api/v1/system/health/live
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/v1/system/health/ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+```
 
 ## 🤝 Contributing
 

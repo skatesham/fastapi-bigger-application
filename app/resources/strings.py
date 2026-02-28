@@ -35,7 +35,6 @@ INACTIVE_USER_ERROR = "User is inactive"
 
 # Authentication & Authorization Errors
 UNAUTHORIZED_ERROR = "Unauthorized"
-NO_JESSICA_TOKEN_ERROR = "No Jessica token provided"
 
 # Success Messages
 ADMIN_SUCCESS_MESSAGE = "Admin getting schwifty"

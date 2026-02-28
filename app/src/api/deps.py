@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.src.core.database import SessionLocal
 from app.src.core.config import SECRET_KEY, ALGORITHM
-from app.src.core.security import get_token_header, get_query_token, TokenHeader, QueryToken
+from app.src.core.security import get_current_user
 # Import the actual classes for type hints
 from app.src.domain.buyer.service import BuyerService as BuyerServiceClass
 from app.src.domain.car.repository import CarRepository as CarRepositoryClass
@@ -80,8 +80,7 @@ StockService = Annotated[StockServiceClass, Depends(get_stock_service)]
 UserService = Annotated[UserServiceClass, Depends(get_user_service)]
 
 # Security Annotated Dependencies
-TokenHeader = Annotated[dict, Depends(get_token_header)]
-QueryToken = Annotated[str, Depends(get_query_token)]
+CurrentUser = Annotated[dict, Depends(get_current_user)]
 
 
 # Common Dependencies mapping
@@ -95,8 +94,7 @@ CommonDependencies = {
     "stock_service": StockService,
     "stock_service": StockService,
     "user_service": UserService,
-    "token_header": TokenHeader,
-    "query_token": QueryToken,
+    "current_user": CurrentUser,
 }
 
 
