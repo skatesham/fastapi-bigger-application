@@ -85,7 +85,7 @@ The fastest way to get started is using Docker Compose:
 # Clone and start everything automatically
 git clone https://github.com/carshop/fastapi-erp.git
 cd fastapi-erp
-docker-compose up --build
+docker compose up --build
 ```
 
 #### 🚀 Interactive Development Script
@@ -131,10 +131,11 @@ If you prefer to run locally:
 # Clone the repository
 git clone https://github.com/carshop/fastapi-erp.git
 cd fastapi-erp
+docker compose up db -d
 
 # Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -e ".[dev]"
