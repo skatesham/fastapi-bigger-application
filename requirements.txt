@@ -1,4 +1,4 @@
-# FastAPI Car Shop ERP - Professional Dependencies
+# FastAPI Bigger Application — Car Shop Demo dependencies
 # Updated to latest stable versions - 2026
 
 # Core FastAPI Stack

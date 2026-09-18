@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "fastapi-car-shop-erp"
+name = "fastapi-bigger-application-car-shop-demo"
 version = "2.1.0"
-description = "Professional FastAPI ERP system for car shop management"
+description = "FastAPI Bigger Application demo using a car shop scenario"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
@@ -100,7 +100,7 @@ docs = [
 
 [project.urls]
 Homepage = "https://github.com/carshop/fastapi-erp"
-Documentation = "https://fastapi-car-shop-erp.readthedocs.io/"
+Documentation = "https://github.com/skatesham/fastapi-bigger-application#readme"
 Repository = "https://github.com/carshop/fastapi-erp.git"
 "Bug Tracker" = "https://github.com/carshop/fastapi-erp/issues"
 Changelog = "https://github.com/carshop/fastapi-erp/blob/main/CHANGELOG.md"

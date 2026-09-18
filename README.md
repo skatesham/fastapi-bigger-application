@@ -1,20 +1,18 @@
-# FastAPI Car Shop ERP
+# 🚗 FastAPI Bigger Application — Car Shop Demo
 
 <p align="center">
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1200&color=009688&center=true&vCenter=true&width=720&lines=Gest%C3%A3o+de+loja+de+carros+com+FastAPI;PostgreSQL%2C+migrations+e+seeds+versionados;Pronto+para+desenvolver+com+Docker+e+Make" alt="FastAPI Car Shop ERP: API com PostgreSQL, migrations, seeds, Docker e Make" />
-  </a>
+  <img src="assets/readme-header.svg" alt="FastAPI Bigger Application — Car Shop Demo" width="960" />
 </p>
 
-API REST para gestão de uma loja de carros, construída com FastAPI, SQLAlchemy, PostgreSQL, Alembic e Pydantic.
+Uma demonstração da arquitetura **Bigger Applications** do FastAPI, usando o cenário de uma loja de carros. O foco é mostrar uma base organizada para APIs, e não entregar um ERP de produção completo.
 
-## O que este projeto entrega
+## ✨ O que este projeto demonstra
 
 Uma base prática para desenvolver uma API de gestão de loja de carros com execução local reproduzível. Ela já inclui cadastro e consulta de usuários, compradores, vendedores, carros, estoque e vendas, documentação interativa e um banco que pode ser criado do zero com migrations e dados de exemplo.
 
 O valor do projeto é permitir que uma pessoa nova no time execute a aplicação com poucos comandos, encontre as rotas em `/docs` e tenha a mesma estrutura de banco nos ambientes de desenvolvimento.
 
-### Ferramentas utilizadas
+### 🧰 Ferramentas utilizadas
 
 - **FastAPI** para rotas HTTP e documentação OpenAPI automática.
 - **SQLAlchemy** para mapear os modelos Python para PostgreSQL.
@@ -25,7 +23,7 @@ O valor do projeto é permitir que uma pessoa nova no time execute a aplicação
 - **Make** para concentrar os comandos do dia a dia.
 - **Pytest** para testes automatizados.
 
-### Padrões aplicados
+### 🧩 Padrões aplicados
 
 - **Separação por domínio**: cada recurso possui modelos, schemas, repositório, serviço e endpoints.
 - **Repository e service layers**: acesso ao banco e regras de negócio ficam separados das rotas HTTP.
@@ -33,9 +31,9 @@ O valor do projeto é permitir que uma pessoa nova no time execute a aplicação
 - **Configuração por ambiente**: segredos e URLs ficam no `.env`, fora do código.
 - **Migrations e seeds versionados**: schema e dados iniciais têm histórico, ordem e execução repetível.
 
-## Como usar
+## 🚀 Como usar
 
-### 1. Instale os pré-requisitos
+### 1️⃣ Instale os pré-requisitos
 
 Para o caminho Docker, você precisa de Docker com Docker Compose e GNU Make. Python 3.11+ só é necessário para o desenvolvimento local. O Docker é o caminho recomendado porque já fornece o PostgreSQL.
 
@@ -49,7 +47,7 @@ sudo apt update && sudo apt install -y make
 choco install make
 ```
 
-### 2. Crie o arquivo de ambiente
+### 2️⃣ Crie o arquivo de ambiente
 
 O Compose carrega o `.env` no container da API. Crie-o antes de executar comandos que iniciam a aplicação:
 
@@ -59,7 +57,7 @@ cp .env.example .env
 
 Para desenvolvimento local, mantenha o `DATABASE_URL` com `localhost`. No Docker, o Compose substitui somente essa variável pela URL interna do serviço `db`; os demais valores, como `SECRET_KEY`, são lidos do `.env`.
 
-### 3. Inicie com Docker
+### 3️⃣ Inicie com Docker
 
 ```bash
 make docker-up
@@ -67,7 +65,7 @@ make docker-up
 
 O comando cria os containers. Antes de iniciar a API, o container executa automaticamente as migrations do Alembic e os seeds pendentes.
 
-### Rotas e acessos de demonstração
+### 🔗 Rotas e acessos de demonstração
 
 | Serviço | Endereço | Acesso |
 | --- | --- | --- |
@@ -89,7 +87,7 @@ make docker-down   # parar os containers
 make docker-reset  # parar e apagar o volume do banco
 ```
 
-### 4. Desenvolvimento local opcional
+### 4️⃣ Desenvolvimento local opcional
 
 Após concluir as etapas anteriores, instale as dependências Python. Para usar o banco no Docker e a API na sua máquina, deixe `make db-up` rodando em outro terminal.
 
@@ -105,7 +103,7 @@ make db-up
 make run
 ```
 
-## Comandos Make
+## 🛠️ Comandos Make
 
 Execute `make help` para listar todos os comandos. Os principais são:
 
@@ -132,22 +130,17 @@ make docker-logs                     # logs da API
 make docker-shell                    # shell da API
 ```
 
-## Banco de dados
+## 🗄️ Banco de dados
 
 As migrations ficam em [`db/migration/versions`](db/migration/versions), uma por tabela. O schema não é criado pela aplicação no startup: use sempre o Alembic.
 
 Os seeds ficam em [`db/seed/versions`](db/seed/versions), pareados às revisões das tabelas. Cada seed é registrado na tabela `seed_history`, portanto `make seed` pode ser executado repetidamente sem duplicar dados.
 
-O conjunto inicial cria:
-
-- `admin@example.com`, senha `change-me`;
-- uma compradora e uma vendedora;
-- três carros e seus registros de estoque;
-- uma venda de demonstração.
+O conjunto inicial cria um usuário, uma compradora, uma vendedora, três carros, seus registros de estoque e uma venda de demonstração. As credenciais de acesso estão na seção **Rotas e acessos de demonstração**.
 
 Essas credenciais e dados são exclusivamente para desenvolvimento. Altere ou remova o seed de usuário antes de qualquer ambiente compartilhado ou de produção.
 
-## Valores de configuração
+## ⚙️ Valores de configuração
 
 Após criar o `.env` na etapa 2, ajuste seus valores quando necessário:
 
@@ -160,7 +153,7 @@ ENVIRONMENT=development
 
 O `DATABASE_URL` é usado pela API, Alembic e executor de seeds. No Docker, a conexão é apontada automaticamente para o serviço `db`.
 
-## Estrutura
+## 🧭 Estrutura
 
 ```text
 app/                 API e regras de domínio
@@ -172,7 +165,7 @@ docker-compose.yml   API, PostgreSQL e Adminer
 Makefile             comandos de desenvolvimento
 ```
 
-## Endpoints
+## 🛣️ Endpoints
 
 - `POST /api/v1/auth/login/`
 - `POST /api/v1/auth/register/`
@@ -181,6 +174,6 @@ Makefile             comandos de desenvolvimento
 - `GET /api/v1/sales/`, `POST /api/v1/sales/`
 - `GET /health`
 
-## Licença
+## 📄 Licença
 
 Distribuído sob a licença MIT. Consulte [LICENSE](LICENSE).

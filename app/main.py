@@ -4,7 +4,7 @@ from starlette.exceptions import HTTPException
 from fastapi_pagination import add_pagination
 from fastapi_pagination.ext.sqlalchemy import paginate
 
-from .src.core.config import ALLOWED_HOSTS, API_PREFIX
+from .src.core.config import ALLOWED_HOSTS, API_PREFIX, SERVICE_NAME
 from .src.core.database import SessionLocal
 from .src.core.security import get_current_user
 from .src.internal import admin
@@ -54,7 +54,7 @@ app = get_application()
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Docker and monitoring"""
-    return {"status": "healthy", "service": "fastapi-car-shop-erp"}
+    return {"status": "healthy", "service": SERVICE_NAME}
 
 
 @app.middleware("http")

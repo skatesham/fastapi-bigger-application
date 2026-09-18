@@ -18,8 +18,10 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api"
     ROUTE_PREFIX_V1: str = "/v1"
     VERSION: str = Field(default="2.0.1")
-    SERVICE_NAME: str = Field(default="fastapi-car-shop-erp")
-    SERVICE_DESCRIPTION: str = Field(default="Professional ERP system for car shop management")
+    SERVICE_NAME: str = Field(default="fastapi-bigger-application-car-shop-demo")
+    SERVICE_DESCRIPTION: str = Field(
+        default="FastAPI Bigger Application demo using a car shop scenario"
+    )
     SERVICE_AUTHOR: str = Field(default="Sham Vinicius Fiorin")
     
     # Security Configuration

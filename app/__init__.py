@@ -1,4 +1,4 @@
-"""FastAPI Car Shop ERP - Professional ERP System"""
+"""FastAPI Bigger Application demo using a car shop scenario."""
 
 __version__ = "1.0.0"
 __author__ = "Sham Vinicius Fiorin"

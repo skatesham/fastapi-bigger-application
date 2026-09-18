@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="230" viewBox="0 0 960 230" role="img" aria-labelledby="title description">
+  <title id="title">FastAPI Bigger Application — Car Shop Demo</title>
+  <desc id="description">Cabeçalho animado para a demonstração de uma aplicação FastAPI de loja de carros.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#071b2d"/>
+      <stop offset="1" stop-color="#064e4a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1">
+      <stop stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-30%" width="140%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="960" height="230" rx="18" fill="url(#background)"/>
+  <g opacity=".16" stroke="#99f6e4">
+    <path d="M0 38H960M0 76H960M0 114H960M0 152H960M0 190H960"/>
+    <path d="M70 0V230M140 0V230M210 0V230M280 0V230M350 0V230M420 0V230M490 0V230M560 0V230M630 0V230M700 0V230M770 0V230M840 0V230M910 0V230"/>
+  </g>
+  <path d="M0 188H960" stroke="#2dd4bf" stroke-dasharray="18 18" stroke-width="3" opacity=".72">
+    <animate attributeName="stroke-dashoffset" from="72" to="0" dur="1.8s" repeatCount="indefinite"/>
+  </path>
+  <g transform="translate(70 129)" fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" filter="url(#glow)">
+    <path d="M6 39h17l13-26h71l20 26h14c7 0 13 6 13 13v9H6z"/>
+    <path d="M45 13l10-18h37l16 18M19 39h123"/>
+    <circle cx="38" cy="61" r="12" fill="#071b2d"/>
+    <circle cx="119" cy="61" r="12" fill="#071b2d"/>
+  </g>
+  <text x="250" y="83" fill="#99f6e4" font-family="'Fira Code', monospace" font-size="18" letter-spacing="3">FASTAPI BIGGER APPLICATION</text>
+  <text x="250" y="126" fill="#ffffff" font-family="'Fira Code', monospace" font-size="34" font-weight="700">Car Shop Demo</text>
+  <text x="250" y="160" fill="#cbd5e1" font-family="'Fira Code', monospace" font-size="17">API • PostgreSQL • Alembic • Docker • Make</text>
+  <circle cx="884" cy="62" r="7" fill="#2dd4bf">
+    <animate attributeName="opacity" values=".25;1;.25" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="910" cy="62" r="7" fill="#60a5fa">
+    <animate attributeName="opacity" values="1;.25;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

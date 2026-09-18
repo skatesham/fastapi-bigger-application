@@ -165,7 +165,7 @@ async def api_root() -> Dict[str, Any]:
     return {
         "name": settings.SERVICE_NAME,
         "version": settings.VERSION,
-        "description": "FastAPI Car Shop ERP API",
+        "description": "FastAPI Bigger Application — Car Shop Demo API",
         "endpoints": {
             "health": "/api/v1/system/health",
             "info": "/api/v1/system/info",
