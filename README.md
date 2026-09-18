@@ -174,6 +174,29 @@ Makefile             comandos de desenvolvimento
 - `GET /api/v1/sales/`, `POST /api/v1/sales/`
 - `GET /health`
 
+## 🧱 Arquitetura e valor
+
+```mermaid
+flowchart TB
+    Client["👤 Cliente ou desenvolvedor"] --> API["🚀 FastAPI"]
+
+    subgraph Application["📦 Aplicação"]
+        API --> Routes["🛣️ Rotas e dependências"]
+        Routes --> Service["🧠 Serviços<br/>Regras de negócio"]
+        Service --> Repository["🗂️ Repositórios<br/>Acesso aos dados"]
+        Repository --> ORM["🔗 SQLAlchemy"]
+    end
+
+    ORM --> Database[("🗄️ PostgreSQL")]
+
+    Tooling["🛠️ Make e Docker"] --> Migration["📜 Alembic migrations"]
+    Tooling --> Seed["🌱 Seeds versionados"]
+    Migration --> Database
+    Seed --> Database
+```
+
+Cada camada tem uma responsabilidade clara: as rotas recebem requisições, os serviços concentram regras de negócio e os repositórios isolam o banco. Migrations e seeds deixam o PostgreSQL reproduzível, enquanto Make e Docker reduzem os passos para iniciar o mesmo ambiente em qualquer máquina.
+
 ## 📄 Licença
 
 Distribuído sob a licença MIT. Consulte [LICENSE](LICENSE).
