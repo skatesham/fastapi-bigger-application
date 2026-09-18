@@ -5,7 +5,7 @@ from fastapi_pagination import add_pagination
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 from .src.core.config import ALLOWED_HOSTS, API_PREFIX
-from .src.core.database import Base, SessionLocal, engine
+from .src.core.database import SessionLocal
 from .src.core.security import get_current_user
 from .src.internal import admin
 from .src.api.v1.router import api_router
@@ -20,9 +20,6 @@ def get_application() -> FastAPI:
 
     ## Start FastApi App
     application = FastAPI()
-
-    ## Generate database tables
-    Base.metadata.create_all(bind=engine)
 
     ## Mapping api routes
     application.include_router(api_router, prefix=API_PREFIX + "/v1")

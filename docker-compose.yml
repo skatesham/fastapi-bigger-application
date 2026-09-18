@@ -25,6 +25,8 @@ services:
     container_name: fastapi_api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=postgresql://skatesham:skatesham-github@db:5432/skatesham
       - DEBUG=true

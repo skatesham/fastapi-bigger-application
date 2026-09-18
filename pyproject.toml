@@ -48,11 +48,11 @@ dependencies = [
     "email-validator>=2.0.0",
     
     # Pagination
-    "fastapi-pagination>=0.12.0",
+    "fastapi-pagination>=0.12.0,<0.15.16",
     
     # Authentication & Security
     "python-jose[cryptography]>=3.3.0",
-    "passlib[bcrypt]>=1.7.4",
+    "bcrypt>=4.0,<6.0",
     "python-multipart>=0.0.6",
     
     # Environment & Configuration
@@ -163,7 +163,6 @@ strict_equality = true
 [[tool.mypy.overrides]]
 module = [
     "jose.*",
-    "passlib.*",
     "alembic.*",
 ]
 ignore_missing_imports = true

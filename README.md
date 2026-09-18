@@ -1,463 +1,186 @@
 # FastAPI Car Shop ERP
 
+<p align="center">
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1200&color=009688&center=true&vCenter=true&width=720&lines=Gest%C3%A3o+de+loja+de+carros+com+FastAPI;PostgreSQL%2C+migrations+e+seeds+versionados;Pronto+para+desenvolver+com+Docker+e+Make" alt="FastAPI Car Shop ERP: API com PostgreSQL, migrations, seeds, Docker e Make" />
+  </a>
+</p>
 
-[![Coverage: 78%](https://img.shields.io/badge/coverage-78%25-brightgreen.svg)](tests/)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.133.1-green.svg)](https://fastapi.tiangolo.com/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.47-blue.svg)](https://www.sqlalchemy.org/)
-[![Pydantic](https://img.shields.io/badge/Pydantic-2.12.5-orange.svg)](https://docs.pydantic.dev/)
+API REST para gestão de uma loja de carros, construída com FastAPI, SQLAlchemy, PostgreSQL, Alembic e Pydantic.
 
-Professional REST API ERP system for car shop management built with FastAPI 0.133, SQLAlchemy 2.0, and modern Python patterns.
+## O que este projeto entrega
 
----
+Uma base prática para desenvolver uma API de gestão de loja de carros com execução local reproduzível. Ela já inclui cadastro e consulta de usuários, compradores, vendedores, carros, estoque e vendas, documentação interativa e um banco que pode ser criado do zero com migrations e dados de exemplo.
 
-## ✨ Features
+O valor do projeto é permitir que uma pessoa nova no time execute a aplicação com poucos comandos, encontre as rotas em `/docs` e tenha a mesma estrutura de banco nos ambientes de desenvolvimento.
 
-- 🚀 **FastAPI 0.133.1** - Latest stable version with modern patterns
-- 🗄️ **SQLAlchemy 2.0.47** - Modern ORM with async support
-- 🔐 **Professional Security** - JWT with core.security module
-- 📊 **Pydantic V2.12.5** - Modern data validation and serialization
-- 🏗️ **Clean Architecture** - Professional structure with core modules
-- 🧪 **Comprehensive Testing** - Tests separated from application code
-- 📝 **Auto Documentation** - Swagger/OpenAPI with `/docs`
-- 🔧 **Professional Tooling** - Black, isort, mypy, pytest, coverage
-- 🎯 **Dependency Injection** - FastAPI Annotated patterns
-- 📦 **Modern Packaging** - pyproject.toml with professional setup
-- 🔒 **Security Best Practices** - passlib, bcrypt, secure JWT handling
+### Ferramentas utilizadas
 
----
+- **FastAPI** para rotas HTTP e documentação OpenAPI automática.
+- **SQLAlchemy** para mapear os modelos Python para PostgreSQL.
+- **Alembic** para versionar mudanças no schema do banco.
+- **Pydantic** para validar dados de entrada e saída.
+- **PostgreSQL** como banco relacional.
+- **Docker Compose** para executar API, banco e Adminer juntos.
+- **Make** para concentrar os comandos do dia a dia.
+- **Pytest** para testes automatizados.
 
-## 🛠️ Tech Stack
+### Padrões aplicados
 
-- **Framework**: FastAPI 0.133.1
-- **Database**: PostgreSQL with SQLAlchemy 2.0.47
-- **Configuration**: Pydantic Settings V2
-- **Authentication**: JWT with python-jose[cryptography]
-- **Validation**: Pydantic V2.12.5 + Pydantic Settings 2.13.1
-- **Testing**: pytest 9.0.2 + pytest-asyncio 1.3.0 + pytest-cov 7.0.0
-- **Code Quality**: Black 26.1.0, isort 8.0.0, flake8 7.3.0, mypy 1.19.1
-- **Security**: passlib[bcrypt] 1.7.4, python-multipart 0.0.6
-- **Database Tools**: psycopg2-binary 2.9.0, alembic 1.12.0
-- **Documentation**: Auto-generated Swagger/OpenAPI
-- **Architecture**: Clean API structure with v1 versioning
+- **Separação por domínio**: cada recurso possui modelos, schemas, repositório, serviço e endpoints.
+- **Repository e service layers**: acesso ao banco e regras de negócio ficam separados das rotas HTTP.
+- **Injeção de dependências**: sessões de banco e serviços são fornecidos às rotas de forma controlada.
+- **Configuração por ambiente**: segredos e URLs ficam no `.env`, fora do código.
+- **Migrations e seeds versionados**: schema e dados iniciais têm histórico, ordem e execução repetível.
 
----
+## Como usar
 
-## 🏗️ Project Structure
+### 1. Instale os pré-requisitos
 
-```
-fastapi-bigger-application/
-├── app/                    # Application source code
-│   ├── src/
-│   │   ├── api/           # API layer (v1)
-│   │   │   ├── deps.py    # Dependencies injection
-│   │   │   ├── converters/ # Response converters
-│   │   │   └── v1/
-│   │   │       └── endpoints/
-│   │   ├── core/          # Core modules
-│   │   │   ├── config.py  # Pydantic Settings
-│   │   │   ├── database.py # Database setup
-│   │   │   └── security.py # JWT & auth
-│   │   ├── domain/        # Business logic
-│   │   └── internal/      # Internal utilities
-│   └── main.py           # Application entry point
-├── tests/                # Test suite (external)
-├── Dockerfile            # Docker container configuration
-├── docker-compose.yml    # Docker Compose orchestration
-├── docker-dev.sh         # Interactive development script
-├── .dockerignore         # Docker build exclusions
-├── pyproject.toml       # Modern Python packaging
-├── requirements.txt     # Dependencies
-├── setup.cfg            # Flake8 configuration
-├── .coveragerc          # Coverage configuration
-└── .env.example        # Environment template
-```
+Para o caminho Docker, você precisa de Docker com Docker Compose e GNU Make. Python 3.11+ só é necessário para o desenvolvimento local. O Docker é o caminho recomendado porque já fornece o PostgreSQL.
 
----
-
-## 🚀 Quick Start
-
-### 🐳 Docker (Recommended - Automated)
-
-The fastest way to get started is using Docker Compose:
+Instale o Make no Linux caso ele não esteja disponível:
 
 ```bash
-# Clone and start everything automatically
-git clone https://github.com/carshop/fastapi-erp.git
-cd fastapi-erp
-docker compose up --build
+# Ubuntu, Debian e derivados
+sudo apt update && sudo apt install -y make
+
+# Windows (PowerShell, com Chocolatey)
+choco install make
 ```
 
-#### 🚀 Interactive Development Script
+### 2. Crie o arquivo de ambiente
 
-For an enhanced development experience, use our interactive script:
-
-```bash
-# Run the interactive development script
-./docker-dev.sh
-```
-
-The script provides:
-- **🚀 Auto-start services** with health checks
-- **📊 Service status monitoring**
-- **📋 Live logs viewing**
-- **🛑 Clean stop/reset options**
-- **🔗 Quick access URLs**
-- **🎨 Colored output and status indicators**
-
-That's it! 🎉 The application will be available at:
-- **API**: http://localhost:8000
-- **Documentation**: http://localhost:8000/docs
-- **Database Admin**: http://localhost:9000 (Adminer)
-
-Services included:
-- **FastAPI App** (port 8000) - Main application
-- **PostgreSQL** (port 5432) - Database with persistent data
-- **Adminer** (port 9000) - Database management interface
-
-### Local Development
-
-If you prefer to run locally:
-
-#### Prerequisites
-
-- Python 3.11+
-- PostgreSQL 12+
-- Docker & Docker Compose (optional)
-
-#### Installation
+O Compose carrega o `.env` no container da API. Crie-o antes de executar comandos que iniciam a aplicação:
 
 ```bash
-# Clone the repository
-git clone https://github.com/carshop/fastapi-erp.git
-cd fastapi-erp
-docker compose up db -d
-
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -e ".[dev]"
-
-# Setup environment
 cp .env.example .env
-# Edit .env with your configuration
-
-# Start the application
-uvicorn app.main:app --reload
 ```
 
-### Environment Configuration
+Para desenvolvimento local, mantenha o `DATABASE_URL` com `localhost`. No Docker, o Compose substitui somente essa variável pela URL interna do serviço `db`; os demais valores, como `SECRET_KEY`, são lidos do `.env`.
 
-Create `.env` file based on `.env.example`:
+### 3. Inicie com Docker
 
 ```bash
-# Database
-DATABASE_URL=postgresql://user:password@localhost/dbname
+make docker-up
+```
 
-# Security
-SECRET_KEY=your-secret-key-here
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+O comando cria os containers. Antes de iniciar a API, o container executa automaticamente as migrations do Alembic e os seeds pendentes.
 
-# Service Configuration
-SERVICE_NAME=fastapi-car-shop-erp
-SERVICE_VERSION=1.0.0
-SERVICE_DESCRIPTION=Professional ERP system for car shop management
-SERVICE_AUTHOR=Your Name
+### Rotas e acessos de demonstração
 
-# Application
+| Serviço | Endereço | Acesso |
+| --- | --- | --- |
+| API | http://localhost:8000 | Health check: http://localhost:8000/health |
+| Swagger UI | http://localhost:8000/docs | Execute e teste as rotas da API. |
+| ReDoc | http://localhost:8000/redoc | Consulte a documentação em modo leitura. |
+| Adminer | http://localhost:9000 | Sistema: `PostgreSQL`; servidor: `db`; usuário: `skatesham`; senha: `skatesham-github`; banco: `skatesham`. |
+
+Depois de executar os seeds, use estas credenciais na rota `POST /api/v1/auth/login/` pelo Swagger:
+
+```text
+Usuário: admin@example.com
+Senha: change-me
+```
+
+```bash
+make docker-logs   # acompanhar logs da API
+make docker-down   # parar os containers
+make docker-reset  # parar e apagar o volume do banco
+```
+
+### 4. Desenvolvimento local opcional
+
+Após concluir as etapas anteriores, instale as dependências Python. Para usar o banco no Docker e a API na sua máquina, deixe `make db-up` rodando em outro terminal.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+make install
+
+# Em outro terminal, inicie o banco via Docker
+make db-up
+
+# Aplica migrations, seeds e sobe a API localmente
+make run
+```
+
+## Comandos Make
+
+Execute `make help` para listar todos os comandos. Os principais são:
+
+```bash
+make install                         # instala dependências
+make run                             # migration + seed + API local
+make test                            # executa testes
+make format                          # formata o código
+make check                           # linter, tipos e testes
+
+make db-up                           # inicia apenas PostgreSQL
+make db-shell                        # abre psql no PostgreSQL
+
+make migration-up                    # aplica migrations
+make migration-down                  # reverte uma migration
+make migration-new MESSAGE="add foo" # cria migration por autogenerate
+make migration-current               # mostra a versão atual
+
+make seed                            # aplica seeds pendentes
+
+make docker-up                       # constrói e inicia tudo
+make docker-down                     # para containers
+make docker-logs                     # logs da API
+make docker-shell                    # shell da API
+```
+
+## Banco de dados
+
+As migrations ficam em [`db/migration/versions`](db/migration/versions), uma por tabela. O schema não é criado pela aplicação no startup: use sempre o Alembic.
+
+Os seeds ficam em [`db/seed/versions`](db/seed/versions), pareados às revisões das tabelas. Cada seed é registrado na tabela `seed_history`, portanto `make seed` pode ser executado repetidamente sem duplicar dados.
+
+O conjunto inicial cria:
+
+- `admin@example.com`, senha `change-me`;
+- uma compradora e uma vendedora;
+- três carros e seus registros de estoque;
+- uma venda de demonstração.
+
+Essas credenciais e dados são exclusivamente para desenvolvimento. Altere ou remova o seed de usuário antes de qualquer ambiente compartilhado ou de produção.
+
+## Valores de configuração
+
+Após criar o `.env` na etapa 2, ajuste seus valores quando necessário:
+
+```env
+DATABASE_URL=postgresql://skatesham:skatesham-github@localhost/skatesham
+SECRET_KEY=change-this-in-production
 DEBUG=false
-ENVIRONMENT=production
-
-# CORS
-ALLOWED_HOSTS=localhost,127.0.0.1,yourdomain.com
+ENVIRONMENT=development
 ```
 
-**Note**: All service information (name, version, description, author) is centralized in the configuration and automatically used by health/info endpoints.
+O `DATABASE_URL` é usado pela API, Alembic e executor de seeds. No Docker, a conexão é apontada automaticamente para o serviço `db`.
 
----
+## Estrutura
 
-## 📚 API Documentation
-
-Once running, access:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app --cov-report=html
-
-# Run specific test
-pytest tests/test_jwt.py -v
+```text
+app/                 API e regras de domínio
+db/migration/        configuração e revisões do Alembic
+db/seed/             seeds versionados e executor
+tests/               testes automatizados
+Dockerfile           imagem da API
+docker-compose.yml   API, PostgreSQL e Adminer
+Makefile             comandos de desenvolvimento
 ```
 
----
+## Endpoints
 
-## 🔧 Development
+- `POST /api/v1/auth/login/`
+- `POST /api/v1/auth/register/`
+- `GET /api/v1/buyers/`, `POST /api/v1/buyers/`
+- `GET /api/v1/cars/`, `POST /api/v1/cars/`
+- `GET /api/v1/sales/`, `POST /api/v1/sales/`
+- `GET /health`
 
-### Code Quality
+## Licença
 
-```bash
-# Format code
-black app/ tests/
-isort app/ tests/
-
-# Lint
-flake8 app/ tests/
-
-# Type checking
-mypy app/
-
-# Security check
-bandit -r app/
-```
-
-### Database Migrations
-
-```bash
-# Create migration
-alembic revision --autogenerate -m "Description"
-
-# Apply migrations
-alembic upgrade head
-
-# Downgrade
-alembic downgrade -1
-```
-
----
-
-## 📦 Deployment
-
-### 🐳 Docker (Recommended)
-
-#### Quick Start - One Command Setup
-
-```bash
-# Clone and run everything automatically
-git clone https://github.com/carshop/fastapi-erp.git
-cd fastapi-erp
-docker-compose up --build
-```
-
-#### Docker Services
-
-The `docker-compose.yml` includes three services:
-
-1. **api** - FastAPI Application
-   - Port: 8000
-   - Auto-reload with volume mounting
-   - Health checks enabled
-   - Depends on database
-
-2. **db** - PostgreSQL Database
-   - Port: 5432
-   - Persistent data volume
-   - Health checks for startup order
-   - Credentials: `skatesham:skatesham-github`
-
-3. **adminer** - Database Admin Interface
-   - Port: 9000
-   - Web-based database management
-   - Connect to `db` service
-
-#### Docker Commands
-
-```bash
-# Start all services
-docker-compose up --build
-
-# Start in background
-docker-compose up -d --build
-
-# View logs
-docker-compose logs -f api
-
-# Stop services
-docker-compose down
-
-# Stop and remove volumes
-docker-compose down -v
-
-# Rebuild specific service
-docker-compose up --build api
-
-# Access running container
-docker-compose exec api bash
-```
-
-#### Environment Variables
-
-The Docker setup automatically configures:
-- `DATABASE_URL=postgresql://skatesham:skatesham-github@db:5432/skatesham`
-- `DEBUG=true` (development mode)
-- `ENVIRONMENT=development`
-
-### Production
-
-```bash
-# Install production dependencies
-pip install -e .
-
-# Run with Gunicorn (recommended for production)
-gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
-```
-
-## 📊 API Endpoints
-
-### System & Health Monitoring
-- `GET /api/v1/system/health` - Complete health check with database connectivity and pool status
-- `GET /api/v1/system/health/live` - Kubernetes liveness probe (simple alive check)
-- `GET /api/v1/system/health/ready` - Kubernetes readiness probe (database connectivity)
-- `GET /api/v1/system/info` - Detailed service information and configuration
-- `GET /api/v1/` - API root endpoint with navigation links
-
-### Authentication
-- `POST /api/v1/auth/login/` - User login with OAuth2PasswordRequestForm
-- `POST /api/v1/auth/register/` - User registration with password hashing
-- `GET /api/v1/auth/me/` - Get current authenticated user info
-
-### Resources
-- `GET /api/v1/buyers/` - List buyers
-- `POST /api/v1/buyers/` - Create buyer
-- `GET /api/v1/cars/` - List cars
-- `POST /api/v1/cars/` - Create car
-- `GET /api/v1/sales/` - List sales
-- `POST /api/v1/sales/` - Create sale
-
-### Health Check Examples
-
-#### Basic Health Check
-```bash
-curl http://localhost:8000/api/v1/system/health
-```
-
-Response:
-```json
-{
-  "status": "healthy",
-  "timestamp": "2024-01-01T00:00:00Z",
-  "version": "1.0.0",
-  "service": "fastapi-car-shop-erp",
-  "checks": {
-    "database": {
-      "status": "healthy",
-      "message": "Database connection successful"
-    },
-    "database_pool": {
-      "status": "healthy",
-      "pool_size": 5,
-      "checked_in": 5,
-      "checked_out": 0,
-      "overflow": 0
-    }
-  }
-}
-```
-
-#### Service Information
-```bash
-curl http://localhost:8000/api/v1/system/info
-```
-
-Response:
-```json
-{
-  "service": {
-    "name": "fastapi-car-shop-erp",
-    "version": "1.0.0",
-    "description": "Professional ERP system for car shop management",
-    "author": "Sham Vinicius Fiorin"
-  },
-  "technology": {
-    "framework": "FastAPI",
-    "database": "PostgreSQL",
-    "orm": "SQLAlchemy",
-    "authentication": "JWT OAuth2"
-  },
-  "environment": {
-    "debug": false,
-    "database_configured": true,
-    "secret_key_configured": true,
-    "environment": "development"
-  }
-}
-```
-
-### Kubernetes Integration
-
-The health endpoints are designed for Kubernetes orchestration:
-
-```yaml
-# Kubernetes Deployment Example
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: fastapi-erp
-spec:
-  template:
-    spec:
-      containers:
-      - name: app
-        image: fastapi-erp:latest
-        ports:
-        - containerPort: 8000
-        livenessProbe:
-          httpGet:
-            path: /api/v1/system/health/live
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /api/v1/system/health/ready
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and code quality checks
-5. Submit a pull request
-
----
-
-## Source Documentation
-
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Bigger Application](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
-- [SQL](https://fastapi.tiangolo.com/tutorial/sql-databases/)
-- [Pagination](https://uriyyo-fastapi-pagination.netlify.app/)
-- [Testing](https://fastapi.tiangolo.com/tutorial/testing/)  
-- [Pydantic](https://pydantic-docs.helpmanual.io/)  
-- [SQL Relational Database SQLAlchemy by FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/?h=databa#sql-relational-databases)
-- [SQLAlchemy 1.4](https://docs.sqlalchemy.org/en/14/tutorial/engine.html)  
-- [FastAPI Full Stack Template](https://github.com/fastapi/full-stack-fastapi-template)
-- [FastAPI "Real world example app"](https://github.com/nsidnev/fastapi-realworld-example-app)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Created by
-> Sham Vinicius Fiorin
-
-**Built with ❤️ using FastAPI and modern Python patterns**
-
----
+Distribuído sob a licença MIT. Consulte [LICENSE](LICENSE).
